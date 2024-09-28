@@ -24245,3 +24245,9 @@ aside .sp-sidebar-banner span {
 
  
 
+.widget-products .rfm-marquee-container{
+    height: 174px !important;
+}
+.slick-slide.slick-cloned{
+width: 100px !important
+}
