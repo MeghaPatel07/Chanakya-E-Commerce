@@ -15,39 +15,7 @@ import axios from "axios";
 
 const Home = () => {
     // Slider settings for the vertical brand slider
-    
-    const categoriesData = [
-        {
-            name: "Travelling Bags",
-            subProducts: ["Duffle Bag", "Suitcases", "Travel Tote", "Weekenders", "A carry-on", "Backpack"],
-            imageUrl: require('../assets/images/categories/h1.jpg'),
-        },
-        {
-            name: "Men Essentials",
-            subProducts: ["Belt", "Wallet", "Men combo", "Perfums", "Cap", "Keychain"],
-            imageUrl: require('../assets/images/categories/h2.jpg'),
-        },
-        {
-            name: "Kitchenware",
-            subProducts: ["Food storage & organising", "Dinnerware", "Serveware", "Cookware", "Glassware & jugs", "Cutlery"],
-            imageUrl: require('../assets/images/categories/h3.jpg'),
-        },
-        {
-            name: "Electronic Accessories",
-            subProducts: ["Portable Wireless Speakers", "Headphones", "Smartwatches", "Gadgets", "Pandrive", "Power Bank"],
-            imageUrl: require('../assets/images/categories/h4.jpg'),
-        },
-        {
-            name: "Gift Articles",
-            subProducts: ["Idols & Figurines", "Diyas & Lanterns", "Decorative Bowls", "Tealight Candle Holders", "Bowls", "Paintings"],
-            imageUrl: require('../assets/images/categories/h5.jpg'),
-        },
-        {
-            name: "Thermoware",
-            subProducts: ["Handi Thermoware", "Lunch Box", "Plastic Thermoware", "Stainless Steel Thermostee", "Drinks Container Insulators"],
-            imageUrl: require('../assets/images/categories/h6.jpg'),
-        },
-    ];
+
     const featuredBrands = [
         {
             imgSrc: require('../assets/images/home/featured-brands/fb_01.jpg'),
@@ -110,12 +78,14 @@ const Home = () => {
         combineData()
     },[])
 
+    const [combinedDatas, setCombinedData] = useState([])
     const combineData =async()=>{
        const res= await axios.get(
             `${process.env.REACT_APP_API_URL}/api/auth/list/getGroupedSubCategory`
           )
 
           console.log(res.data.data)
+          setCombinedData(res.data.data)
         
     }
 
@@ -128,12 +98,12 @@ const Home = () => {
                         <h4 className="title title-link font-weight-bold" style={{ fontSize: '15px' }}>Brands We Have</h4>
                     </div>
                     <div className="vertical-marquee">
-                        <Marquee gradient={false} direction="up" speed={10}>
+                        <Marquee gradient={false} direction="up" speed={0}>
                             {brandData.map((img, index) => (
                                 <div key={index} className="brand-item">
-                                    <a href="#">
+                                    <Link to="/">
                                         <img src={`${process.env.REACT_APP_API_URL}/${img.logo}`} className="mb-2" alt="Brand" style={{width:'150px'}}/>
-                                    </a>
+                                    </Link>
                                 </div>
                             ))}
                         </Marquee>
@@ -146,16 +116,17 @@ const Home = () => {
                         {categoryData.map((category, index) => (
                             index === 15 ? (
                                 <div key={index} xs="12" md="6" lg="4" xl="3" className="category category-ellipse text-center">
-                                    <div className="icon-box icon-colored-circle">
+                                     <Link to ='/category'><div className="icon-box icon-colored-circle">
                                         <span className="icon-box-icon mb-0 text-white">
                                             <i className="w-icon-hamburger"></i>
                                         </span>
                                     </div>
                                     <div className="category-content">
                                         <h4 className="category-name">
-                                            <a href="#">All Categories</a>
+                                           All Categories
                                         </h4>
                                     </div>
+                                    </Link>
                                 </div>
                             ) : (
                                 <div key={index} xs="12" md="6" lg="4" xl="3" className="category category-ellipse mb-5">
@@ -187,24 +158,24 @@ const Home = () => {
             <Row>
             <div className="all-category-product">
             <div className="row category-wrapper cols-lg-3 cols-sm-2  mt-5">
-                {categoriesData.map((category, index) => (
+                {combinedDatas.map((category, index) => (
                     <div className="category-wrap mb-4" key={index}>
                         <div className="category category-group-image br-sm">
                             <div className="category-content">
                                 <h4 className="category-name">
-                                    <a href="#">{category.name}</a>
+                                    <a href="#">{category.categoryDetails.categoryName}</a>
                                 </h4>
                                 <ul className="category-list">
-                                    {category.subProducts.map((subProduct, subIndex) => (
+                                    {category.subCategoryDetails.map((subProduct, subIndex) => (
                                         <li key={subIndex}>
-                                            <a href="#">{subProduct}</a>
+                                            <a href="#">{subProduct.subCategoryName}</a>
                                         </li>
                                     ))}
                                 </ul>
                             </div>
                             <a href="#">
                                 <figure className="category-media">
-                                    <img src={category.imageUrl} alt={category.name} width="190" height="215" />
+                                    <img src={`${process.env.REACT_APP_API_URL}/${category.categoryDetails.logo}`} alt={category.categoryDetails.categoryName} width="190" height="215" />
                                 </figure>
                             </a>
                         </div>
