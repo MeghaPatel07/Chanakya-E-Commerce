@@ -45,7 +45,7 @@
 }
 .vertical-marquee {
   width: 100%; /* Adjust to your layout */
-  height: 150px;  
+  height: 130px;  
   /* overflow: hidden;   */
   transform: rotate(270deg); 
   width: 310px;
@@ -63,7 +63,7 @@ width: 100% !important;
 overflow: hidden;
 height: 100% !important;
 transform: none !important;
-left: -130px;
+left: -90px;
     top: -90px;
     position: absolute;
 }

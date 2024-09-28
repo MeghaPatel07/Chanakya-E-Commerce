@@ -9,51 +9,13 @@ import { Link } from 'react-router-dom';
 import axios from "axios";
 
 // Define the brand images
-const brandImages = [
-    { name: 'brand1', src: require('../assets/images/home/all-brands/01.jpg') },
-    { name: 'brand1', src: require('../assets/images/home/all-brands/02.jpg') },
-    { name: 'brand1', src: require('../assets/images/home/all-brands/03.jpg') },
-    { name: 'brand1', src: require('../assets/images/home/all-brands/04.jpg') }, 
-    { name: 'brand1', src: require('../assets/images/home/all-brands/05.jpg') },
-    { name: 'brand1', src: require('../assets/images/home/all-brands/06.jpg') },
-    { name: 'brand1', src: require('../assets/images/home/all-brands/07.jpg') },
-    { name: 'brand1', src: require('../assets/images/home/all-brands/08.jpg') }, 
-];
+ 
 
-// Define the categories with name and image url
-const categories = [
-    { name: 'Travelling Bags', src: require("../assets/images/categories/category-1.jpg") },
-    { name: 'Student Bags', src: require("../assets/images/categories/category-2.jpg") },
-    { name: 'Kids Bags', src: require("../assets/images/categories/category-3.jpg") },
-    { name: 'Men Essentials', src: require("../assets/images/categories/category-5.jpg") },
-    { name: 'Winter Wear', src: require("../assets/images/categories/category-7.jpg") },
-    { name: 'Monsoon Wear', src: require("../assets/images/categories/category-8.jpg") },
-    { name: 'Sports Wear', src: require("../assets/images/categories/category-9.jpg") },
-    { name: 'Kitchenware', src: require("../assets/images/categories/category-4.jpg") },
-    { name: 'Electronic Accessories', src: require("../assets/images/categories/category-6.jpg") },
-    { name: 'Gift Articles', src: require("../assets/images/categories/category-10.jpg") },
-    { name: 'Thermoware', src: require("../assets/images/categories/category-11.jpg") },
-    { name: 'Home Appliances', src: require("../assets/images/categories/category-12.jpg") },
-    { name: 'Glassware', src: require("../assets/images/categories/category-13.jpg") },
-    { name: 'Corporate Gifts', src: require("../assets/images/categories/category-14.jpg") },
-    { name: 'Helmet', src: require("../assets/images/categories/category-15.jpg") },
-    { name: 'Helmet', src: require("../assets/images/categories/category-15.jpg") }
-];
+ 
 
 const Home = () => {
     // Slider settings for the vertical brand slider
-    const brandSliderSettings = {
-        dots: false,               // Disable dots
-        infinite: true,            // Loop infinitely
-        speed: 3000,               // Set the speed of the slide animation
-        slidesToShow: 3,           // Show 3 slides at a time
-        slidesToScroll: 1,         // Scroll one slide at a time
-        vertical: true,            // Enable vertical scrolling
-        autoplay: true,            // Enable autoplay
-        autoplaySpeed: 0,          // Continuous movement with no pause
-        cssEase: 'linear',         // Smooth linear animation
-    };
-
+    
     const categoriesData = [
         {
             name: "Travelling Bags",
@@ -119,21 +81,43 @@ const Home = () => {
         },
     ];
 
-
+    const [brandData, setBrandData] = useState([])
+    const [clientData, setClientData ] = useState([])
+    const [categoryData, setCategoryData ] = useState([])
+    const [subCategoryData, setSubCategoryData ] = useState([])
     useEffect (()=>{
         const fetchData=async()=>{
-            const [brandData, clientData] = await Promise.all([
+            const [brandData, clientData , categoryData ] = await Promise.all([
                 axios.get(
                   `${process.env.REACT_APP_API_URL}/api/auth/list/BrandMaster`
                 ),
                 axios.get(
                   `${process.env.REACT_APP_API_URL}/api/auth/list/ClientMaster`
                 ),
+                axios.get(
+                    `${process.env.REACT_APP_API_URL}/api/auth/list/CategoryMaster`
+                  ),
+                  
               ]);
-              console.log(brandData,clientData)
+              console.log(clientData)
+              setBrandData(brandData.data)
+              setClientData(clientData.data)
+            //   setSubCategoryData(subCategory.data)
+              setCategoryData(categoryData.data)
+
         }
         fetchData()
+        combineData()
     },[])
+
+    const combineData =async()=>{
+       const res= await axios.get(
+            `${process.env.REACT_APP_API_URL}/api/auth/list/getGroupedSubCategory`
+          )
+
+          console.log(res.data.data)
+        
+    }
 
     return (
         <Container className="pb-2">
@@ -145,10 +129,10 @@ const Home = () => {
                     </div>
                     <div className="vertical-marquee">
                         <Marquee gradient={false} direction="up" speed={10}>
-                            {brandImages.map((img, index) => (
+                            {brandData.map((img, index) => (
                                 <div key={index} className="brand-item">
                                     <a href="#">
-                                        <img src={img.src} className="mb-2" alt="Brand" style={{width:'150px'}}/>
+                                        <img src={`${process.env.REACT_APP_API_URL}/${img.logo}`} className="mb-2" alt="Brand" style={{width:'150px'}}/>
                                     </a>
                                 </div>
                             ))}
@@ -159,7 +143,7 @@ const Home = () => {
                 {/* Right side category grid */}
                 <Col lg="10">
                     <Row className="category-wrapper cols-12 cols-lg-7 cols-xl-8 pt-4 align-items-center">
-                        {categories.map((category, index) => (
+                        {categoryData.map((category, index) => (
                             index === 15 ? (
                                 <div key={index} xs="12" md="6" lg="4" xl="3" className="category category-ellipse text-center">
                                     <div className="icon-box icon-colored-circle">
@@ -178,8 +162,8 @@ const Home = () => {
                                     <div className="category-media">
                                         <a href="#">
                                             <img
-                                                src={category.src}
-                                                alt={category.name}
+                                                src={`${process.env.REACT_APP_API_URL}/${category.logo}`}
+                                                alt={category.categoryName}
                                                 width="190"
                                                 height="190"
                                             />
@@ -187,7 +171,7 @@ const Home = () => {
                                     </div>
                                     <div className="category-content">
                                         <h4 className="category-name">
-                                            <a href="#">{category.name}</a>
+                                            <a href="#">{category.categoryName}</a>
                                         </h4>
                                     </div>
                                 </div>
@@ -199,7 +183,7 @@ const Home = () => {
                     </Row>
                 </Col>
             </Row>
-            <Client />
+            <Client data={clientData}/>
             <Row>
             <div className="all-category-product">
             <div className="row category-wrapper cols-lg-3 cols-sm-2  mt-5">

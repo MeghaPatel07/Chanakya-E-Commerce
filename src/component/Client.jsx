@@ -3,32 +3,32 @@ import Slider from 'react-slick'; // Import the Slider component
 import 'slick-carousel/slick/slick.css'; // Import slick carousel styles
 import 'slick-carousel/slick/slick-theme.css'; // Import slick carousel theme styles
 
-export const Client = () => {
+export const Client = ({data}) => {
     const settings = {
         // dots: true,
         infinite: true,
         speed: 1000,
-        slidesToShow: 2,
+        slidesToShow: 8,
         slidesToScroll: 1,
         autoplay: true,
-        autoplaySpeed: 4000,
+        autoplaySpeed: 600,
         responsive: [
             {
                 breakpoint: 576,
                 settings: {
-                    slidesToShow: 3,
+                    slidesToShow:8,
                 },
             },
             {
                 breakpoint: 768,
                 settings: {
-                    slidesToShow: 4,
+                    slidesToShow:8,
                 },
             },
             {
                 breakpoint: 992,
                 settings: {
-                    slidesToShow: 6,
+                    slidesToShow: 8,
                 },
             },
             {
@@ -55,6 +55,7 @@ export const Client = () => {
         { url: require('../assets/images/client/11.jpg') },
     ];
 
+    console.log(data)
     return (
         <>
         <div className="title-link-wrapper title-underline title-post after-none mb-4 ">
@@ -68,10 +69,10 @@ export const Client = () => {
         
             <div className="swiper-container swiper-theme brands-wrapper br-sm mb-10">
                 <Slider {...settings}>
-                    {clientImages.map((imageName, index) => (
+                    {data.map((imageName, index) => (
                         <div className="swiper-slide" key={index}>
                             <figure>
-                                <img src={imageName.url} alt="Brand" />
+                                <img src={`${process.env.REACT_APP_API_URL}/${imageName.logo}`} alt="Brand" />
                             </figure>
                         </div>
                     ))}
