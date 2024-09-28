@@ -98,7 +98,7 @@ const Home = () => {
                         <h4 className="title title-link font-weight-bold" style={{ fontSize: '15px' }}>Brands We Have</h4>
                     </div>
                     <div className="vertical-marquee">
-                        <Marquee gradient={false} direction="up" speed={0}>
+                        <Marquee gradient={false} direction="up" speed={10}>
                             {brandData.map((img, index) => (
                                 <div key={index} className="brand-item">
                                     <Link to="/">
