@@ -24251,3 +24251,11 @@ aside .sp-sidebar-banner span {
 .slick-slide.slick-cloned{
 width: 100px !important
 }
+
+.login-popup.signup-popup {
+    max-width: 70%;
+}
+
+.login-popup label{
+    display: flex !important;
+}
