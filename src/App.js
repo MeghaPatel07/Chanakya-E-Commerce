@@ -8,6 +8,7 @@ import './App.css';
 // import './assets/css/demo1.min.css'
 // import './assets/css/demo7.min.css'
 import './assets/css/demo12.min.css'
+import "react-toastify/dist/ReactToastify.css";
 import Header from "./component/header";
 import Home from "./pages/Home";
 import Footer from "./component/Footer";

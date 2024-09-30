@@ -1,14 +1,20 @@
 import React, { useState } from "react";
+import { createUserLogin } from "../Functions/UserLogin";
+import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 const SignupPage = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    contactNo: "",
-    password: "",
+    Name: "",
+    Email: "",
+    Mobile: "",
+    Password: "",
     confirmPassword: "",
     agree: false,
   });
+
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -18,14 +24,64 @@ const SignupPage = () => {
     });
   };
 
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validateMobile = (mobile) => {
+    const mobileRegex = /^[0-9]{10}$/;
+    return mobileRegex.test(mobile);
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!validateEmail(formData.Email)) {
+      newErrors.Email = "Invalid email address.";
+    }
+
+    if (!validateMobile(formData.Mobile)) {
+      newErrors.Mobile = "Mobile number must be 10 digits.";
+    }
+
+    if (formData.Password !== formData.confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match.";
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add your form submission logic here
-    console.log(formData);
+
+    if (!formData.agree) {
+      toast.error("You must accept the privacy policy to sign up.");
+      return;
+    }
+
+    if (validateForm()) {
+      console.log(formData);
+
+      createUserLogin(formData).then((res) => {
+        console.log(res);
+        if (res.data.isOk) {
+          toast.success(res.data.message); // Show success message
+          navigate("/login");
+        } else {
+          toast.error(res.data.message || "Error"); // Show error message
+        }
+      });
+    } else {
+      toast.error("Please fix the form errors.");
+    }
   };
 
   return (
     <main className="main login-page">
+      <ToastContainer />
       {/* Start of Breadcrumb */}
       <nav className="breadcrumb-nav mb-10">
         <div className="container">
@@ -59,8 +115,8 @@ const SignupPage = () => {
                           <input
                             type="text"
                             className="form-control"
-                            name="username"
-                            value={formData.username}
+                            name="Name"
+                            value={formData.Name}
                             onChange={handleChange}
                             required
                           />
@@ -70,30 +126,36 @@ const SignupPage = () => {
                           <input
                             type="text"
                             className="form-control"
-                            name="email"
-                            value={formData.email}
+                            name="Email"
+                            value={formData.Email}
                             onChange={handleChange}
                             required
                           />
+                          {errors.Email && (
+                            <span className="text-danger">{errors.Email}</span>
+                          )}
                         </div>
                         <div className="form-group col-md-6 col-lg-4">
                           <label>Contact No *</label>
                           <input
                             type="text"
                             className="form-control"
-                            name="contactNo"
-                            value={formData.contactNo}
+                            name="Mobile"
+                            value={formData.Mobile}
                             onChange={handleChange}
                             required
                           />
+                          {errors.Mobile && (
+                            <span className="text-danger">{errors.Mobile}</span>
+                          )}
                         </div>
                         <div className="form-group mb-0 col-md-6 col-lg-4">
                           <label>Password *</label>
                           <input
                             type="password"
                             className="form-control"
-                            name="password"
-                            value={formData.password}
+                            name="Password"
+                            value={formData.Password}
                             onChange={handleChange}
                             required
                           />
@@ -108,6 +170,11 @@ const SignupPage = () => {
                             onChange={handleChange}
                             required
                           />
+                          {errors.confirmPassword && (
+                            <span className="text-danger">
+                              {errors.confirmPassword}
+                            </span>
+                          )}
                         </div>
                       </div>
 
@@ -132,14 +199,22 @@ const SignupPage = () => {
                           required
                         />
                         <label htmlFor="agree" className="font-size-md">
-                          I agree to the{" "}
+                          I agree to the &nbsp;
                           <a href="#" className="text-primary font-size-md">
                             privacy policy
                           </a>
                         </label>
                       </div>
 
-                      <a type="submit" className="btn btn-primary">
+                      <a
+                        className={`btn btn-primary ${
+                          !formData.agree ? "disabled btn-danger" : ""
+                        }`}
+                        onClick={handleSubmit}
+                        style={{
+                          pointerEvents: !formData.agree ? "none" : "auto",
+                        }}
+                      >
                         Sign Up
                       </a>
                     </form>
