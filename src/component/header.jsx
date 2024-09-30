@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import logo from '../assets/images/home/logo.png'
 import product from "../assets/images/cart/product-2.jpg";
+import { varifyUser } from '../Functions/UserLogin';
 
 
 
 const Header = () => {
     const [show, setShow] = useState(false)
+    const [token, setToken] = useState("");
+    const [Name, setName] = useState("");
+
+
     const [isOpen, setIsOpen] = useState(false); // Track dropdown open/close state
     const [cartItems, setCartItems] = useState([
       {
@@ -38,6 +43,25 @@ const Header = () => {
     const toggleDropdown = () => {
       setIsOpen(!isOpen); // Toggle the dropdown state
     };
+
+
+    useEffect(()=>{
+      
+      const token= localStorage.getItem("token")
+      if(token){
+         varifyUser(token)
+           .then((response) => {
+             const user = response.data; // Access the user data from response
+             console.log(user); // Do something with the user data
+           })
+           .catch((error) => {
+             console.error("Error in user verification process:", error);
+           }); 
+      }
+      else{
+        console.log("No token found")
+      }
+    },[])
     return (
       <header className="header">
         <div className="header-top">
@@ -49,11 +73,11 @@ const Header = () => {
               <Link to="/" className="d-lg-show">
                 My Account
               </Link>
-              <Link to="/" className="d-lg-show login sign-in">
+              <Link to="/Login" className="d-lg-show login sign-in">
                 <i className="w-icon-account"></i> Sign In
               </Link>
               <span className="delimiter d-lg-show">/</span>
-              <Link to="/" className="ml-0 d-lg-show login register">
+              <Link to="/SignUp" className="ml-0 d-lg-show login register">
                 Register
               </Link>
             </div>

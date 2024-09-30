@@ -17,3 +17,20 @@ export const createUserLogin = async (data) => {
     throw error; // Optionally rethrow the error if you want to handle it elsewhere
   }
 };
+
+
+export const varifyUser = async (token) => {
+  try {
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/auth/verifyUser`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return res; // Returning the full Axios response
+  } catch (error) {
+    console.error("Error during user verification:", error);
+  }
+};

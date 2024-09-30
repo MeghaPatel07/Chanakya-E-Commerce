@@ -37,16 +37,28 @@ const SignupPage = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!validateEmail(formData.Email)) {
+    // Check if Name is provided
+    if (!formData.Name) {
+      newErrors.Name = "Name is required.";
+    }
+
+    // Check if Email is valid
+    if (!formData.Email) {
+      newErrors.Email = "Email is required.";
+    } else if (!validateEmail(formData.Email)) {
       newErrors.Email = "Invalid email address.";
     }
 
-    if (!validateMobile(formData.Mobile)) {
+    // Check if Mobile is valid
+    if (!formData.Mobile) {
+      newErrors.Mobile = "Mobile number is required.";
+    } else if (!validateMobile(formData.Mobile)) {
       newErrors.Mobile = "Mobile number must be 10 digits.";
     }
 
-    if (formData.Password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match.";
+    // Check if Password is provided
+    if (!formData.Password) {
+      newErrors.Password = "Password is required.";
     }
 
     setErrors(newErrors);
@@ -120,6 +132,9 @@ const SignupPage = () => {
                             onChange={handleChange}
                             required
                           />
+                          {errors.Name && (
+                            <span className="text-danger">{errors.Name}</span>
+                          )}
                         </div>
                         <div className="form-group col-md-6 col-lg-4">
                           <label>Email Address *</label>
@@ -159,6 +174,11 @@ const SignupPage = () => {
                             onChange={handleChange}
                             required
                           />
+                          {errors.Password && (
+                            <span className="text-danger">
+                              {errors.Password}
+                            </span>
+                          )}
                         </div>
                         <div className="form-group mb-0 col-md-6 col-lg-4">
                           <label>Confirm Password *</label>
@@ -178,16 +198,6 @@ const SignupPage = () => {
                         </div>
                       </div>
 
-                      <p className="mt-3">
-                        Your personal data will be used to support your
-                        experience throughout this website, to manage access to
-                        your account, and for other purposes described in our{" "}
-                        <a href="#" className="text-primary">
-                          privacy policy
-                        </a>
-                        .
-                      </p>
-
                       <div className="form-checkbox d-flex align-items-center justify-content-between mb-5">
                         <input
                           type="checkbox"
@@ -199,11 +209,14 @@ const SignupPage = () => {
                           required
                         />
                         <label htmlFor="agree" className="font-size-md">
-                          I agree to the &nbsp;
+                          I agree to the{" "}
                           <a href="#" className="text-primary font-size-md">
                             privacy policy
                           </a>
                         </label>
+                        {errors.agree && (
+                          <span className="text-danger">{errors.agree}</span>
+                        )}
                       </div>
 
                       <a
