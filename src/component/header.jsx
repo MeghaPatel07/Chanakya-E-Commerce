@@ -6,9 +6,21 @@ import product from "../assets/images/cart/product-2.jpg";
 import { varifyUser } from '../Functions/UserLogin';
 
 
+import axios from "axios";
 
-const Header = () => {
+const Header = (data) => {
     const [show, setShow] = useState(false)
+    const [CategoryData, setCategoryData] = useState([])
+    const fetchData = async () => {
+        const res = await axios.get(
+            `${process.env.REACT_APP_API_URL}/api/auth/list/CategoryMaster`
+        )
+        setCategoryData(res.data)
+        console.log(res)
+    }
+    useEffect(() => {
+        fetchData()
+    }, [])
     const [token, setToken] = useState("");
     const [Name, setName] = useState("");
 

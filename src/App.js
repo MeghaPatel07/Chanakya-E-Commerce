@@ -12,6 +12,9 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "./component/header";
 import Home from "./pages/Home";
 import Footer from "./component/Footer";
+import ScrollTopButton from "./component/ScrollToTop";
+import CategoryPage from "./pages/CategoryPage";
+import ProductList from "./pages/ProductList";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignUpPage";
 function App() {
@@ -20,10 +23,13 @@ function App() {
       <BrowserRouter>
         {/* Place Header outside of Routes */}
         <Header />
+        {/* <ScrollTopButton /> */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signUp" element={<SignupPage />} />
+          <Route path='/category' element={<CategoryPage />}/>
+          <Route path='/product-list' element={<ProductList />}/>
         </Routes>
         <Footer />
       </BrowserRouter>
