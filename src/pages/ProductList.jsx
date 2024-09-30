@@ -9,7 +9,7 @@ const ProductList = () => {
     <div className="container">
       <Row>
         <Col
-          lg={0}
+          lg={3}
           className="d-none d-lg-block"
         >
           <div className='d-flex justify-content-between'>

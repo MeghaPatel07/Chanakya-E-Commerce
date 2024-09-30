@@ -13,6 +13,7 @@ import Home from "./pages/Home";
 import Footer from "./component/Footer";
 import ScrollTopButton from "./component/ScrollToTop";
 import CategoryPage from "./pages/CategoryPage";
+import ProductList from "./pages/ProductList";
 function App() {
   return (
     <div className="App">
@@ -24,6 +25,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />}/>
           <Route path='/category' element={<CategoryPage />}/>
+          <Route path='/product-list' element={<ProductList />}/>
         </Routes>
         <Footer />
       </BrowserRouter>

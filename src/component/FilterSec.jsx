@@ -151,16 +151,35 @@ export default function FilterSec() {
         </AccordionSummary>
         <AccordionDetails>
         <Box>
+          <div className='d-flex align-item-center justify-content-between'>
+            <div className='d-flex' style={{alignItems:"center", gap:"10px"}}><p className='mb-0-p'>Min</p><div className='d-flex justify-content-center range-box'><p className='mb-0-p'>4433333334</p></div></div>
+            <p className='mb-0-p'>-</p>
+            <div className='d-flex' style={{alignItems:"center", gap:"10px"}}><p className='mb-0-p'>Max</p><div className='d-flex justify-content-center range-box'><p className='mb-0-p'>4433333334</p></div></div>
+          </div>
       <Slider
         getAriaLabel={() => 'Temperature range'}
         value={value}
         onChange={handleChange}
         valueLabelDisplay="auto"
         getAriaValueText={valuetext}
+        sx={{
+          color: '#1976d2',
+          '& .MuiSlider-thumb': {
+            backgroundColor: '#a01e20',
+          },
+          '& .MuiSlider-track': {
+            backgroundColor: '#a01e20',
+            border: "1px solid #a01e20"
+          },
+          '& .MuiSlider-rail': {
+            backgroundColor: '#a01e20',
+          },
+        }}
       />
     </Box>
         </AccordionDetails>
       </Accordion>
+      <button className='filter-btn'>Apply Now</button>
     </div>
   );
 }

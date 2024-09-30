@@ -42,3 +42,26 @@
     display: flex;
     justify-content: end;
 }
+.mb-0-p{
+    margin-bottom: 0px;
+    font-size: larger;
+}
+.range-box{
+    border: 1px solid gray;
+    width: 55px;
+    height: 45px;
+    border-radius: 5px;
+    align-items: center;
+    overflow: hidden;
+}
+.filter-btn{
+    color: #fff;
+    border: none;
+    background-color: #a01e20;
+    padding: 10px;
+    border-radius: 3px;
+    margin-top: 20px;
+}
+.filter-btn:hover{
+    background-color: #007bff;
+}
