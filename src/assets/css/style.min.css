@@ -24259,3 +24259,75 @@ width: 100px !important
 .login-popup label{
     display: flex !important;
 }
+
+.deleteBut{
+    color: #fff !important;
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+
+.deletebtn i::before{
+    font-size: 15px;
+}
+
+.seetBtn i::before{
+    font-size: 15px;
+}
+        .mfp-bg {
+            display: none;
+            opacity: 0;
+        }
+
+        .productname {
+    font-size: 13px;
+    display: block;
+    color: #a01e20;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.stciky-right-bar {
+    position: sticky; top: 100px;
+}
+
+.order-table td {
+    padding-top: 1.5rem;
+    border: 1px solid #f2f2f2;
+    padding: 10px !important;
+}
+
+.order-table .product-name {
+    font-size: 1.4rem;
+    font-weight: 400;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.order-table th {
+    text-align: start;
+    padding: 10px;
+    border: 1px solid #f2f2f2;
+}
+
+.email-otp {
+    width: 100%;
+    margin: 0 auto;
+}
+.email-otp .text-otp-heading {
+    color: #a01e20;
+}
+.email-otp .text-otp-email {
+    margin-bottom: 7px;
+    font-size: 14px;
+}
+.email-otp .text-otp-desc {
+    margin-bottom: 7px;
+    font-size: 13px;
+}
+.email-otp .enter-otp-email {
+    width: 200px;
+    margin: 0 auto 7px;
+    letter-spacing: 10px;
+
+}

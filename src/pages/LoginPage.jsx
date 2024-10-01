@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
@@ -89,7 +89,7 @@ const LoginPage = () => {
         <div className="container">
           <ul className="breadcrumb">
             <li>
-              <a href="#">Home</a>
+              <Link to="/">Home</Link>
             </li>
             <li>Login</li>
           </ul>
@@ -155,7 +155,7 @@ const LoginPage = () => {
                           // Remember me functionality can be added here if needed
                         />
                         <label htmlFor="remember1">Remember me</label>
-                        <a href="forgot-password.html">Forgot Password?</a>
+                        <Link to="/">Forgot Password?</Link>
                       </div>
 
                       <button type="submit" className="btn btn-primary">
@@ -166,7 +166,7 @@ const LoginPage = () => {
                 </div>
 
                 <p>
-                  Don't have an account? <a href="sign-up.html">Sign up</a>
+                  Don't have an account? <Link to="/signUp">Sign up</Link>
                 </p>
               </div>
             </div>

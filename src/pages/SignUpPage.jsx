@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { createUserLogin } from "../Functions/UserLogin";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
 const SignupPage = () => {
@@ -99,7 +99,7 @@ const SignupPage = () => {
         <div className="container">
           <ul className="breadcrumb">
             <li>
-              <a href="#">Home</a>
+              <Link to="/">Home</Link>
             </li>
             <li>Sign Up</li>
           </ul>
@@ -210,16 +210,16 @@ const SignupPage = () => {
                         />
                         <label htmlFor="agree" className="font-size-md">
                           I agree to the{" "}
-                          <a href="#" className="text-primary font-size-md">
+                          <Link to="/" className="text-primary font-size-md">
                             privacy policy
-                          </a>
+                          </Link>
                         </label>
                         {errors.agree && (
                           <span className="text-danger">{errors.agree}</span>
                         )}
                       </div>
 
-                      <a
+                      <Link
                         className={`btn btn-primary ${
                           !formData.agree ? "disabled btn-danger" : ""
                         }`}
@@ -229,13 +229,13 @@ const SignupPage = () => {
                         }}
                       >
                         Sign Up
-                      </a>
+                      </Link>
                     </form>
                   </div>
                 </div>
 
                 <p>
-                  Already have an account? <a href="sign-in.html">Sign In</a>
+                  Already have an account? <Link to="/login">Sign In</Link>
                 </p>
               </div>
             </div>
