@@ -7,9 +7,11 @@ import { varifyUser } from '../Functions/UserLogin';
 
 
 import axios from "axios";
+import { Email } from '@mui/icons-material';
 
 const Header = (data) => {
     const [show, setShow] = useState(false)
+    const [userData, setUserData] = useState({})
     const [CategoryData, setCategoryData] = useState([])
     const fetchData = async () => {
         const res = await axios.get(
@@ -59,12 +61,14 @@ const Header = (data) => {
 
     useEffect(()=>{
       
-      const token= localStorage.getItem("token")
-      if(token){
-         varifyUser(token)
+      const Email= localStorage.getItem("Email");
+      console.log(Email);
+      if(Email){
+
+         varifyUser(Email)
            .then((response) => {
              const user = response.data; // Access the user data from response
-             console.log(user); // Do something with the user data
+             setUserData(user); // Do something with the user data
            })
            .catch((error) => {
              console.error("Error in user verification process:", error);
@@ -73,7 +77,7 @@ const Header = (data) => {
       else{
         console.log("No token found")
       }
-    },[])
+    },[]);
     return (
       <header className="header">
         <div className="header-top">
@@ -82,16 +86,24 @@ const Header = (data) => {
               <p className="welcome-msg">Welcome to Chanakya Corporate</p>
             </div>
             <div className="header-right">
-              <Link to="/" className="d-lg-show">
-                My Account
-              </Link>
-              <Link to="/Login" className="d-lg-show login sign-in">
-                <i className="w-icon-account"></i> Sign In
-              </Link>
-              <span className="delimiter d-lg-show">/</span>
-              <Link to="/SignUp" className="ml-0 d-lg-show login register">
-                Register
-              </Link>
+              {userData.Email ? (
+                <>
+                  <span>Welcome, {userData.Name}</span>
+                  <Link to="/" className="d-lg-show">
+                    My Account
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link to="/Login" className="d-lg-show login sign-in">
+                    <i className="w-icon-account"></i> Sign In
+                  </Link>
+                  <span className="delimiter d-lg-show">/</span>
+                  <Link to="/SignUp" className="ml-0 d-lg-show login register">
+                    Register
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>

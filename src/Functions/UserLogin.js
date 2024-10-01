@@ -19,15 +19,11 @@ export const createUserLogin = async (data) => {
 };
 
 
-export const varifyUser = async (token) => {
+export const varifyUser = async (Email) => {
   try {
     const res = await axios.get(
-      `${process.env.REACT_APP_API_URL}/api/auth/verifyUser`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      `${process.env.REACT_APP_API_URL}/api/auth/get/UserMasterDetails/${Email}`
+     
     );
     return res; // Returning the full Axios response
   } catch (error) {
