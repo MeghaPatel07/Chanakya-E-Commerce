@@ -1,4 +1,4 @@
-import {React, useState} from 'react';
+import { React, useEffect, useState } from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -7,179 +7,229 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
+import axios from "axios";
+import { Button } from 'react-bootstrap';
+// import { FaPlus } from "react-icons/fa";
 
 function valuetext(value) {
   return `${value}°C`;
 }
 
-export default function FilterSec() {
-    const [selectList, setSelectList] = useState([]);
-    const [value, setValue] = useState([20, 37]);
+export default function FilterSec({ handleSubmit }) {
+  const [selectList, setSelectList] = useState([]);
+  const [value, setValue] = useState([]);
 
-    const handleChange = (event, newValue) => {
-      setValue(newValue);
-    };
-    const subCategory = [
-        { id: 1, name: "Duffle Bag" },
-        { id: 2, name: "Suitcases" },
-        { id: 3, name: "Travel Tote" },
-        { id: 4, name: "Weekenders" },
-        { id: 5, name: "A carry-on" },
-        { id: 6, name: "Backpack" },
-      ];
+  const [filters, setFilters] = useState([])
+  const [subCategories, setSubcategories] = useState([])
+  const [categories, setCategories] = useState([])
+  const [brands, setBrands] = useState([])
+  const [minVal, setMinVal] = useState(0)
+  const [maxVal, setMaxVal] = useState(0)
 
-      const brands = [
-        { id: 1, name: "VIP" },
-        { id: 2, name: "Safari" },
-        { id: 3, name: "Aristocrat" },
-        { id: 4, name: "American Tourister" },
-      ];
+  useEffect(() => {
+    fetchFilters()
+  }, [])
 
-      const allCategory = [
-        { name: "Travelling Bags" },
-        { name: "Student Bags" },
-        { name: "Kids Bags" },
-        { name: "Camera Bags" },
-        { name: "Men Essentials" },
-        { name: "Women Essentials" },
-        { name: "Winter Wear" },
-        { name: "Monsoon Wear" },
-        { name: "Sports Wear" },
-        { name: "Gift Articles" },
-        { name: "Thermoware" },
-        { name: "Glassware" },
-        { name: "Corporate Gifts" },
-        { name: "Helmet" },
-      ];
-      
-    
-    
-      const [activeIndices, setActiveIndices] = useState([]);
-    
-      const handleClick = (index) => {
-        setActiveIndices((prevIndices) => {
+  const fetchFilters = async () => {
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/auth/list/get-filters`)
+    console.log(res.data[0])
+    setFilters(res.data[0])
+    setSubcategories(res.data[0].subCategories)
+    setCategories(res.data[0].categories)
+    setBrands(res.data[0].brands)
+    const minPrice = Math.min(...res.data[0].uniquePrices);
+    const maxPrice = Math.max(...res.data[0].uniquePrices);
+    setMaxVal(maxPrice)
+    setMinVal(minPrice)
+    setValue([minPrice,maxPrice])
+
+    console.log(`Min price: ${minPrice}`); // Min price: 111
+    console.log(`Max price: ${maxPrice}`); // Max price: 1999
+  }
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+    console.log(newValue)
+  };
+
+
+
+  const [activeCategoriesIndices, setActiveCategoriesIndices] = useState([]);
+  const [activeSubCategoriesIndices, setActiveSubCategoriesIndices] = useState([]);
+  const [activeBrandIndices, setActiveBrandIndices] = useState([]);
+  const handleClick = (e,index) => {
+    console.log(e)
+    if(e === 'categories')
+    {
+      setActiveCategoriesIndices((prevIndices) => {
+        if (prevIndices.includes(index)) {
+          return prevIndices.filter((i) => i !== index);
+        } else {
+          return [...prevIndices, index];
+        }
+      });
+    }
+    else if(e === 'subcategories')
+      {
+        setActiveSubCategoriesIndices((prevIndices) => {
           if (prevIndices.includes(index)) {
             return prevIndices.filter((i) => i !== index);
           } else {
             return [...prevIndices, index];
           }
         });
-      };
+      }
+      else if(e === 'brands')
+        {
+          setActiveBrandIndices((prevIndices) => {
+            if (prevIndices.includes(index)) {
+              return prevIndices.filter((i) => i !== index);
+            } else {
+              return [...prevIndices, index];
+            }
+          });
+        }
+   
+  };
 
-      const [activeIndices2, setActiveIndices2] = useState([]);
-    
-      const handleClick2 = (index) => {
-        setActiveIndices2((prevIndices) => {
-          if (prevIndices.includes(index)) {
-            return prevIndices.filter((i) => i !== index);
-          } else {
-            return [...prevIndices, index];
-          }
-        });
-      };
+  
 
+  
 
   return (
     <div>
-      <Accordion>
+      <Accordion className='widget new border-0'>
         <AccordionSummary
-          expandIcon={<p style={{marginBottom:"0px", fontSize:"24px", fontWeight:"bolder", color:"rgb(58, 58, 58)"}}><ArrowDownwardIcon /></p>}
+          expandIcon={<p style={{ marginBottom: "0px", fontSize: "24px", fontWeight: "bolder", color: "rgb(58, 58, 58)" }}><ArrowDownwardIcon /></p>}
           aria-controls="panel1-content"
           id="panel1-header"
         >
-          <Typography><p style={{marginBottom:"0px", fontSize:"18px", fontWeight:"bolder", color:"rgb(58, 58, 58)"}}>Sub Categories</p></Typography>
+          <Typography ><p className='widget-title' style={{ marginBottom: "0px", fontSize: "18px", fontWeight: "bolder", color: "rgb(58, 58, 58)" }}>Categories</p></Typography>
         </AccordionSummary>
         <AccordionDetails>
-        <ul class="widget-body filter-items item-check">
-        {subCategory.map((item, index) => (
-        <li
-          key={item.id}
-          className={activeIndices.includes(index) ? 'active' : 'inactive'}
-          onClick={() => handleClick(index)}
-        >
-          <a href="#" style={{ textAlign: "left" }}>{item.name}</a>
-        </li>
-      ))}
-                                        </ul>
+          <ul class="widget-body filter-items item-check">
+
+
+
+            {categories.map((item, index) => {
+              return (
+                <li
+                  key={index}
+                  id="categories"
+                  className={activeCategoriesIndices.includes(item._id) ? 'active' : 'inactive'}
+                  onClick={(e) => handleClick("categories",item._id)}
+                >
+                  <p className='p-0 text-left mb-1'>{item.categoryName}</p>
+                </li>
+              );
+            })}
+
+
+
+
+          </ul>
         </AccordionDetails>
       </Accordion>
-      <Accordion>
+      <Accordion className='widget new border-0'>
         <AccordionSummary
-          expandIcon={<p style={{marginBottom:"0px", fontSize:"24px", fontWeight:"bolder", color:"rgb(58, 58, 58)"}}><ArrowDownwardIcon /></p>}
+          expandIcon={<p style={{ marginBottom: "0px", fontSize: "24px", fontWeight: "bolder", color: "rgb(58, 58, 58)" }}><ArrowDownwardIcon /></p>}
           aria-controls="panel1-content"
           id="panel1-header"
         >
-          <Typography><p style={{marginBottom:"0px", fontSize:"18px", fontWeight:"bolder", color:"rgb(58, 58, 58)"}}>All Categories</p></Typography>
+          <Typography ><p className='widget-title' style={{ marginBottom: "0px", fontSize: "18px", fontWeight: "bolder", color: "rgb(58, 58, 58)" }}>Sub Categories</p></Typography>
         </AccordionSummary>
         <AccordionDetails>
-                                        <ul class="widget-body filter-items search-ul">
-                                        {allCategory.map((item, index) => (
-                                            <li><a href="#" style={{textAlign:"left"}}>{item.name}</a></li>
-      ))}
-                                        </ul>
+          <ul class="widget-body filter-items item-check">
+
+
+
+            {subCategories.map((item, index) => {
+              return (
+                <li
+                key={index}
+                name="subcategories"
+                className={activeSubCategoriesIndices.includes(item._id) ? 'active' : 'inactive'}
+                onClick={(e) => handleClick("subcategories",item._id)}
+                >
+                  <p className='p-0 text-left mb-1'>{item.subCategoryName}</p>
+                </li>
+              );
+            })}
+
+
+
+
+          </ul>
         </AccordionDetails>
       </Accordion>
-      <Accordion>
+      <Accordion className='widget new border-0'>
         <AccordionSummary
-          expandIcon={<p style={{marginBottom:"0px", fontSize:"24px", fontWeight:"bolder", color:"rgb(58, 58, 58)"}}><ArrowDownwardIcon /></p>}
+          expandIcon={<p style={{ marginBottom: "0px", fontSize: "24px", fontWeight: "bolder", color: "rgb(58, 58, 58)" }}><ArrowDownwardIcon /></p>}
           aria-controls="panel1-content"
           id="panel1-header"
         >
-          <Typography><p style={{marginBottom:"0px", fontSize:"18px", fontWeight:"bolder", color:"rgb(58, 58, 58)"}}>Brands</p></Typography>
+          <Typography ><p className='widget-title' style={{ marginBottom: "0px", fontSize: "18px", fontWeight: "bolder", color: "rgb(58, 58, 58)" }}>Brands</p></Typography>
         </AccordionSummary>
         <AccordionDetails>
-        <ul class="widget-body filter-items item-check">
-        {brands.map((item, index) => (
-        <li
-          key={item.id}
-          className={activeIndices2.includes(index) ? 'active' : 'inactive'}
-          onClick={() => handleClick2(index)}
-        >
-          <a href="#" style={{ textAlign: "left" }}>{item.name}</a>
-        </li>
-      ))}
-                                        </ul>
+          <ul class="widget-body filter-items item-check">
+
+
+
+            {brands.map((item, index) => {
+              return (
+                <li
+                key={index}
+                name="brands"
+                className={activeBrandIndices.includes(item._id) ? 'active' : 'inactive'}
+                onClick={(e) => handleClick('brands',item._id)}
+                >
+                  <p className='p-0 text-left mb-1'>{item.brandName}</p>
+                </li>
+              );
+            })}
+
+
+
+
+          </ul>
         </AccordionDetails>
       </Accordion>
       <Accordion>
-        <AccordionSummary
-          expandIcon={<p style={{marginBottom:"0px", fontSize:"24px", fontWeight:"bolder", color:"rgb(58, 58, 58)"}}><ArrowDownwardIcon /></p>}
-          aria-controls="panel1-content"
-          id="panel1-header"
-        >
-          <Typography><p style={{marginBottom:"0px", fontSize:"18px", fontWeight:"bolder", color:"rgb(58, 58, 58)"}}>Price Range</p></Typography>
-        </AccordionSummary>
+
         <AccordionDetails>
-        <Box>
-          <div className='d-flex align-item-center justify-content-between'>
-            <div className='d-flex' style={{alignItems:"center", gap:"10px"}}><p className='mb-0-p'>Min</p><div className='d-flex justify-content-center range-box'><p className='mb-0-p'>4433333334</p></div></div>
-            <p className='mb-0-p'>-</p>
-            <div className='d-flex' style={{alignItems:"center", gap:"10px"}}><p className='mb-0-p'>Max</p><div className='d-flex justify-content-center range-box'><p className='mb-0-p'>4433333334</p></div></div>
-          </div>
-      <Slider
-        getAriaLabel={() => 'Temperature range'}
-        value={value}
-        onChange={handleChange}
-        valueLabelDisplay="auto"
-        getAriaValueText={valuetext}
-        sx={{
-          color: '#1976d2',
-          '& .MuiSlider-thumb': {
-            backgroundColor: '#a01e20',
-          },
-          '& .MuiSlider-track': {
-            backgroundColor: '#a01e20',
-            border: "1px solid #a01e20"
-          },
-          '& .MuiSlider-rail': {
-            backgroundColor: '#a01e20',
-          },
-        }}
-      />
-    </Box>
+          <Box>
+            <div className='d-flex align-item-center justify-content-between'>
+              <div className='d-flex' style={{ alignItems: "center", gap: "10px" }}><p className='mb-0-p'>Min</p><div className='d-flex justify-content-center range-box'><p className='mb-0-p'>{value[0]}</p></div></div>
+
+              <div className='d-flex' style={{ alignItems: "center", gap: "10px" }}><p className='mb-0-p'>Max</p><div className='d-flex justify-content-center range-box'><p className='mb-0-p'>{value[1]}</p></div></div>
+            </div>
+            
+            <Slider
+              getAriaLabel={() => 'Temperature range'}
+              min={minVal}
+              max={maxVal}
+              value={value}
+              onChange={handleChange}
+              valueLabelDisplay="auto"
+              getAriaValueText={valuetext}
+              sx={{
+                color: '#1976d2',
+                '& .MuiSlider-thumb': {
+                  backgroundColor: '#a01e20',
+                },
+                '& .MuiSlider-track': {
+                  backgroundColor: '#a01e20',
+                  border: "1px solid #a01e20"
+                },
+                '& .MuiSlider-rail': {
+                  backgroundColor: '#a01e20',
+                },
+              }}
+            />
+          </Box>
         </AccordionDetails>
       </Accordion>
-      <button className='filter-btn'>Apply Now</button>
+      <button className='filter-btn' onClick={() => handleSubmit({activeBrandIndices,activeCategoriesIndices,activeSubCategoriesIndices,value})} type='button'>Apply Now</button>
     </div>
   );
 }

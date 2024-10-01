@@ -10302,7 +10302,7 @@ body .product-popup {
 
 @media (min-width: 768px) {
     .product-popup .product-details {
-        position: absolute;
+        position: relative;
         overflow-y: auto;
         top: 0;
         left: 2rem;
@@ -12603,6 +12603,7 @@ body .product-popup {
         padding-bottom: 0;
         text-transform: capitalize;
         font-weight: 400;
+        text-decoration: none;
     }
 
 .price-range {
@@ -12670,27 +12671,27 @@ body .product-popup {
     font-size: 1.4rem;
 }
 
-    .filter-items a {
+    .filter-items p{
         position: relative;
         display: block;
         color: inherit;
         padding: 1rem 0 1rem 0.2rem;
     }
 
-        .filter-items a.active {
+        .filter-items p.active {
             color: #a01e20;
             font-weight: 600;
         }
 
-        .filter-items a:hover {
+        .filter-items p:hover {
             color: #a01e20;
         }
 
-    .filter-items.item-check a {
+    .filter-items.item-check p {
         padding-left: 2.8rem !important;
     }
 
-        .filter-items.item-check a::before {
+        .filter-items.item-check p::before {
             content: "";
             position: absolute;
             border: 1px solid;
@@ -12711,12 +12712,12 @@ body .product-popup {
         }
 
 @media (-webkit-min-device-pixel-ratio: 1.5), (min--moz-device-pixel-ratio: 1.5), (min-device-pixel-ratio: 1.5) {
-    .filter-items.item-check a::before {
+    .filter-items.item-check p::before {
         text-indent: 0;
     }
 }
 
-.filter-items.item-check .active > a::before {
+.filter-items.item-check .active > p::before {
     content: "";
     background-color: #a01e20;
     width: 20px;
@@ -12728,15 +12729,15 @@ body .product-popup {
     font-weight: 600;
 }
 
-.filter-items.search-ul a::before {
+.filter-items.search-ul p::before {
     content: none;
 }
 
-.filter-items .show > a {
+.filter-items .show > p {
     color: #a01e20;
 }
 
-    .filter-items .show > a i {
+    .filter-items .show > p i {
         -webkit-transform: rotate(-180deg);
         transform: rotate(-180deg);
     }
@@ -12747,7 +12748,7 @@ body .product-popup {
     color: #ccc;
 }
 
-.filter-items .with-ul > a > i {
+.filter-items .with-ul > p > i {
     position: absolute;
     right: 0;
     line-height: 0;
@@ -12776,7 +12777,7 @@ body .product-popup {
         border-left: 1px solid #eee;
     }
 
-    .filter-items ul a {
+    .filter-items ul p {
         font-size: 1.3rem;
         color: #999;
         padding: 0.45rem 0;
@@ -14912,7 +14913,7 @@ body .product-popup {
 }
 
 .widget .widget-body {
-    padding: 0.7rem 0 1rem;
+    /* padding: 0.7rem 0 1rem; */
     opacity: 1;
     -webkit-transition: opacity 0.3s;
     transition: opacity 0.3s;
