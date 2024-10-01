@@ -121,3 +121,26 @@ left: -90px;
   -webkit-transform: translate3d(0, -10px, 0);
           transform: translate3d(0, -10px, 0);
 }
+
+.widget.new{
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+.widget.new .MuiAccordionSummary-content{
+  margin: 0 !important;
+}
+
+.widget.new .css-15v22id-MuiAccordionDetails-root{
+  padding: 0;
+}
+
+.widget .widget-body{
+  padding: 10px 0 10px  ;
+}
+
+.widget .MuiButtonBase-root.MuiAccordionSummary-root{
+  border-bottom : 1px solid #eee !important;
+  min-height: fit-content !important;
+  padding: 0;
+}

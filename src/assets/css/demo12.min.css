@@ -12884,7 +12884,7 @@ body .product-popup {
   white-space: nowrap;
 }
 .widget .widget-body {
-  padding: 0.7rem 0 1rem;
+  /* padding: 0.7rem 0 1rem; */
   opacity: 1;
   -webkit-transition: opacity 0.3s;
   transition: opacity 0.3s;
@@ -14095,7 +14095,7 @@ body .product-popup {
       padding-top: 5px;
     padding-bottom: 5px;
     color: #333;
-    margin-bottom: 15px;
+    /* margin-bottom: 15px; */
     background: #fff;
     font-size: 1.2rem;
     border-bottom: 1px solid #eee !important;
