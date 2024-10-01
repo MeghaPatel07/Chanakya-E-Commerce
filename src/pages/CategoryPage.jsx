@@ -39,18 +39,18 @@ const CategoryPage = () => {
 
                                 <div key={index} xs="12" md="6" lg="4" xl="3" className="category category-ellipse mb-5">
                                     <div className="category-media">
-                                        <a href="#">
+                                        <Link to="#">
                                             <img
                                                 src={`${process.env.REACT_APP_API_URL}/${category.logo}`}
                                                 alt={category.categoryName}
                                                 width="190"
                                                 height="190"
                                             />
-                                        </a>
+                                        </Link>
                                     </div>
                                     <div className="category-content">
                                         <h4 className="category-name">
-                                            <a href="#">{category.categoryName}</a>
+                                            <Link to="#">{category.categoryName}</Link>
                                         </h4>
                                     </div>
                                 </div>
