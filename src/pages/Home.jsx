@@ -7,6 +7,7 @@ import Marquee from "react-fast-marquee";
 import { Client } from '../component/Client';
 import { Link } from 'react-router-dom'; 
 import axios from "axios";
+import CreateCatalogBtn from '../component/CreateCatalogBtn';
 
 // Define the brand images
  
@@ -91,6 +92,7 @@ const Home = () => {
 
     return (
         <Container className="pb-2">
+          
             <Row>
                 {/* Left vertical slider for brands */}
                 <Col lg="2" className="widget widget-products" style={{ borderRight: '1px solid #eee' }}>
@@ -182,6 +184,7 @@ const Home = () => {
                     </div>
                 ))}
             </div>
+            <CreateCatalogBtn />
             {/* End of Category Wrapper */}
         </div>
             </Row>

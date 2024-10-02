@@ -20,6 +20,7 @@ import SignupPage from "./pages/SignUpPage";
 import Cart from "./pages/Cart";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrderCompletion from "./pages/Order-Complete";
+import CreateCatalogPage from "./pages/CreateCatalogPage";
 function App() {
   return (
     <div className="App">
@@ -36,6 +37,7 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/orderCompletion" element={<OrderCompletion />} />
+          <Route path="/createCatalog" element={<CreateCatalogPage />} />
         </Routes>
         <Footer />
       </BrowserRouter>
