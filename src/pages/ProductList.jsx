@@ -124,6 +124,33 @@ const ProductList = () => {
 
   };
 
+  const handleSortChange =(e)=>{
+    console.log(e.target)
+    if (e.target.value === 'AZ') {
+      // Assuming products is an array of objects with productName field
+      const sortedProducts = [...products].sort((a, b) => {
+        return a.productName.localeCompare(b.productName); // Sorts alphabetically (A-Z)
+      });
+    
+      setProducts(sortedProducts); // Assuming setProducts is the state updater function
+    }
+    if (e.target.value === 'ZA') {
+      // Assuming products is an array of objects with productName field
+      const sortedProducts = [...products].sort((a, b) => {
+        return b.productName.localeCompare(a.productName); // Sorts alphabetically (A-Z)
+      });
+    
+      setProducts(sortedProducts); // Assuming setProducts is the state updater function
+    }
+    if (e.target.value === 'price') {
+      // Assuming products is an array of objects with a price field
+      const sortedProducts = [...products].sort((a, b) => a.price - b.price); // Sorts by price (low to high)
+    
+      setProducts(sortedProducts); // Assuming setProducts is the state updater function
+    }
+    
+    
+  }
 
   return (
     <>
@@ -292,12 +319,12 @@ const ProductList = () => {
                 <div className='dis-flex-end'>
                   <div class="toolbox-item toolbox-show select-box" style={{ width: "215px" }}>
                     <label>Sort By :</label>
-                    <select name="orderby" class="form-control">
-                      <option value="default" selected="selected">
-                        Default sorting
+                    <select name="orderby" class="form-control" onChange={handleSortChange}>
+                      <option value="price" selected="selected">
+                        price
                       </option>
-                      <option value="popularity">Sort by A to Z</option>
-                      <option value="rating">Sort by Z to A</option>
+                      <option value="AZ">Sort by A to Z</option>
+                      <option value="ZA">Sort by Z to A</option>
                     </select>
                   </div>
                 </div>
