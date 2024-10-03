@@ -6832,11 +6832,73 @@ blockquote {
     .category-group-image a {
         white-space: nowrap;
     }
+.brandLogo{
+    width: 100px;
+}
+.catagoryDiv{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding-bottom: 10px;
+}
+.remarkDescription{
+    color: #a01e20;
+}
+.increntBtn{
+    cursor: pointer;
+    font-size: 20px;
+    color: #ccc;
+}
+.modalRow{
+    padding: 20px;
+}
+.mainDivCounter{
+    display: flex;
+    /* gap: 20px; */
+    justify-content: space-between;
+    font-size: 16px;
+    border: 1px solid #000;
+    padding: 10px;
+    border-radius: 7px;
+    align-items: center;
+}
+.addInquiry{
+    width: 100%;
+    padding: 14px;
+    border-radius: 7px;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: #a01e20;
+}
+.icon-box-wrapper {
+    margin-top: 2.9rem;
+    padding: 2.4rem 0 2.2rem;
+    border: 1px solid #eee;
+}
 
+.hrTag{
+    border: 1px solid #000;
+}
+.catagoryTitle{
+    font-size: 16px;
+    font-weight: 500;
+    color: #ccc;
+    text-transform: capitalize;
+}
+.catagoryTitle span{
+    color: #000;
+}
+.catagoryDiv img {
+    border: 1px solid #ccc;
+    border-radius: 7px;
+}
 .category-ellipse .category-media {
     border-radius: 50%;
     overflow: hidden;
-    border: 0px solid #fff;
+    /* border: 0px solid #fff; */
+    border:0px solid #a01e20;
     -webkit-transition: border-width 0.1s, -webkit-box-shadow 0.1s;
     transition: border-width 0.1s, -webkit-box-shadow 0.1s;
     transition: box-shadow 0.1s, border-width 0.1s;
