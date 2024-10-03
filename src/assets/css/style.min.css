@@ -67,11 +67,78 @@ body:not(.loaded) * {
     -webkit-transition: margin 0.4s, opacity 0.5s;
     transition: margin 0.4s, opacity 0.5s;
 }
-
+.createCatelogDiv{
+    bottom: 74px;
+    left: 98%;
+    position: fixed;
+    z-index: 99999999;
+    background: #a01e20;
+    
+    border-radius: 10px;
+}
+.createCatelogDiv a{
+    color: #fff;
+    text-orientation: upright;
+    -webkit-writing-mode: vertical-rl;
+    writing-mode: vertical-rl;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px;
+}
+.createCatelogDiv a:hover{
+    color: #fff;
+}
 .loaded > .page-wrapper {
     opacity: 1;
 }
+.selector{
+    padding: 10px;
+    border: 1px solid #a01e20;
+}
+.qtyInput{
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #a01e20;
+    border-radius: 3px;
+}
+.viewBtn{
+    width: 100%;
+    padding: 5px;
+    border-radius: 3px;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: #333;
+}
+.categoryDiv{
+    display: flex;
+    justify-content: center;
+    width: 30% !important;
+}
+.allCategoryDiv{
+    display: flex;
+    align-items:center;
+    gap: 10px;
 
+}
+.productTitle{    font-size: 12px;
+    font-weight: 400;
+    color: #a01e20;
+    font-size: 15px;
+    font-weight: 500;
+    color: #000;
+}
+.categoryTitle{
+    font-size: 12px;
+    font-weight: 400;
+    color: #a01e20;
+    text-transform: uppercase;
+}
+.checkBoxDiv{
+    padding: 10px;
+}
 ul {
     padding-left: 1.5em;
 }
