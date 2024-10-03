@@ -62,7 +62,7 @@ const LoginPage = () => {
         if (res.data.success) {
           toast.success(res.data.message);
            localStorage.setItem("token", res.data.token);
-           localStorage.setItem("Email", values.Email);
+           localStorage.setItem("user", res.data._id);
 
 
           
