@@ -89,9 +89,9 @@ left: -90px;
   position: absolute;
   z-index: 9999; /* Ensure this is higher than other elements */
 }
-.dropdown-box {
+/* .dropdown-box {
     display: none;
-}
+} */
 
 .dropdown-box.active {
     display: block;
