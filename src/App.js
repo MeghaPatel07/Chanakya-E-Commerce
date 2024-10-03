@@ -17,6 +17,10 @@ import CategoryPage from "./pages/CategoryPage";
 import ProductList from "./pages/ProductList";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignUpPage";
+import Cart from "./pages/Cart";
+import CheckoutPage from "./pages/CheckoutPage";
+import OrderCompletion from "./pages/Order-Complete";
+import CreateCatalogPage from "./pages/CreateCatalogPage";
 function App() {
   return (
     <div className="App">
@@ -28,8 +32,12 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signUp" element={<SignupPage />} />
-          <Route path='/category' element={<CategoryPage />}/>
-          <Route path='/product-list' element={<ProductList />}/>
+          <Route path="/category" element={<CategoryPage />} />
+          <Route path="/product-list" element={<ProductList />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/orderCompletion" element={<OrderCompletion />} />
+          <Route path="/createCatalog" element={<CreateCatalogPage />} />
         </Routes>
         <Footer />
       </BrowserRouter>
