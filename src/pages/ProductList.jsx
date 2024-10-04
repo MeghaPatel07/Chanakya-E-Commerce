@@ -13,6 +13,7 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
+import ProductInquiry from '../component/ProductInquiry';
 
 function valuetext(value) {
   return `${value}°C`;
@@ -163,6 +164,7 @@ const ProductList = () => {
           </ul>
         </div>
       </nav>
+     
       <div className='page-content mb-10'>
         <div className="container">
 
@@ -316,7 +318,9 @@ const ProductList = () => {
             </Col>
             <Col lg={10} md={12}>
               <Row>
+              
                 <div className='dis-flex-end'>
+                <ProductInquiry />
                   <div class="toolbox-item toolbox-show select-box" style={{ width: "215px" }}>
                     <label>Sort By :</label>
                     <select name="orderby" class="form-control" onChange={handleSortChange}>
@@ -331,15 +335,18 @@ const ProductList = () => {
                 {products.length > 0 ?
                   products.map((items, index) => {
                     return (
+                      
                       <Col lg={3} md={4} sm={6} key={index}>
+                       
                         <div className='item-card'>
                           <img src={`${process.env.REACT_APP_API_URL}/${items.productImage}`} alt="" />
                           <p>{items.productName}</p>
                           <p>{items.brandName.brandName}</p>
-                          <div className='item-card-hov'>
+                          {/* <div className='item-card-hov'>
                             <i className="w-icon-cart"></i>
                             <p>Add To Inquiry</p>
-                          </div>
+                          </div> */}
+                          <ProductInquiry />
                         </div>
                       </Col>)
                   }) : "No Products in this filter"}
