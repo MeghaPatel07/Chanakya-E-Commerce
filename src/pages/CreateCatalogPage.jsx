@@ -173,7 +173,7 @@ const CreateCatalogPage = () => {
     if(checkedProducts.length === 0)
     {
       toast.error("Please Select Products to download the Brochure")
-      isLoading(false)
+      setLoading(false)
       return
     }
     try {
@@ -212,6 +212,7 @@ const CreateCatalogPage = () => {
       endPrice: endPrice ,
       quantity: quantity,
       user: user ? user : null,
+      productName : checkedProducts
     };
     try{
       axios.post(`${process.env.REACT_APP_API_URL}/api/auth/create/catalogue-inqiury`,finalValues).then((res)=>{
