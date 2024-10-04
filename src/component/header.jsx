@@ -58,15 +58,16 @@ const Header = (data) => {
       setIsOpen(!isOpen); // Toggle the dropdown state
     };
 
-
+    const Email= localStorage.getItem("user");
     useEffect(()=>{
       
-      const Email= localStorage.getItem("Email");
+      
       console.log(Email);
       if(Email){
 
          varifyUser(Email)
            .then((response) => {
+            console.log(response)
              const user = response.data; // Access the user data from response
              setUserData(user); // Do something with the user data
            })
@@ -77,7 +78,7 @@ const Header = (data) => {
       else{
         console.log("No token found")
       }
-    },[]);
+    },[Email]);
     return (
       <header className="header">
         <div className="header-top">
@@ -89,9 +90,9 @@ const Header = (data) => {
               {userData.Email ? (
                 <>
                   <span>Welcome, {userData.Name}</span>
-                  <Link to="/" className="d-lg-show">
+                  {/* <Link to="/" className="d-lg-show">
                     My Account
-                  </Link>
+                  </Link> */}
                 </>
               ) : (
                 <>

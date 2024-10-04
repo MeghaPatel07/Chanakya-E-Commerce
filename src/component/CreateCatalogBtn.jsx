@@ -1,12 +1,35 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect , useState } from 'react'
+import { Link, redirect , useNavigate } from 'react-router-dom'
+import { varifyUser } from '../Functions/UserLogin';
+import { toast, ToastContainer } from "react-toastify";
+
 
 const CreateCatalogBtn = () => {
+  const navigate = useNavigate();
+  const user= localStorage.getItem("user");
+  const [userData, setUserData] = useState({})
+ 
+
+  const chechLogin =()=>{
+    if(user)
+    {
+      navigate("/createCatalog");
+      // redirect("/createCatalog")
+    }
+    else{
+     
+      toast.warning("Please Login to assess Catalogue")
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000)
+    }
+  }
+
   return (
     <React.Fragment>
-    
+    <ToastContainer />
         <div className='createCatelogDiv'>
-        <Link to="/createCatalog">   Create Catalog  </Link>
+        <button onClick={chechLogin} className='catalogue-vertical'>   Create Catalog  </button>
         </div>
        
     </React.Fragment>
