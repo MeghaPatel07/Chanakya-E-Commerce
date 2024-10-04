@@ -60,13 +60,14 @@ const LoginPage = () => {
       .post(`${process.env.REACT_APP_API_URL}/api/UserMasterLogin`, values)
       .then((res) => {
         if (res.data.success) {
+          console.log(res.data)
           toast.success(res.data.message);
            localStorage.setItem("token", res.data.token);
-           localStorage.setItem("Email", values.Email);
+           localStorage.setItem("user", res.data.user._id);
 
-
+           window.location.href = '/'; 
           
-            navigate("/"); // Redirect to the home page after successful login
+            // navigate("/"); // Redirect to the home page after successful login
           
         } else {
           toast.error(res.data.message || "Login failed. Please try again.");
