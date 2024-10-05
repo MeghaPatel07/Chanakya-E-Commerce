@@ -169,16 +169,26 @@ input, .btn {
 
 a {
     text-decoration: none;
-    color: #a01e20;
+    color: #a01e20 ; 
     -webkit-transition: color 0.3s;
     transition: color 0.3s;
 }
-
+ 
     a:hover {
-        color: #1914fe;
+        color: #000;
         text-decoration: none !important;
     }
-
+.orTitle{
+    padding-left: 5px;
+}
+.order-info {
+    border: 1px solid #e7e7e7;
+    padding: 20px;
+}
+.no-order {
+    border: 2px dashed #ccc;
+    padding: 20px;
+}
 :focus {
     outline: 0;
 }
@@ -190,7 +200,7 @@ figure {
 hr {
     margin: 0.5rem 0 1.5rem;
     border: 0;
-    border-top: 1px solid #eee;
+    border-top: 1px solid #ccc;
 }
 
 img {
@@ -206,10 +216,20 @@ table {
     border-collapse: collapse;
 }
 
+.address-info {
+    border: 1px solid #e7e7e7;
+    padding: 20px;
+    text-align: start;
+}
 .scrollable {
     -webkit-overflow-scrolling: touch;
 }
-
+.ecommerce-address {
+    background-color: #f5f6f8;
+    padding: 20px;
+    text-align: start;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
     .scrollable::-webkit-scrollbar {
         height: 7px;
         width: 4px;
@@ -3176,6 +3196,12 @@ blockquote {
 .text-default {
     color: #666 !important;
 }
+.loginTitle{
+    color: #a01c20;
+}
+.singnupBtn{
+    background-color: #a01c20;
+}
 
 .text-hover-underline::after {
     display: block;
@@ -5687,7 +5713,7 @@ blockquote {
 }
 
     .btn:hover, .btn:active, .btn:focus {
-        color: #666;
+        color: #a01e20;
         border-color: gainsboro;
         background-color: gainsboro;
     }
@@ -5821,6 +5847,9 @@ blockquote {
     -webkit-transform: scaleX(1);
     transform: scaleX(1);
 }
+.editBtn{
+    color: #a01c20;
+}
 
 .btn-underline::after {
     display: block;
@@ -5907,8 +5936,8 @@ blockquote {
 
     .btn-danger {
     color: #fff;
-    background-color: #dc3545;
-    border-color: #dc3545;
+    background-color: #a01e20 !important;
+    border-color: #a01e20 !important;
 }
 
     .btn-danger:hover {
@@ -21392,11 +21421,23 @@ body .product-popup {
     text-transform: none;
     border-bottom: 1px solid #eee;
 }
-
+.account-info {
+    border: 1px solid #e7e7e7;
+    padding: 20px;
+}
+.contact-information {
+    color: #a01e20;
+    font-size: 20px;
+    text-align: start;
+}
+.informationDiv{
+    text-align: start;
+}
 .my-account .link-item {
     font-weight: 600;
     color: #333;
     line-height: 1;
+    text-align: start;
 }
 
     .my-account .link-item a {
@@ -24131,12 +24172,20 @@ aside .sp-sidebar-banner span {
 .w-auto {
     width: auto !important;
 }
-
+.error-message{
+    color: red;
+    font-size: 12px;
+    padding-bottom: 10px;
+}
+.profile-info{
+    text-align: start;
+}
 .badge {
     margin-left: 20px;
     font-size: 12px;
     background-color: #d7d7d7;
     padding: 10px;
+    color: #000;
 }
 
 .btn-vendor {
@@ -24213,7 +24262,7 @@ aside .sp-sidebar-banner span {
     .account-dashboard:after {
         content: '';
         position: absolute;
-        background: #ff4901;
+        background:#a01e20;
         bottom: -1px;
         left: 0;
         width: 50px;

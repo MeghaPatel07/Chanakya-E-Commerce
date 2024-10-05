@@ -21,6 +21,10 @@ import Cart from "./pages/Cart";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrderCompletion from "./pages/Order-Complete";
 import CreateCatalogPage from "./pages/CreateCatalogPage";
+import MyAccount from "./pages/MyAccount";
+import MyOrder from "./pages/MyOrder";
+import MyAddress from "./pages/MyAddress";
+import MyProFile from "./pages/MyProFile";
 function App() {
   return (
     <div className="App">
@@ -38,6 +42,10 @@ function App() {
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/orderCompletion" element={<OrderCompletion />} />
           <Route path="/createCatalog" element={<CreateCatalogPage />} />
+          <Route path="/myAccount" element={<MyAccount />} />
+          <Route path="/myOrder" element={<MyOrder />} />
+          <Route path="/myAddres" element={<MyAddress />} />
+          <Route path="/myProfile" element={<MyProFile />} />
         </Routes>
         <Footer />
       </BrowserRouter>
