@@ -25,6 +25,11 @@ import MyAccount from "./pages/MyAccount";
 import MyOrder from "./pages/MyOrder";
 import MyAddress from "./pages/MyAddress";
 import MyProFile from "./pages/MyProFile";
+import BrandPage from "./pages/BrandPage";
+import AboutUs from "./pages/AboutUs";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import ContactUs from "./pages/ContactUs";
+import PrintStatment from "./pages/PrintStatment";
 function App() {
   return (
     <div className="App">
@@ -46,6 +51,11 @@ function App() {
           <Route path="/myOrder" element={<MyOrder />} />
           <Route path="/myAddres" element={<MyAddress />} />
           <Route path="/myProfile" element={<MyProFile />} />
+          <Route path="/brand" element={<BrandPage />} />
+          <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/contactUs" element={<ContactUs />} />
+          <Route path="/printStatment" element={<PrintStatment />} />
         </Routes>
         <Footer />
       </BrowserRouter>

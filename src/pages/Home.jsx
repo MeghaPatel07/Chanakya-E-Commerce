@@ -99,8 +99,8 @@ const Home = () => {
                     <div className="title-link-wrapper mb-2">
                         <h4 className="title title-link font-weight-bold" style={{ fontSize: '15px' }}>Brands We Have</h4>
                     </div>
-                    <div className="vertical-marquee">
-                        <Marquee gradient={false} direction="up" speed={10}>
+                    <div className="vertical-marquee" >
+                        <Marquee gradient={false}  direction="up"  speed={10}>
                             {brandData.map((img, index) => (
                                 <div key={index} className="brand-item">
                                     <Link to="/">
@@ -165,7 +165,7 @@ const Home = () => {
                         <div className="category category-group-image br-sm">
                             <div className="category-content">
                                 <h4 className="category-name">
-                                    <a href="#">{category.categoryDetails.categoryName}</a>
+                                    <a href="#">{category?.categoryDetails?.categoryName}</a>
                                 </h4>
                                 <ul className="category-list">
                                     {category.subCategoryDetails.map((subProduct, subIndex) => (
@@ -177,7 +177,7 @@ const Home = () => {
                             </div>
                             <a href="#">
                                 <figure className="category-media">
-                                    <img src={`${process.env.REACT_APP_API_URL}/${category.categoryDetails.logo}`} alt={category.categoryDetails.categoryName} width="190" height="215" />
+                                    <img src={`${process.env.REACT_APP_API_URL}/${category?.categoryDetails?.logo}`} alt={category?.categoryDetails?.categoryName} width="190" height="215" />
                                 </figure>
                             </a>
                         </div>
