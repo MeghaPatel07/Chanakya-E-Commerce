@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { createUserLogin } from "../Functions/UserLogin";
 import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+import { Button } from "reactstrap";
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -113,7 +114,7 @@ const SignupPage = () => {
             <div className="login-popup signup-popup">
               <div className="tab tab-nav-boxed tab-nav-center tab-nav-underline">
                 <div className="text-center">
-                  <h4 className="text-primary heading-sign">
+                  <h4 className="loginTitle  heading-sign">
                     Create your Account in Chanakya Corporate
                   </h4>
                 </div>
@@ -219,17 +220,16 @@ const SignupPage = () => {
                         )}
                       </div>
 
-                      <Link
-                        className={`btn btn-primary ${
-                          !formData.agree ? "disabled btn-danger" : ""
-                        }`}
+                      <Button
+                        className=" btn-danger"
+                        disabled={!formData.agree}
                         onClick={handleSubmit}
                         style={{
                           pointerEvents: !formData.agree ? "none" : "auto",
                         }}
                       >
                         Sign Up
-                      </Link>
+                      </Button>
                     </form>
                   </div>
                 </div>

@@ -156,13 +156,14 @@ const Header = (data) => {
                 <Link to="tel:#" className="w-icon-call"></Link>
                 <div className="call-info d-lg-show">
                   <h4 className="chat font-size-md text-normal ls-normal text-white mb-0">
-                    <a
-                      href="mailto:info@chanakya.com"
-                      className="text-capitalize text-primary font-weight-normal"
+                    <Link
+                      to="mailto:info@chanakya.com"
+                      className="text-capitalize  font-weight-normal"
+                      style={{color:"#a01e20"}}
                     >
                       Live Chat
-                    </a>
-                    <span className="text-light font-weight-normal">or :</span>
+                    </Link>
+                    <span className="text-light orTitle font-weight-normal">or :</span>
                   </h4>
                   <a
                     href="tel:#"

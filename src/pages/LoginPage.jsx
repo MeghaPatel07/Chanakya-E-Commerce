@@ -103,7 +103,7 @@ const LoginPage = () => {
             <div className="login-popup">
               <div className="tab tab-nav-boxed tab-nav-center tab-nav-underline">
                 <div className="text-center">
-                  <h4 className="text-primary heading-sign">
+                  <h4 className="loginTitle heading-sign">
                     Welcome to Chanakya Corporate, Sign into your Account
                   </h4>
                 </div>
