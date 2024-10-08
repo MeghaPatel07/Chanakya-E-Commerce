@@ -32,10 +32,35 @@ const CheckoutPage = () => {
                   Billing Details
                 </h3>
                 <div className="row gutter-sm">
+                <div className="col-xs-6">
+                    <div className="form-group">
+                      <label htmlFor="companyName" className="d-flex">
+                        Company name <span>*</span>
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control form-control-md"
+                        name="companyName"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-xs-6">
+                    <div className="form-group">
+                      <label htmlFor="designation" className="d-flex">
+                        Designation <span>*</span>
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control form-control-md"
+                        name="designation"
+                      />
+                    </div>
+                  </div>
                   <div className="col-xs-6">
                     <div className="form-group">
                       <label htmlFor="firstname" className="d-flex">
-                        First name *
+                        First name <span>*</span>
                       </label>
                       <input
                         type="text"
@@ -48,7 +73,7 @@ const CheckoutPage = () => {
                   <div className="col-xs-6">
                     <div className="form-group">
                       <label htmlFor="lastname" className="d-flex">
-                        Last name *
+                        Last name <span>*</span>
                       </label>
                       <input
                         type="text"
@@ -62,7 +87,7 @@ const CheckoutPage = () => {
                   <div className="col-xs-6">
                     <div className="form-group">
                       <label htmlFor="email" className="d-flex">
-                        Email Address *
+                        Email Address<span>*</span>
                       </label>
                       <input
                         type="text"
@@ -74,13 +99,14 @@ const CheckoutPage = () => {
                   </div>
                   <div className="col-xs-6">
                     <div className="form-group">
-                      <label htmlFor="companyEmail" className="d-flex">
-                        Company Email Address *
+                      <label htmlFor="companyEmail"  className="d-flex">
+                        Company Email Address <span>*</span>
                       </label>
                       <input
-                        type="text"
+                        type="email"
                         className="form-control form-control-md"
                         name="companyEmail"
+                        placeholder="optional"
                         required
                       />
                     </div>
@@ -89,7 +115,7 @@ const CheckoutPage = () => {
                   <div className="col-xs-6">
                     <div className="form-group">
                       <label htmlFor="contactNo" className="d-flex">
-                        Contact No. *
+                        Contact No. <span>*</span>
                       </label>
                       <input
                         type="text"
@@ -102,7 +128,7 @@ const CheckoutPage = () => {
                   <div className="col-xs-6">
                     <div className="form-group">
                       <label htmlFor="companyContactNo" className="d-flex">
-                        Company Contact No. *
+                        Company Contact No. <span>*</span>
                       </label>
                       <input
                         type="text"
@@ -115,34 +141,22 @@ const CheckoutPage = () => {
 
                   <div className="col-xs-6">
                     <div className="form-group">
-                      <label htmlFor="companyName" className="d-flex">
-                        Company name *
+                      <label htmlFor="companyContactNo" className="d-flex">
+                        Date.<span>*</span>
                       </label>
                       <input
-                        type="text"
+                        type="date"
                         className="form-control form-control-md"
-                        name="companyName"
+                        name="companyContactNo"
+                        required
                       />
                     </div>
                   </div>
 
                   <div className="col-xs-6">
                     <div className="form-group">
-                      <label htmlFor="designation" className="d-flex">
-                        Designation *
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control form-control-md"
-                        name="designation"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="col-xs-12">
-                    <div className="form-group">
                       <label htmlFor="companyAddress" className="d-flex">
-                        Company Address *
+                        Company Address <span>*</span>
                       </label>
                       <textarea
                         className="form-control mb-0"
@@ -158,7 +172,7 @@ const CheckoutPage = () => {
                   <div className="col-xs-12">
                     <div className="form-group">
                       <label htmlFor="remark" className="d-flex">
-                        Remark *
+                        Remark <span>*</span>
                       </label>
                       <textarea
                         className="form-control mb-0"

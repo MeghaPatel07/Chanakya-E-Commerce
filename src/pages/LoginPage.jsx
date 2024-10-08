@@ -147,17 +147,17 @@ const LoginPage = () => {
                         )}
                       </div>
 
-                      <div className="form-checkbox d-flex align-items-center justify-content-between">
+                      {/* <div className="form-checkbox d-flex align-items-center justify-content-between">
                         <input
                           type="checkbox"
                           className="custom-checkbox"
                           id="remember1"
                           name="remember1"
-                          // Remember me functionality can be added here if needed
+                         
                         />
                         <label htmlFor="remember1">Remember me</label>
                         <Link to="/">Forgot Password?</Link>
-                      </div>
+                      </div> */}
 
                       <button type="submit" className="btn btn-primary">
                         Sign In

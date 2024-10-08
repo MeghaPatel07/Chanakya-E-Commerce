@@ -280,9 +280,9 @@ const ProductList = () => {
                     <AccordionDetails>
                       <Box>
                         <div className='d-flex align-item-center justify-content-between'>
-                          <div className='d-flex' style={{ alignItems: "center", gap: "10px" }}><p className='mb-0-p'>Min</p><div className='d-flex justify-content-center range-box'><p className='mb-0-p'>{value[0]}</p></div></div>
+                          <div><p className='mb-0-p ' style={{textAlign:"start"}}>Min</p><div className='d-flex justify-content-center range-box'><p className='mb-0-p'>{value[0]}</p></div></div>
 
-                          <div className='d-flex' style={{ alignItems: "center", gap: "10px" }}><p className='mb-0-p'>Max</p><div className='d-flex justify-content-center range-box'><p className='mb-0-p'>{value[1]}</p></div></div>
+                          <div ><p className='mb-0-p' style={{textAlign:"start"}}>Max</p><div className='d-flex justify-content-center range-box'><p className='mb-0-p'>{value[1]}</p></div></div>
                         </div>
 
                         <Slider

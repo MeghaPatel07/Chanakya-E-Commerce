@@ -126,16 +126,16 @@ const Header = (data) => {
               >
                 <div className="select-box bg-white">
                   <select id="category" name="category">
-                    <option value="">All Categories</option>
-                    <option value="travel-bags">Travelling Bags</option>
-                    <option value="student-bags">Student Bags</option>
-                    <option value="kids-bags">Kids Bags</option>
-                    <option value="camera-bags">Camera Bags</option>
-                    <option value="men-essentials">Men Essentials</option>
-                    <option value="women-essentials">Women Essentials</option>
-                    <option value="winter-wear">Winter Wear</option>
-                    <option value="monsoon-wear">Monsoon Wear</option>
-                    <option value="thermoware">Thermoware</option>
+                    <option value="">All Price</option>
+                    <option value="travel-bags">Under 100</option>
+                    <option value="student-bags">Under 200</option>
+                    <option value="kids-bags">Under 500</option>
+                    <option value="camera-bags">Under 700</option>
+                    <option value="men-essentials">Under 1000</option>
+                    <option value="women-essentials">Under 2000</option>
+                    <option value="winter-wear">Under 5000</option>
+                    <option value="monsoon-wear">Above 5000</option>
+                    
                   </select>
                 </div>
                 <input
