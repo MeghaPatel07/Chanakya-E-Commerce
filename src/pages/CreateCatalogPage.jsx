@@ -340,7 +340,7 @@ const CreateCatalogPage = () => {
                 <img src={`${process.env.REACT_APP_API_URL}/${data.productImage}`} alt="" />
                 <div className="productTitle">{data.productName}</div>
                 <div className="categoryTitle">{data.categoryName.categoryName}</div>
-                <div className="categoryTitle">{data.price}</div>
+                <div className="categoryTitle">{data.newPrice}</div>
                 {/* <div className='item-card-hov'>
                             <i className="w-icon-cart"></i>
                             <p>Add To Inquiry</p>

@@ -143,9 +143,9 @@ const ProductList = () => {
     
       setProducts(sortedProducts); // Assuming setProducts is the state updater function
     }
-    if (e.target.value === 'price') {
+    if (e.target.value === 'newPrice') {
       // Assuming products is an array of objects with a price field
-      const sortedProducts = [...products].sort((a, b) => a.price - b.price); // Sorts by price (low to high)
+      const sortedProducts = [...products].sort((a, b) => a.newPrice - b.newPrice); // Sorts by price (low to high)
     
       setProducts(sortedProducts); // Assuming setProducts is the state updater function
     }
@@ -324,7 +324,7 @@ const ProductList = () => {
                   <div class="toolbox-item toolbox-show select-box" style={{ width: "215px" }}>
                     <label>Sort By :</label>
                     <select name="orderby" class="form-control" onChange={handleSortChange}>
-                      <option value="price" selected="selected">
+                      <option value="newPrice" selected="selected">
                         price
                       </option>
                       <option value="AZ">Sort by A to Z</option>
