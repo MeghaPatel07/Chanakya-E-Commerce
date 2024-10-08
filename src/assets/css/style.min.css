@@ -13269,6 +13269,10 @@ body .product-popup {
 .blog-sidebar .widget .widget-body {
     padding: 0;
 }
+ .brandCard{
+    overflow-y: scroll;
+    height: 100px;
+}
 
 .blog-sidebar .widget:not(:last-child) .widget-body {
     margin-bottom: 2.5rem;
