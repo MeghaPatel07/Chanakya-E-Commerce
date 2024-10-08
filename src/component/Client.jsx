@@ -71,7 +71,7 @@ export const Client = ({data}) => {
                 <Slider {...settings}>
                     {data.map((imageName, index) => (
                         <div className="swiper-slide" key={index}>
-                            <figure style={{width:"100px" ,height:"100px"}}>
+                            <figure >
                                 <img  src={`${process.env.REACT_APP_API_URL}/${imageName.logo}`} alt="Brand" />
                             </figure>
                         </div>
