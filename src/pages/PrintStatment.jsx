@@ -1,5 +1,5 @@
 import React from 'react'
-import Logo from "../assets/images/logo.png"
+import Logo from "../assets/images/home/logo.png"
 
 const PrintStatment = () => {
   return (
@@ -129,19 +129,19 @@ const PrintStatment = () => {
                   </tr>
                   <tr>
                     <td colSpan={2} className="text-left">We appreciate your business and looking forward to help you again!</td>
-                    <td colSpan={2} className="text-right fw-700">Subtotal : </td>
+                    <td colSpan={2} className="text-right fw-700">total : </td>
                     <td className="text-right">
                       $ 419.28
                     </td>
                   </tr>
-                  <tr id>
+                  {/* <tr id>
                     <td colSpan={2} className="text-left" />
                     <td colSpan={2} className="text-right fw-700">GST @ 5% : </td>
                     <td className="text-right">
                       $ 20.96
                     </td>
-                  </tr>
-                  <tr id>
+                  </tr> */}
+                  {/* <tr id>
                     <td colSpan={2} className="text-left" />
                     <td colSpan={2} className="text-right fw-700">SHIPPING  : </td>
                     <td className="text-right">
@@ -161,7 +161,7 @@ const PrintStatment = () => {
                     <td className="text-right fw-700 fs-13">
                       $ 190.24
                     </td>
-                  </tr>
+                  </tr> */}
                 </tbody>
               </table>
             </div>

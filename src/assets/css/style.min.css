@@ -172,6 +172,10 @@ body:not(.loaded) * {
 .checkout-login{
     text-align: start;
 }
+.table-tacb thead tr th {
+    background-color: #a01e20;
+    color: #fff;
+}
 .tags a {
     display: inline-block;
     margin: 0.5rem 1rem 0.5rem 0;
