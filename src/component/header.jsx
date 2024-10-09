@@ -92,7 +92,7 @@ const Header = (data) => {
               <>
                 
                 <Dropdown>
-                  <Dropdown.Toggle className="dropdownHader" id="dropdown-basic">
+                  <Dropdown.Toggle className="dropdownHader welcome-msg" id="dropdown-basic">
                   <span>Welcome, {userData.Name}</span>
                   </Dropdown.Toggle>
 
