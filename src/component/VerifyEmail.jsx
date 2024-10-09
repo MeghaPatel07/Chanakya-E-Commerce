@@ -24,11 +24,12 @@ const EmailProvider = ({ children }) => {
         });
     } else {
       console.log("No token found");
+      setUserData(null)
     }
   };
 
   return (
-    <EmailContext.Provider value={{ EmailVerify, userData }}>
+    <EmailContext.Provider value={{ EmailVerify, userData, setUserData }}>
       {children}
     </EmailContext.Provider>
   );

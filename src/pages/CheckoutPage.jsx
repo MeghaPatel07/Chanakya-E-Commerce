@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useEmail } from "../component/VerifyEmail";
 
 const CheckoutPage = () => {
+  const { EmailVerify , userData} = useEmail();
+  useEffect(()=>{
+    EmailVerify()
+    console.log(userData)
+  },[])
   return (
     <main className="main login-page">
       {/* Start of Breadcrumb */}
