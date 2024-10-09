@@ -51,7 +51,7 @@ function App() {
           <Route path="/myOrder" element={<MyOrder />} />
           <Route path="/myAddres" element={<MyAddress />} />
           <Route path="/myProfile" element={<MyProFile />} />
-          <Route path="/brand" element={<BrandPage />} />
+          <Route path="/brand/:id" element={<BrandPage />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/contactUs" element={<ContactUs />} />
