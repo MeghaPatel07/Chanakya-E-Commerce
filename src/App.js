@@ -30,10 +30,12 @@ import AboutUs from "./pages/AboutUs";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import ContactUs from "./pages/ContactUs";
 import PrintStatment from "./pages/PrintStatment";
+import EmailProvider from "./component/VerifyEmail";
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
+      <EmailProvider >
         {/* Place Header outside of Routes */}
         <Header />
         {/* <ScrollTopButton /> */}
@@ -58,6 +60,7 @@ function App() {
           <Route path="/printStatment" element={<PrintStatment />} />
         </Routes>
         <Footer />
+        </EmailProvider>
       </BrowserRouter>
     </div>
   );

@@ -66,6 +66,11 @@ const Header = (data) => {
   const Email = localStorage.getItem("user");
   useEffect(() => {
     console.log(Email);
+    EmailVerify()
+  }, [Email]);
+  
+
+  const EmailVerify =()=>{
     if (Email) {
       varifyUser(Email)
         .then((response) => {
@@ -79,7 +84,20 @@ const Header = (data) => {
     } else {
       console.log("No token found");
     }
-  }, [Email]);
+  }
+
+  const handleLogout = () => {
+    // Remove user data from localStorage
+    localStorage.removeItem("user");
+  
+    // Optionally, you can also clear all localStorage data if needed:
+    // localStorage.clear();
+  
+    // Redirect to the login page ("/")
+    window.location.href = "/";
+  };
+  
+
   return (
     <header className="header">
       <div className="header-top">
@@ -98,8 +116,8 @@ const Header = (data) => {
 
                   <Dropdown.Menu className="dropdownHaderMenu">
                     <Dropdown.Item href="/myAccount">My Account</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">
-                     Logout
+                    <Dropdown.Item >
+                     <button onClick={handleLogout}>Logout</button>
                     </Dropdown.Item>
                    
                   </Dropdown.Menu>
@@ -203,7 +221,7 @@ const Header = (data) => {
               >
                 <i className="w-icon-cart">
                   <span className="cart-count text-white">
-                    {cartTotalQuantity}
+                    {userData.cart ? userData.cart.length : "0"}
                   </span>
                 </i>
                 <span className="cart-label">Cart</span>

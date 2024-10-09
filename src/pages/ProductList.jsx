@@ -453,7 +453,7 @@ const ProductList = () => {
                             <i className="w-icon-cart"></i>
                             <p>Add To Inquiry</p>
                           </div> */}
-                            <ProductInquiry />
+                            <ProductInquiry  data ={items}/>
                           </div>
                         </Col>
                       );
