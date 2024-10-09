@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { createUserLogin } from "../Functions/UserLogin";
 import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import { Button ,
+import {
+  Button,
   Label,
   Modal,
   ModalBody,
   ModalFooter,
-  ModalHeader,} from "reactstrap";
+  ModalHeader,
+} from "reactstrap";
 import axios from "axios";
 
 const SignupPage = () => {
@@ -74,7 +76,7 @@ const SignupPage = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
 
     if (!formData.agree) {
       toast.error("You must accept the privacy policy to sign up.");
@@ -99,14 +101,40 @@ const SignupPage = () => {
   };
 
   const [showOTP, setShowOtp] = useState(false)
-  const [isLoading, setIsLoading]  = useState(false)
-  const sendOTP =async()=>{
+  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading2, setIsLoading2] = useState(false)
+  const [otp, setOtp] = useState('')
+  const sendOTP = async () => {
     setIsLoading(true)
-    const val ={Email:formData.Email}
-    const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/user/otp-signin-request`,val)
+    const val = { Email: formData.Email }
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/user/otp-signin-request`, val)
     console.log(res)
     setShowOtp(true)
+    setOtp(res.data.otp)
+    setIsLoading(false)
 
+  }
+
+  const [verifyOTP, setVerifyOtp] = useState("")
+  const verify = () => {
+    const check = verifyOTP === otp
+    console.log(otp)
+    console.log(check)
+    setIsLoading2(true)
+    if (check) {
+      toast.success("Thank you for registering")
+      setIsLoading2(false)
+
+      setTimeout(() => {
+        handleSubmit();
+      }, 2000);
+
+
+    }
+    else {
+      setIsLoading2(false)
+      toast.error("Otp doesnot match")
+    }
   }
 
   return (
@@ -246,7 +274,7 @@ const SignupPage = () => {
                           pointerEvents: !formData.agree ? "none" : "auto",
                         }}
                       >
-                        {isLoading ? "Sign Up" :"Processing"}
+                        {isLoading ? "Processing" : "Sign Up"}
                       </Button>
                     </form>
                   </div>
@@ -277,7 +305,8 @@ const SignupPage = () => {
           <ModalBody>
             <Label>Enter Otp sent to you Email</Label>
             <input
-            onChange={setVerifyOtp()}
+              value={verifyOTP}
+              onChange={(e) => { setVerifyOtp(e.target.value) }}
             >
             </input>
           </ModalBody>
@@ -288,24 +317,24 @@ const SignupPage = () => {
                 className="viewBtn"
                 type="button"
                 onClick={() => { verify() }}>
-                {isLoading ? "Loading...." : "Submit"}
+                {isLoading2 ? "Submit" : "Loading.."}
 
               </button>
-           
 
-            <button
-              type="button"
-              className="btn btn-outline-danger"
-              onClick={() => {
-                setShowOtp(false)
-              }}
-            >
-              Cancel
-            </button>
-          </div>
-        </ModalFooter>
-      </form>
-    </Modal>
+
+              <button
+                type="button"
+                className="btn btn-outline-danger"
+                onClick={() => {
+                  setShowOtp(false)
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </ModalFooter>
+        </form>
+      </Modal>
     </main>
   );
 };
