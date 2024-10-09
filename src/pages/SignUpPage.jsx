@@ -107,12 +107,25 @@ const SignupPage = () => {
   const sendOTP = async () => {
     setIsLoading(true)
     const val = { Email: formData.Email }
-    const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/user/otp-signin-request`, val)
-    console.log(res)
-    setShowOtp(true)
-    setOtp(res.data.otp)
-    setIsLoading(false)
+    try {
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/user/otp-signin-request`, val)
+      console.log(res)
+      if(res.data.isOk)
+      {
+      
+      setShowOtp(true)
+      setOtp(res.data.otp)
+      setIsLoading(false)
+      }
+      else{
+        setIsLoading(false)
+        toast.error(res.data.message)
+      }
 
+    }
+    catch (error) {
+      console.error(error)
+    }
   }
 
   const [verifyOTP, setVerifyOtp] = useState("")
@@ -317,7 +330,7 @@ const SignupPage = () => {
                 className="viewBtn"
                 type="button"
                 onClick={() => { verify() }}>
-                {isLoading2 ? "Submit" : "Loading.."}
+                {isLoading2 ? "Loading" : "Submit"}
 
               </button>
 
