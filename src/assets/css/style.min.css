@@ -112,6 +112,31 @@ body:not(.loaded) * {
     font-size: 16px;
     font-weight: 600;
     background-color: #333;
+    /* margin-top: 28px; */
+}
+.modalHader{
+    background-color: #6d1a17;
+    color: #fff;
+}
+.modalHader h5{
+    color: #fff;
+}
+.modalHader .close{
+    color: #fff;
+    font-size: 17px;
+    background: transparent;
+    border: none;
+}
+.otpDiv{
+    padding: 20px 0px;
+}
+.otpInput{
+    width: 100%;
+}
+.mainDivAllCategory{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 .categoryDiv{
     display: flex;
@@ -13309,6 +13334,10 @@ body .product-popup {
 .dropdownHaderMenu{
 width:100%;
 
+}
+.form-label{
+    text-align: start;
+    width: 100%;
 }
 .btn.show{
     background-color: #f5f6f8 !important;
