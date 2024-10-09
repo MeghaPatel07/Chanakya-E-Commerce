@@ -13291,6 +13291,30 @@ body .product-popup {
     font-size: 1.2rem;
     color: #777;
 }
+.dropdownHader{
+    background: #f5f6f8;
+    border: none;
+    color: #000;
+    font-size: 13px;
+    font-weight: 600;
+}
+.dropdownHader:hover{
+    background-color: #f5f6f8 ;
+    color: #000;
+}
+.dropdownHader:active{
+    background-color: #f5f6f8 !important;
+    color: #000 !important;
+}
+.dropdownHaderMenu{
+width:100%;
+
+}
+.btn.show{
+    background-color: #f5f6f8 !important;
+    color: #000 !important;
+}
+
 
 .widget-search-form .btn-search {
     padding: 0.9em 1.07em 1em;
