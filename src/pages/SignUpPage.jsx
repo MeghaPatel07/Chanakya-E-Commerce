@@ -4,11 +4,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import {
   Button,
+  Col,
   Label,
   Modal,
   ModalBody,
   ModalFooter,
   ModalHeader,
+  Row,
 } from "reactstrap";
 import axios from "axios";
 
@@ -304,28 +306,38 @@ const SignupPage = () => {
       <Modal
         isOpen={showOTP}
 
-        centered
+        size="sm"
       >
         <ModalHeader
-          className="bg-light p-3"
+        
+          
+          className="p-3 modalHader"
           toggle={() => {
             setShowOtp(false);
           }}
+          close={
+            <button       onClick={() => setShowOtp(false)}
+            className="close" >
+              &times;
+            </button>
+          }
         >
           Verify your otp
         </ModalHeader>
         <form>
           <ModalBody>
-            <Label>Enter Otp sent to you Email</Label>
+            <Row>
+              <Col lg={12}>
+              <Label>Enter Otp sent to you Email</Label>
             <input
               value={verifyOTP}
               onChange={(e) => { setVerifyOtp(e.target.value) }}
+              className="otpInput"
             >
             </input>
-          </ModalBody>
-
-          <ModalFooter>
-            <div className="hstack gap-2 justify-content-end">
+              </Col>
+              <Col lg={12}>
+              <div className="hstack otpDiv gap-2 justify-content-end">
               <button
                 className="viewBtn"
                 type="button"
@@ -335,17 +347,15 @@ const SignupPage = () => {
               </button>
 
 
-              <button
-                type="button"
-                className="btn btn-outline-danger"
-                onClick={() => {
-                  setShowOtp(false)
-                }}
-              >
-                Cancel
-              </button>
+             
             </div>
-          </ModalFooter>
+              </Col>
+            </Row>
+            
+           
+          </ModalBody>
+
+          
         </form>
       </Modal>
     </main>

@@ -338,12 +338,13 @@ const CreateCatalogPage = () => {
               onChange={(e) => { setValues({ ...values, "endPrice": e.target.value }) }} />
           </Col>
           <Col lg={4}>
-            <button className="viewBtn" type="button" onClick={handleView}>
+            <button className="viewBtn " type="button" onClick={handleView}>
               View <FaEye />
             </button>
           </Col>
         </Row>
         <Row className="pt-4 pb-4">
+       <div className="mainDivAllCategory">
           {allproduct.length > 0 &&
             <div className="allCategoryDiv">
               <input type="checkbox"
@@ -352,6 +353,16 @@ const CreateCatalogPage = () => {
               /> <span>Select All Category</span>
             </div>
           }
+           {allproduct.length > 0 && <div className="categoryDiv pt-4">
+          <button
+            className="viewBtn"
+            type="button"
+            onClick={() => { setViewModel(true) }}>
+            {isLoading ? "Loading...." : "Create Catalog"}<IoCreateOutline />
+
+          </button>
+        </div>}
+        </div>
           {allproduct.length > 0 ? allproduct.map((data) => (
             <Col className="pt-4" lg={3} md={4} sm={6}>
               <div className="item-card">
@@ -378,37 +389,45 @@ const CreateCatalogPage = () => {
 
 
         </Row>
-        {allproduct.length > 0 && <div className="categoryDiv pt-4">
-          <button
-            className="viewBtn"
-            type="button"
-            onClick={() => { setViewModel(true) }}>
-            {isLoading ? "Loading...." : "Create Catalog"}<IoCreateOutline />
-
-          </button>
-        </div>}
+      
       </Container>
 
       <Modal
         isOpen={viewModel}
-
-        centered
+     
+        // centered
       >
         <ModalHeader
-          className="bg-light p-3"
+          className="p-3 modalHader"
           toggle={() => {
             setViewModel(false);
           }}
+          close={
+            <button       onClick={() => setViewModel(false)}
+            className="close" >
+              &times;
+            </button>
+          }
         >
           User Detail
+          
         </ModalHeader>
         <form>
           <ModalBody>
+           
             <div className="form-floating mb-3">
+            <Row>
+            <Col lg={12}>
               <p ><span className="fw-bold"> User Name :</span>{userData.Name} </p>
+              </Col>
+              <Col lg={12}>
               <p ><span className="fw-bold"> Contact Number :</span>{userData.Mobile} </p>
+              </Col>
+              
+              <Col lg={12}>
               <p ><span className="fw-bold"> User Email :</span>{userData.Email} </p>
-              {/* <p ><span className="fw-bold"> Password :</span>{values.Password} </p> */}
+              </Col>
+              <Col lg={12}>
               <p ><span className="fw-bold"> Estimated Date you want  :</span>
                 <input
                   value={estimatedDate}
@@ -418,14 +437,9 @@ const CreateCatalogPage = () => {
                   }}
                   type="date">
                 </input> </p>
-
-
-
-            </div>
-          </ModalBody>
-
-          <ModalFooter>
-            <div className="hstack gap-2 justify-content-end">
+              </Col>
+              <Col lg={12}>
+              <div className="hstack gap-2 justify-content-end">
               <button
                 className="viewBtn"
                 type="button"
@@ -435,17 +449,21 @@ const CreateCatalogPage = () => {
               </button>
            
 
-            <button
-              type="button"
-              className="btn btn-outline-danger"
-              onClick={() => {
-                setViewModel(false)
-              }}
-            >
-              Cancel
-            </button>
+           
           </div>
-        </ModalFooter>
+              </Col>
+            </Row>
+             
+            
+             
+              {/* <p ><span className="fw-bold"> Password :</span>{values.Password} </p> */}
+              
+
+
+
+            </div>
+          </ModalBody>
+
       </form>
     </Modal>
     </React.Fragment >
