@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import { createUserLogin } from "../Functions/UserLogin";
 import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import { Button } from "reactstrap";
+import { Button ,
+  Label,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,} from "reactstrap";
+import axios from "axios";
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -91,6 +97,17 @@ const SignupPage = () => {
       toast.error("Please fix the form errors.");
     }
   };
+
+  const [showOTP, setShowOtp] = useState(false)
+  const [isLoading, setIsLoading]  = useState(false)
+  const sendOTP =async()=>{
+    setIsLoading(true)
+    const val ={Email:formData.Email}
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/user/otp-signin-request`,val)
+    console.log(res)
+    setShowOtp(true)
+
+  }
 
   return (
     <main className="main login-page">
@@ -222,13 +239,14 @@ const SignupPage = () => {
 
                       <Button
                         className=" btn-danger"
-                        disabled={!formData.agree}
-                        onClick={handleSubmit}
+                        disabled={!formData.agree || isLoading}
+                        onClick={sendOTP}
+                        // disabled={isLoading}
                         style={{
                           pointerEvents: !formData.agree ? "none" : "auto",
                         }}
                       >
-                        Sign Up
+                        {isLoading ? "Sign Up" :"Processing"}
                       </Button>
                     </form>
                   </div>
@@ -242,6 +260,52 @@ const SignupPage = () => {
           </div>
         </div>
       </div>
+      <Modal
+        isOpen={showOTP}
+
+        centered
+      >
+        <ModalHeader
+          className="bg-light p-3"
+          toggle={() => {
+            setShowOtp(false);
+          }}
+        >
+          Verify your otp
+        </ModalHeader>
+        <form>
+          <ModalBody>
+            <Label>Enter Otp sent to you Email</Label>
+            <input
+            onChange={setVerifyOtp()}
+            >
+            </input>
+          </ModalBody>
+
+          <ModalFooter>
+            <div className="hstack gap-2 justify-content-end">
+              <button
+                className="viewBtn"
+                type="button"
+                onClick={() => { verify() }}>
+                {isLoading ? "Loading...." : "Submit"}
+
+              </button>
+           
+
+            <button
+              type="button"
+              className="btn btn-outline-danger"
+              onClick={() => {
+                setShowOtp(false)
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        </ModalFooter>
+      </form>
+    </Modal>
     </main>
   );
 };

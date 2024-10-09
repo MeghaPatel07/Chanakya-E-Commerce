@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Col, Container, Row, Label, Button } from "reactstrap";
+import {
+  Col, Container, Row, Label, Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+} from "reactstrap";
 import { FaEye } from "react-icons/fa";
 import { IoCreateOutline } from "react-icons/io5";
 import axios from "axios";
@@ -11,7 +17,7 @@ import Form from "react-bootstrap/Form";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 
 const CreateCatalogPage = () => {
- 
+
 
   const initialValue = {
     category: "",
@@ -20,34 +26,52 @@ const CreateCatalogPage = () => {
     startPrice: 0,
     endPrice: 1000,
     // discount: "",
+    estimatedDate: ''
 
   }
-  const user= localStorage.getItem("user");
+  const user = localStorage.getItem("user");
 
   const [values, setValues] = useState(initialValue)
-  const { category, subCategory, quantity, startPrice, endPrice } = values
+  const { category, subCategory, quantity, startPrice, endPrice, estimatedDate } = values
 
 
   const [allcategory, setcategory] = useState([]);
   const [isLoading, setLoading] = useState(false)
-  const [subCat, setSubCategory] = useState([]) 
-   const [show, setShow] = useState(false)
+  const [subCat, setSubCategory] = useState([])
+  const [show, setShow] = useState(false)
   const [allproduct, setAllProducts] = useState([])
 
   const [checkedProducts, setCheckedProducts] = useState([]); // State to store checked product IDs
   const [selectAll, setSelectAll] = useState(false); // State for "Select All"
-  
+  const [viewModel, setViewModel] = useState(false)
+
 
   useEffect(() => {
     loadcategory();
   }, []);
+
+  useEffect(() => {
+    fetchUser()
+  }, [user])
+
+  const [userData, setUserData] = useState({})
+
+  const fetchUser = async () => {
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/auth/get/UserMasterDetail/${user}`
+    );
+    console.log(res)
+    setUserData(res.data)
+
+
+  }
 
   const loadcategory = () => {
     axios.get(
       `${process.env.REACT_APP_API_URL}/api/auth/list/CategoryMaster`
     ).then((res) => setcategory(res.data));
   };
- 
+
 
 
   const handleCategoryChange = (selectedOptions) => {
@@ -131,7 +155,7 @@ const CreateCatalogPage = () => {
         link.parentNode.removeChild(link);
         window.URL.revokeObjectURL(blobUrl);
         toast.success("PDF downloaded Successfully")
-        
+
         setCheckedProducts([])
         setAllProducts([])
         setSelectAll(false)
@@ -151,7 +175,7 @@ const CreateCatalogPage = () => {
       setCheckedProducts(checkedProducts.filter(id => id !== productId));
     }
   };
- 
+
   const handleSelectAllChange = (e) => {
     const isChecked = e.target.checked;
     setSelectAll(isChecked); // Set "Select All" state
@@ -167,74 +191,77 @@ const CreateCatalogPage = () => {
   };
 
 
-  const handleCreateCatalogue =()=>{
+  const handleCreateCatalogue = () => {
     setLoading(true)
     console.log(checkedProducts)
-    if(checkedProducts.length === 0)
-    {
+    if (checkedProducts.length === 0) {
       toast.error("Please Select Products to download the Brochure")
       setLoading(false)
+      
       return
     }
     try {
       axios.post(`${process.env.REACT_APP_API_URL}/api/auth/downloadCatalogueFromFrontend`, checkedProducts).then((res) => {
-      console.log(res)
-      if (res.status === 200) {
-        toast.success(res.message)
-        setLoading(false)
-        // setDownloadable(true)
-        downloadFile(`${process.env.REACT_APP_API_URL}/uploads/Catalogue/${res.data.filename}`)
-        // setAllProducts(res.data.products)
-        // const customFileName = `ChanakyaCatalogue-${currentDate}.pdf`;
+        console.log(res)
+        if (res.status === 200) {
+          toast.success(res.message)
+          setLoading(false)
+          // setDownloadable(true)
+          downloadFile(`${process.env.REACT_APP_API_URL}/uploads/Catalogue/${res.data.filename}`)
+          // setAllProducts(res.data.products)
+          // const customFileName = `ChanakyaCatalogue-${currentDate}.pdf`;
 
-        // downloadFile(`${process.env.REACT_APP_API_URL}/uploads/Catalogue/${res.data.filename}`)
-        const data = {fileName : res.data.filename}
-        deleteFile(data)
-        catalogueInqiury()
-      }
-      else{
-        toast.error(res.message)
-      }
-    })
-  }
-  catch(error)
-  {
-    console.log(error)
-    toast.error(error)
-  }
+          // downloadFile(`${process.env.REACT_APP_API_URL}/uploads/Catalogue/${res.data.filename}`)
+          const data = { fileName: res.data.filename }
+          deleteFile(data)
+          catalogueInqiury()
+          setViewModel(false)
+        }
+        else {
+          setViewModel(false)
+          setLoading(false)
+          toast.error(res.message)
+        }
+      })
+    }
+    catch (error) {
+      console.log(error)
+      toast.error(error)
+    }
   }
 
-  const catalogueInqiury =()=>{
+  const catalogueInqiury = () => {
     const finalValues = {
-      categoryName: category!== ""  ? category : null,
+      categoryName: category !== "" ? category : null,
       subCategoryName: subCategory !== "" ? subCategory : null,
       startPrice: startPrice,
-      endPrice: endPrice ,
+      endPrice: endPrice,
       quantity: quantity,
       user: user ? user : null,
-      productName : checkedProducts
+      productName: checkedProducts,
+      estimatedDate: estimatedDate,
     };
-    try{
-      axios.post(`${process.env.REACT_APP_API_URL}/api/auth/create/catalogue-inqiury`,finalValues).then((res)=>{
+    try {
+      axios.post(`${process.env.REACT_APP_API_URL}/api/auth/create/catalogue-inqiury`, finalValues).then((res) => {
         console.log(res)
-  
-      })}
-      catch(error)
-      {
-        console.log(error)
-      }
+
+      })
+    }
+    catch (error) {
+      console.log(error)
+    }
   }
 
-  const deleteFile=(data)=>{
-    try{
-      axios.post(`${process.env.REACT_APP_API_URL}/api/auth/delete-catalogue`,data).then((res)=>{
+  const deleteFile = (data) => {
+    try {
+      axios.post(`${process.env.REACT_APP_API_URL}/api/auth/delete-catalogue`, data).then((res) => {
         console.log(res)
-  
-      })}
-      catch(error)
-      {
-        console.log(error)
-      }
+
+      })
+    }
+    catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -353,15 +380,75 @@ const CreateCatalogPage = () => {
         </Row>
         {allproduct.length > 0 && <div className="categoryDiv pt-4">
           <button
-             className="viewBtn" 
-             type="button" 
-             onClick={handleCreateCatalogue}>
-            {isLoading ? "Loading...." :"Create Catalog" }<IoCreateOutline />
+            className="viewBtn"
+            type="button"
+            onClick={() => { setViewModel(true) }}>
+            {isLoading ? "Loading...." : "Create Catalog"}<IoCreateOutline />
 
           </button>
         </div>}
       </Container>
-    </React.Fragment>
+
+      <Modal
+        isOpen={viewModel}
+
+        centered
+      >
+        <ModalHeader
+          className="bg-light p-3"
+          toggle={() => {
+            setViewModel(false);
+          }}
+        >
+          User Detail
+        </ModalHeader>
+        <form>
+          <ModalBody>
+            <div className="form-floating mb-3">
+              <p ><span className="fw-bold"> User Name :</span>{userData.Name} </p>
+              <p ><span className="fw-bold"> Contact Number :</span>{userData.Mobile} </p>
+              <p ><span className="fw-bold"> User Email :</span>{userData.Email} </p>
+              {/* <p ><span className="fw-bold"> Password :</span>{values.Password} </p> */}
+              <p ><span className="fw-bold"> Estimated Date you want  :</span>
+                <input
+                  value={estimatedDate}
+                  onChange={(e) => {
+                    setValues({ ...values, "estimatedDate": e.target.value });
+                    console.log(values)
+                  }}
+                  type="date">
+                </input> </p>
+
+
+
+            </div>
+          </ModalBody>
+
+          <ModalFooter>
+            <div className="hstack gap-2 justify-content-end">
+              <button
+                className="viewBtn"
+                type="button"
+                onClick={() => { handleCreateCatalogue() }}>
+                {isLoading ? "Loading...." : "Create Catalog"}<IoCreateOutline />
+
+              </button>
+           
+
+            <button
+              type="button"
+              className="btn btn-outline-danger"
+              onClick={() => {
+                setViewModel(false)
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        </ModalFooter>
+      </form>
+    </Modal>
+    </React.Fragment >
   );
 };
 

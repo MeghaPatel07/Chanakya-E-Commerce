@@ -1,32 +1,44 @@
-import React, { useState } from 'react';
-import { FaPlus ,FaMinus } from "react-icons/fa";
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { FaPlus, FaMinus } from "react-icons/fa";
+import { Link, useParams } from 'react-router-dom';
 import Img1 from "../assets/images/brands/category/2.png"
 import { FaFilePdf } from "react-icons/fa";
+import axios from 'axios';
+import { Button } from 'reactstrap';
 
-
-const    BrandPage = () => {
-     // State for toggling accordion sections
+const BrandPage = () => {
+  // State for toggling accordion sections
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isExportOpen, setIsExportOpen] = useState(false);
-  const brandData = [
-    {
-        img: Img1,
-        title:"Gopal"   
-    },
-    {
-        img: Img1,
-        title:"Gopal"   
-    },
-    {
-        img: Img1,
-        title:"Gopal"   
-    },
-    {
-        img: Img1,
-        title:"Gopal"   
-    }
-  ]
+
+  const { id } = useParams()
+
+  useEffect(() => {
+    console.log(id)
+    fetchData(id)
+  }, [id])
+
+
+  const [brandData, setBrandData] = useState([])
+  useEffect(() => {
+    axios.get(
+      `${process.env.REACT_APP_API_URL}/api/auth/list/BrandMaster`
+    ).then((res) => {
+      setBrandData(res.data)
+      console.log(res.data)
+    })
+
+  }, [])
+
+  const [brandDetails, setBrandDetails] = useState({})
+  const fetchData = async (id) => {
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/auth/get/BrandMasterDetails/${id}`
+    );
+
+    console.log(res.data)
+    setBrandDetails(res.data)
+  }
 
   // Toggle functions
   const toggleCategory = () => setIsCategoryOpen(!isCategoryOpen);
@@ -40,9 +52,9 @@ const    BrandPage = () => {
               <Link to="/">Home</Link>
             </li>
             <li>
-              <Link to="#">Category</Link>
+              <Link to="#">Brand</Link>
             </li>
-            <li>Snacks</li>
+            <li>{brandDetails.brandName}</li>
           </ul>
         </div>
       </nav>
@@ -52,55 +64,55 @@ const    BrandPage = () => {
           <div className="shop-content row gutter-lg">
             {/* Start of Sidebar, Shop Sidebar */}
             <aside className="sidebar shop-sidebar sticky-sidebar-wrapper sidebar-fixed">
-      {/* Start of Sidebar Overlay */}
-      <div className="sidebar-overlay" />
-      <Link className="sidebar-close" to="#">
-        <i className="close-icon" />
-      </Link>
+              {/* Start of Sidebar Overlay */}
+              <div className="sidebar-overlay" />
+              <Link className="sidebar-close" to="#">
+                <i className="close-icon" />
+              </Link>
 
-      {/* Start of Sidebar Content */}
-      <div className="sidebar-content scrollable">
-        {/* Start of Sticky Sidebar */}
-        <div className="sticky-sidebar">
-          
+              {/* Start of Sidebar Content */}
+              <div className="sidebar-content scrollable">
+                {/* Start of Sticky Sidebar */}
+                <div className="sticky-sidebar">
 
-          {/* Start of Collapsible widget */}
-          <div className="widget widget-collapsible">
-          <h3
-              className="widget-title"
-              onClick={toggleCategory}
-              style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-            >
-              <span>All Brand's</span>
-              <span>{isCategoryOpen ?  <FaMinus /> :<FaPlus /> }</span>
-            </h3>
-            {/* Toggle visibility based on isCategoryOpen state */}
-            {isCategoryOpen && (
-              <ul className="widget-body brandUl filter-items search-ul">
-                <li><Link to="#">Snakes</Link></li>
-                <li><Link to="#">Special</Link></li>
-                <li><Link to="#">Namkeen</Link></li>
-                <li><Link to="#">Ready To Eat</Link></li>
-                <li><Link to="#">Kitchenware</Link></li>
-                <li><Link to="#">Spices</Link></li>
-                <li><Link to="#">Spice Mixes</Link></li>
-                <li><Link to="#">Tea & Coffee</Link></li>
-                <li><Link to="#">Pooja</Link></li>
-                <li><Link to="#">Oils & Ghee</Link></li>
-                <li><Link to="#">Personal Care</Link></li>
-              </ul>
-            )}
-          </div>
-          {/* End of Collapsible Widget */}
 
-          {/* Start of Collapsible Widget */}
-      
-          {/* End of Collapsible Widget */}
-        </div>
-        {/* End of Sticky Sidebar */}
-      </div>
-      {/* End of Sidebar Content */}
-    </aside>
+                  {/* Start of Collapsible widget */}
+                  <div className="widget widget-collapsible">
+                    <h3
+                      className="widget-title"
+                      onClick={toggleCategory}
+                      style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                    >
+                      <span>All Brand's</span>
+                      <span>{isCategoryOpen ? <FaMinus /> : <FaPlus />}</span>
+                    </h3>
+                    {/* Toggle visibility based on isCategoryOpen state */}
+                    {isCategoryOpen && (
+                      <ul className="widget-body brandUl filter-items search-ul">
+                        {brandData && brandData.map((item, index) => (
+                          <li><Button
+                            key={index}
+                            className='button-none'
+                            onClick={(e) => { fetchData(item._id) }}
+                          >
+                            {item.brandName}
+                          </Button></li>
+                        ))}
+
+
+                      </ul>
+                    )}
+                  </div>
+                  {/* End of Collapsible Widget */}
+
+                  {/* Start of Collapsible Widget */}
+
+                  {/* End of Collapsible Widget */}
+                </div>
+                {/* End of Sticky Sidebar */}
+              </div>
+              {/* End of Sidebar Content */}
+            </aside>
             {/* End of Shop Sidebar */}
             {/* Start of Main Content */}
             <div className="main-content">
@@ -119,50 +131,50 @@ const    BrandPage = () => {
                   </div>
                 </div>
               </nav> */}
-              <div className="product-wrapper row brand-categories">
-                {/* {brandData?.map((data)=>
-                <div className="col-lg-3 col-md-4 col-sm-6 col-6">
-                  <div className="swiper-slide product product-image-gap product-simple">
-                    <figure className="product-media">
-                      <Link to="#">
-                        <img src={data.img} alt='img' />
-                      </Link>
-                    </figure>
-                    <div className="product-details">
-                      <h4 className="product-name mb-0">
-                        <Link to="#">{data.title}</Link>
-                      </h4>
+              {brandDetails &&
+                <div className="product-wrapper row brand-categories">
+
+                  <h2>
+                    {brandDetails.brandName}
+                  </h2>
+                  <div className="row mt-4">
+                    <div className="col-md-12">
+                      {brandDetails.brandBrochure.length > 0 && (
+                        <>
+                          <table className="table table-bordered table-tacb">
+                            <thead>
+                              <tr>
+                                <th>Category</th>
+                                <th>Title</th>
+                                <th>
+                                  Download <FaFilePdf />
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {brandDetails.brandBrochure.map((item, index) => (
+                                <tr key={index}>
+                                  <td>{item.categoryDetails?.categoryName || "N/A"}</td>
+                                  <td>{item.title || "N/A"}</td>
+                                  <td>
+                                    <button
+                                      className="downloadBtn"
+                                      onClick={() => window.open(`${process.env.REACT_APP_API_URL}/${item.linkdoc}`, "_blank")}
+                                    >
+                                      Download
+                                    </button>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </>
+                      )}
                     </div>
+
                   </div>
-                </div>
-                )} */}
-           <h2>
-            Brand Name 
-           </h2>
-           <div className="row mt-4">
-          <div className="col-md-12">
-            <table className="table table-bordered table-tacb">
-              <thead>
-                <tr>
-                  <th>Category</th>
-                  <th>Title</th>
-                  <th>Download <FaFilePdf/></th>
-                 
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td> Bage </td>
-                  <td> catelog title </td>
-                  <td> <button className='dodnloadBtn'>Download</button> </td>
-                 
-                </tr>
-              </tbody>
-            </table>
-          </div>
-         
-        </div>
-              </div>
+                </div>}
+
             </div>
             {/* End of Main Content */}
           </div>
