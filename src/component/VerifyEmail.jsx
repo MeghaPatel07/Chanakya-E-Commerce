@@ -11,13 +11,11 @@ const EmailProvider = ({ children }) => {
     const Email = localStorage.getItem("user");
     if (Email) {
         await axios.get(
-            `${process.env.REACT_APP_API_URL}/api/auth/get/UserMasterDetails/${Email}`
-           
-          )
+            `${process.env.REACT_APP_API_URL}/api/auth/get/UserMasterDetails/${Email}`)
         .then((response) => {
-          console.log(response);
+        console.log(response)
           const user = response.data;
-          setUserData(user);
+          setUserData(response.data);
         })
         .catch((error) => {
           console.error("Error in user verification process:", error);

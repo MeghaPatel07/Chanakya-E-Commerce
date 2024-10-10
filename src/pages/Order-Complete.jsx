@@ -8,37 +8,26 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
-const OrderCompletion = () => {
+const OrderCompletion = ({orderStatus ,orderData}) => {
+  const [show, setShow] = useState(false)
   // Assuming the order status can be "success" or "failed"
-  const [orderStatus, setOrderStatus] = useState("success"); // Change this based on actual logic
+  
+ 
+
 
   return (
     <main className="main login-page">
       {/* Start of Breadcrumb */}
-      <nav className="breadcrumb-nav">
-        <div className="container">
-          <ul className="breadcrumb shop-breadcrumb bb-no pt-2 pb-2">
-            <li>
-              <Link to="#">Shopping Cart</Link>
-            </li>
-            <li>
-              <Link to="#">Checkout</Link>
-            </li>
-            <li className="active">
-              <Link to="#">Order Complete</Link>
-            </li>
-          </ul>
-        </div>
-      </nav>
+      
       {/* End of Breadcrumb */}
 
       {/* Start of PageContent */}
-      <div className="page-content mb-10 pt-10 pb-2">
-        <div className="container">
+      <div className="page-content ">
+        <div className="">
           <ul className="order-view list-style-none">
             <li>
               <label>Order number</label>
-              <strong>CNKSEP24945</strong>
+              <strong>{orderData.orderHistory.orderNo}</strong>
             </li>
             <li>
               <label>Status</label>
@@ -48,17 +37,14 @@ const OrderCompletion = () => {
             </li>
             <li>
               <label>Date</label>
-              <strong>October 27, 2023</strong>
+              <strong>{orderData.orderHistory.createdAt.split('T')[0]}</strong>
             </li>
-            <li>
-              <label>Total</label>
-              <strong>₹40,400.00</strong>
-            </li>
+             
           </ul>
 
           <div className="row justify-content-center" id="thankyou-note">
             {orderStatus === "success" ? (
-              <div className="col-xl-5 col-lg-6 col-md-12 col-sm-12">
+              <div className="">
                 <div className="card">
                   <div className="card-body text-center">
                     <h3 className="mt-5 mb-5">
@@ -75,19 +61,21 @@ const OrderCompletion = () => {
                       more details shortly.
                     </p>
                     <div className="text-center">
-                      <button
-                        type="button"
+                      <Link
+                        // type="button"
                         className="btn btn-rounded btn-primary"
-                        onClick={() => ( console.log("clicked"))}
+                        to={`/printStatment/${orderData.orderHistory._id}`}
+                        target="_blank"
                       >
-                        <span className="btn-icon-left text-white">
-                          <FontAwesomeIcon
-                            icon={faArrowRight}
+                        <span className=" text-white">
+                          {/* <FontAwesomeIcon
+                            // icon={faArrowRight}
                             className="pr-1"
-                          />
+                          /> */}
                         </span>
-                        Continue Now
-                      </button>
+                        Print Invioce
+                        {/* <PrintStatement /> */}
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -98,10 +86,10 @@ const OrderCompletion = () => {
                   <div className="card-body text-center">
                     <h3 className="mt-5 mb-5">
                       <span className="p-3 bg-danger w-auto rounded-circle">
-                        <FontAwesomeIcon
+                        {/* <FontAwesomeIcon
                           icon={faExclamationTriangle}
                           className="text-white"
-                        />
+                        /> */}
                       </span>
                     </h3>
                     <h3 className="text-danger">Oh no, your inquiry failed</h3>
@@ -116,7 +104,7 @@ const OrderCompletion = () => {
                         onClick={() => (console.log("clicked"))}
                       >
                         <span className="btn-icon-left text-white">
-                          <FontAwesomeIcon icon={faRedo} className="pr-1" />
+                          {/* <FontAwesomeIcon icon={faRedo} className="pr-1" /> */}
                         </span>
                         Try Again
                       </button>
@@ -129,10 +117,10 @@ const OrderCompletion = () => {
 
           <div className="text-center">
             <Link
-              to="#"
+              to="/"
               className="btn btn-primary btn-rounded btn-icon-left btn-back mt-6"
             >
-              <FontAwesomeIcon icon="long-arrow-left" />
+              {/* <FontAwesomeIcon icon="long-arrow-left" /> */}
               Back To Home Page
             </Link>
           </div>

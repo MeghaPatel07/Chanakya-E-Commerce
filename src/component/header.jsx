@@ -89,9 +89,7 @@ const Header = (data) => {
   useEffect(() => {
     console.log(Email);
     EmailVerify()
-    console.log(userData)
   }, [Email]);
-
   const [totalQuantity, setTotalQuantity] = useState(0);
 
   useEffect(() => {

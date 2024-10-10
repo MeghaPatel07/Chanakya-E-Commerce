@@ -57,7 +57,7 @@ function App() {
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/contactUs" element={<ContactUs />} />
-          <Route path="/printStatment" element={<PrintStatment />} />
+          <Route path="/printStatment/:id" element={<PrintStatment />} />
         </Routes>
         <Footer />
         </EmailProvider>
