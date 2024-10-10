@@ -313,12 +313,12 @@ const Header = (data) => {
                         <span className="price">{totalQuantity} QTY</span>
                       </div>
                       <div className="cart-action">
-                        <a
-                          href="#"
+                        <Link
+                          to="/cart"
                           className="btn btn-dark btn-outline btn-rounded"
                         >
                           View Cart
-                        </a>
+                        </Link>
                         <Link to='checkout' className="btn btn-primary btn-rounded">
                           Checkout
                         </Link>
