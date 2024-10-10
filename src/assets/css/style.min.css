@@ -133,6 +133,11 @@ body:not(.loaded) * {
 .otpInput{
     width: 100%;
 }
+.logoutBtn{
+    background: transparent;
+    border: none;
+    padding-left: 0px;
+}
 .mainDivAllCategory{
     display: flex;
     align-items: center;
@@ -5975,8 +5980,17 @@ blockquote {
 
     .btn-primary:hover, .btn-primary:active, .btn-primary:focus {
         color: #fff;
-        border-color: #3c78b4;
-        background-color: #3c78b4;
+        border-color: #000;
+        background-color: #000;
+    }
+    
+    .btn-primary:active{
+        color: #fff !important;
+        border-color: #000 !important;
+        background-color: #000 !important;
+    }
+    .loginBtn {
+        margin-top: 20px;
     }
 
     .btn-primary.btn-solid {
@@ -24299,6 +24313,7 @@ aside .sp-sidebar-banner span {
     color: red;
     font-size: 12px;
     padding-bottom: 10px;
+    text-align: start;
 }
 .profile-info{
     text-align: start;

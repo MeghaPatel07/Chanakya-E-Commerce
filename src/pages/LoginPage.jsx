@@ -159,7 +159,7 @@ const LoginPage = () => {
                         <Link to="/">Forgot Password?</Link>
                       </div> */}
 
-                      <button type="submit" className="btn btn-primary">
+                      <button type="submit" className="btn loginBtn btn-primary">
                         Sign In
                       </button>
                     </form>
