@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useEmail } from "../component/VerifyEmail";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
@@ -25,6 +26,11 @@ const CheckoutSchema = Yup.object().shape({
 });
 
 const CheckoutPage = () => {
+  const { EmailVerify , userData} = useEmail();
+  useEffect(()=>{
+    EmailVerify()
+    console.log(userData)
+  },[])
   return (
     <main className="main login-page">
       {/* Start of Breadcrumb */}

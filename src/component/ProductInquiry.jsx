@@ -12,8 +12,11 @@ import ProductImg from "../assets/images/products/default/1-1.jpg";
 import Logo from "../assets/images/products/brand/brand-1.jpg";
 import Counter from "./Counter";
 import { toast , ToastContainer } from "react-toastify";
+import { useEmail } from "./VerifyEmail";
+
 
 const ProductInquiry = ({ data }) => {
+  const { EmailVerify } = useEmail();
   const [count, setCount] = useState(1);
   const [modalShow, setModalShow] = React.useState(false);
   const user = localStorage.getItem('user')
@@ -36,9 +39,10 @@ const ProductInquiry = ({ data }) => {
         if(res.data.isOk)
         {
           console.log(res)
-          toast.success(res.data.message)
+          // toast.success(res.data.message)
           setModalShow(false)
           setCount(1)
+          EmailVerify();
 
         }
         else{
