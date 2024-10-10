@@ -46,12 +46,7 @@ const Cart = () => {
 
   // // Calculate the total for the entire cart
 
-  useEffect(() => {
-    handleCheckout(); // Call checkout whenever the cart changes
-  }, [userData]); // Dependencies array includes userData.cart
-
-  
-
+ 
   const calculateTotal = () => {
     // Check if userData exists and has a cart array
     return userData && userData.cart
@@ -61,8 +56,19 @@ const Cart = () => {
 
   const handleCheckout = async()=>{
     const user= localStorage.getItem('user')
-      const res = await axios.put(`${process.env.REACT_APP_API_URL}/api/auth/update/UserMasterDetails/${user}`,userData )
+      try{
+        const res = await axios.put(`${process.env.REACT_APP_API_URL}/api/auth/update/UserMasterDetails/${user}`,userData )
       console.log(res)
+      if(res.data)
+      {
+        window.location.href = '/checkout'; 
+      }
+      }
+      catch(error)
+      {
+        console.log(error)
+      }
+
   }
 
   const handleClear=()=>{
