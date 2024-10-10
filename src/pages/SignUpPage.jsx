@@ -13,75 +13,149 @@ import {
   Row,
 } from "reactstrap";
 import axios from "axios";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup"; // For validation schema
 
 const SignupPage = () => {
   const navigate = useNavigate();
-  const [showOTP, setShowOtp] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isLoading2, setIsLoading2] = useState(false);
-  const [otp, setOtp] = useState("");
-  const [verifyOTP, setVerifyOtp] = useState("");
-
-  // Validation schema using Yup
-  const SignupSchema = Yup.object().shape({
-    Name: Yup.string().required("Name is required."),
-    Email: Yup.string()
-      .email("Invalid email address.")
-      .required("Email is required."),
-    Mobile: Yup.string()
-      .matches(/^[0-9]{10}$/, "Mobile number must be 10 digits.")
-      .required("Mobile number is required."),
-    Password: Yup.string().required("Password is required."),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref("Password"), null], "Passwords must match")
-      .required("Confirm Password is required."),
-    agree: Yup.boolean().oneOf([true], "You must accept the privacy policy."),
+  const [formData, setFormData] = useState({
+    Name: "",
+    Email: "",
+    Mobile: "",
+    Password: "",
+    confirmPassword: "",
+    agree: false,
   });
 
-  // Handle OTP sending
-  const sendOTP = async (Email, setFieldError) => {
-    setIsLoading(true);
-    try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/auth/user/otp-signin-request`,
-        { Email }
-      );
-      if (res.data.isOk) {
-        setShowOtp(true);
-        setOtp(res.data.otp);
-        setIsLoading(false);
-      } else {
-        setIsLoading(false);
-        toast.error(res.data.message);
-        setFieldError("Email", res.data.message);
-      }
-    } catch (error) {
-      setIsLoading(false);
-      console.error(error);
+  const [errors, setErrors] = useState({});
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? checked : value,
+    });
+  };
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validateMobile = (mobile) => {
+    const mobileRegex = /^[0-9]{10}$/;
+    return mobileRegex.test(mobile);
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Check if Name is provided
+    if (!formData.Name) {
+      newErrors.Name = "Name is required.";
+    }
+
+    // Check if Email is valid
+    if (!formData.Email) {
+      newErrors.Email = "Email is required.";
+    } else if (!validateEmail(formData.Email)) {
+      newErrors.Email = "Invalid email address.";
+    }
+
+    // Check if Mobile is valid
+    if (!formData.Mobile) {
+      newErrors.Mobile = "Mobile number is required.";
+    } else if (!validateMobile(formData.Mobile)) {
+      newErrors.Mobile = "Mobile number must be 10 digits.";
+    }
+
+    // Check if Password is provided
+    if (!formData.Password) {
+      newErrors.Password = "Password is required.";
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (e) => {
+    // e.preventDefault();
+
+    if (!formData.agree) {
+      toast.error("You must accept the privacy policy to sign up.");
+      return;
+    }
+
+    if (validateForm()) {
+      console.log(formData);
+
+      createUserLogin(formData).then((res) => {
+        console.log(res);
+        if (res.data.isOk) {
+          toast.success(res.data.message); // Show success message
+          navigate("/login");
+        } else {
+          toast.error(res.data.message || "Error"); // Show error message
+        }
+      });
+    } else {
+      toast.error("Please fix the form errors.");
     }
   };
 
-  // Handle OTP verification
-  const verify = (handleSubmit) => {
-    const check = verifyOTP === otp;
-    setIsLoading2(true);
+  const [showOTP, setShowOtp] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading2, setIsLoading2] = useState(false)
+  const [otp, setOtp] = useState('')
+  const sendOTP = async () => {
+    setIsLoading(true)
+    const val = { Email: formData.Email }
+    try {
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/user/otp-signin-request`, val)
+      console.log(res)
+      if(res.data.isOk)
+      {
+      
+      setShowOtp(true)
+      setOtp(res.data.otp)
+      setIsLoading(false)
+      }
+      else{
+        setIsLoading(false)
+        toast.error(res.data.message)
+      }
+
+    }
+    catch (error) {
+      console.error(error)
+    }
+  }
+
+  const [verifyOTP, setVerifyOtp] = useState("")
+  const verify = () => {
+    const check = verifyOTP === otp
+    console.log(otp)
+    console.log(check)
+    setIsLoading2(true)
     if (check) {
-      toast.success("Thank you for registering");
-      setIsLoading2(false);
+      toast.success("Thank you for registering")
+      setIsLoading2(false)
+
       setTimeout(() => {
         handleSubmit();
       }, 2000);
-    } else {
-      setIsLoading2(false);
-      toast.error("OTP does not match");
+
+
     }
-  };
+    else {
+      setIsLoading2(false)
+      toast.error("Otp doesnot match")
+    }
+  }
 
   return (
     <main className="main login-page">
       <ToastContainer />
+      {/* Start of Breadcrumb */}
       <nav className="breadcrumb-nav mb-10">
         <div className="container">
           <ul className="breadcrumb">
@@ -92,6 +166,7 @@ const SignupPage = () => {
           </ul>
         </div>
       </nav>
+      {/* End of Breadcrumb */}
 
       <div className="container pb-5">
         <div className="row">
@@ -99,100 +174,100 @@ const SignupPage = () => {
             <div className="login-popup signup-popup">
               <div className="tab tab-nav-boxed tab-nav-center tab-nav-underline">
                 <div className="text-center">
-                  <h4 className="loginTitle heading-sign">
+                  <h4 className="loginTitle  heading-sign">
                     Create your Account in Chanakya Corporate
                   </h4>
                 </div>
 
-                <Formik
-                  initialValues={{
-                    Name: "",
-                    Email: "",
-                    Mobile: "",
-                    Password: "",
-                    confirmPassword: "",
-                    agree: false,
-                  }}
-                  validationSchema={SignupSchema}
-                  onSubmit={(values, { setFieldError }) => {
-                    sendOTP(values.Email, setFieldError);
-                  }}
-                >
-                  {({ handleSubmit }) => (
-                    <Form>
+                <div className="tab-content">
+                  <div className="tab-pane active in" id="sign-in">
+                    <form onSubmit={handleSubmit}>
                       <div className="row">
                         <div className="form-group col-md-6 col-lg-4">
                           <label>Name *</label>
-                          <Field
+                          <input
                             type="text"
-                            name="Name"
                             className="form-control"
-                          />
-                          <ErrorMessage
                             name="Name"
-                            component="div"
-                            className="error-message"
+                            value={formData.Name}
+                            onChange={handleChange}
+                            required
                           />
+                          {errors.Name && (
+                            <span className="text-danger">{errors.Name}</span>
+                          )}
                         </div>
                         <div className="form-group col-md-6 col-lg-4">
                           <label>Email Address *</label>
-                          <Field
+                          <input
                             type="text"
-                            name="Email"
                             className="form-control"
-                          />
-                          <ErrorMessage
                             name="Email"
-                            component="div"
-                            className="error-message"
+                            value={formData.Email}
+                            onChange={handleChange}
+                            required
                           />
+                          {errors.Email && (
+                            <span className="text-danger">{errors.Email}</span>
+                          )}
                         </div>
                         <div className="form-group col-md-6 col-lg-4">
                           <label>Contact No *</label>
-                          <Field
+                          <input
                             type="text"
-                            name="Mobile"
                             className="form-control"
-                          />
-                          <ErrorMessage
                             name="Mobile"
-                            component="div"
-                            className="error-message"
+                            value={formData.Mobile}
+                            onChange={handleChange}
+                            required
                           />
+                          {errors.Mobile && (
+                            <span className="text-danger">{errors.Mobile}</span>
+                          )}
                         </div>
                         <div className="form-group mb-0 col-md-6 col-lg-4">
                           <label>Password *</label>
-                          <Field
+                          <input
                             type="password"
-                            name="Password"
                             className="form-control"
-                          />
-                          <ErrorMessage
                             name="Password"
-                            component="div"
-                            className="error-message"
+                            value={formData.Password}
+                            onChange={handleChange}
+                            required
                           />
+                          {errors.Password && (
+                            <span className="text-danger">
+                              {errors.Password}
+                            </span>
+                          )}
                         </div>
                         <div className="form-group mb-0 col-md-6 col-lg-4">
                           <label>Confirm Password *</label>
-                          <Field
+                          <input
                             type="password"
-                            name="confirmPassword"
                             className="form-control"
-                          />
-                          <ErrorMessage
                             name="confirmPassword"
-                            component="div"
-                            className="error-message"
+                            value={formData.confirmPassword}
+                            onChange={handleChange}
+                            required
                           />
+                          {errors.confirmPassword && (
+                            <span className="text-danger">
+                              {errors.confirmPassword}
+                            </span>
+                          )}
                         </div>
                       </div>
 
                       <div className="form-checkbox d-flex align-items-center justify-content-between mb-5">
-                        <Field
+                        <input
                           type="checkbox"
-                          name="agree"
                           className="custom-checkbox"
+                          id="agree"
+                          name="agree"
+                          checked={formData.agree}
+                          onChange={handleChange}
+                          required
                         />
                         <label htmlFor="agree" className="font-size-md">
                           I agree to the{" "}
@@ -200,26 +275,25 @@ const SignupPage = () => {
                             privacy policy
                           </Link>
                         </label>
-                        <ErrorMessage
-                          name="agree"
-                          component="div"
-                          className="error-message"
-                        />
+                        {errors.agree && (
+                          <span className="text-danger">{errors.agree}</span>
+                        )}
                       </div>
 
                       <Button
-                        className="btn-danger"
-                        disabled={isLoading}
+                        className=" btn-danger"
+                        disabled={!formData.agree || isLoading}
+                        onClick={sendOTP}
+                        // disabled={isLoading}
                         style={{
-                          pointerEvents: isLoading ? "none" : "auto",
+                          pointerEvents: !formData.agree ? "none" : "auto",
                         }}
-                        onClick={() => handleSubmit()}
                       >
                         {isLoading ? "Processing" : "Sign Up"}
                       </Button>
-                    </Form>
-                  )}
-                </Formik>
+                    </form>
+                  </div>
+                </div>
 
                 <p>
                   Already have an account? <Link to="/login">Sign In</Link>
@@ -229,27 +303,38 @@ const SignupPage = () => {
           </div>
         </div>
       </div>
+      <Modal
+        isOpen={showOTP}
 
-      {/* OTP Modal */}
-      <Modal isOpen={showOTP} size="sm">
+        size="sm"
+      >
         <ModalHeader
+        
+          
           className="p-3 modalHader"
           toggle={() => {
             setShowOtp(false);
           }}
+          close={
+            <button       onClick={() => setShowOtp(false)}
+            className="close" >
+              &times;
+            </button>
+          }
         >
-          Verify your OTP
+          Verify your otp
         </ModalHeader>
         <form>
           <ModalBody>
             <Row>
               <Col lg={12}>
-                <Label>Enter Otp sent to your Email</Label>
-                <input
-                  value={verifyOTP}
-                  onChange={(e) => setVerifyOtp(e.target.value)}
-                  className="otpInput"
-                />
+              <Label>Enter Otp sent to you Email</Label>
+            <input
+              value={verifyOTP}
+              onChange={(e) => { setVerifyOtp(e.target.value) }}
+              className="otpInput"
+            >
+            </input>
               </Col>
               <Col lg={12}>
               <div className="hstack otpDiv gap-2 justify-content-end">
@@ -266,7 +351,11 @@ const SignupPage = () => {
             </div>
               </Col>
             </Row>
+            
+           
           </ModalBody>
+
+          
         </form>
       </Modal>
     </main>
