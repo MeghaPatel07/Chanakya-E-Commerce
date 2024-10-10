@@ -117,7 +117,7 @@ const Header = (data) => {
                   <Dropdown.Menu className="dropdownHaderMenu">
                     <Dropdown.Item href="/myAccount">My Account</Dropdown.Item>
                     <Dropdown.Item >
-                     <button onClick={handleLogout}>Logout</button>
+                     <button className="logoutBtn" onClick={handleLogout}>Logout</button>
                     </Dropdown.Item>
                    
                   </Dropdown.Menu>
