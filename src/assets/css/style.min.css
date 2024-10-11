@@ -24448,13 +24448,13 @@ aside .sp-sidebar-banner span {
     font-size: 18px;
   }
   
-  .logoutBtn {
+  /* .logoutBtn {
     color: #fff;
     background: #a01e20;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
-  }
+  } */
   
 .dropdown-item:active {
     background-color: transparent;
