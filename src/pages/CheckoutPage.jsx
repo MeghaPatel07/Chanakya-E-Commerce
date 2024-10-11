@@ -151,14 +151,12 @@ const CheckoutPage = () => {
         <div className="container">
           <ul className="breadcrumb shop-breadcrumb bb-no pt-2 pb-2">
             <li>
-              <Link to="#">Shopping Cart</Link>
+              <Link to="/cart">Shopping Cart</Link>
             </li>
             <li className="active">
               <Link to="#">Checkout</Link>
             </li>
-            <li>
-              <Link to="#">Order Complete</Link>
-            </li>
+            
           </ul>
         </div>
       </nav>

@@ -116,13 +116,13 @@ const OrderCompletion = ({orderStatus ,orderData}) => {
           </div>
 
           <div className="text-center">
-            <Link
-              to="/"
+            <button
+              onClick={()=>{window.location.href = "/"}}
               className="btn btn-primary btn-rounded btn-icon-left btn-back mt-6"
             >
               {/* <FontAwesomeIcon icon="long-arrow-left" /> */}
               Back To Home Page
-            </Link>
+            </button>
           </div>
         </div>
       </div>
