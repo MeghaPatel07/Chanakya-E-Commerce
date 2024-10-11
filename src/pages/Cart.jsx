@@ -59,7 +59,7 @@ const Cart = () => {
       try{
         const res = await axios.put(`${process.env.REACT_APP_API_URL}/api/auth/update/UserMasterDetails/${user}`,userData )
       console.log(res)
-      if(res.data)
+      if(res.status===200)
       {
         window.location.href = '/checkout'; 
       }
