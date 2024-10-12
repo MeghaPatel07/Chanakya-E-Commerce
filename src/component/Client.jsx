@@ -16,19 +16,19 @@ export const Client = ({data}) => {
             {
                 breakpoint: 576,
                 settings: {
-                    slidesToShow:8,
+                    slidesToShow:2,
                 },
             },
             {
                 breakpoint: 768,
                 settings: {
-                    slidesToShow:8,
+                    slidesToShow:4,
                 },
             },
             {
                 breakpoint: 992,
                 settings: {
-                    slidesToShow: 8,
+                    slidesToShow: 4,
                 },
             },
             {
