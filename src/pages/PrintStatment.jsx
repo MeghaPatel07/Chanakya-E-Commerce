@@ -113,19 +113,13 @@ const PrintStatment = () => {
                 <div className="row align-items-center">
                   <div className="col-md-7">
                     <div className="invoice-address">
-                      <h4>The Direct Deal</h4>
-                      <p> Barodaweb, Vadodara, Gujarat 390005.</p>
-                      <p> info@thedirectdeals.com</p>
-                      <p> +91(1800)888-8888</p>
-                      <p>
-                        www.thedirectdeals.com
-                      </p>
-                      <p>
-                        GST/HST Registration No.: 73520 0081 RC0001
-                      </p>
-                      <p>
-                        Business Number : 735200081
-                      </p>
+                      <h4>Chanakya - The Bag Studio</h4>
+                      <p> Opp. Pratap Talkies, opp. Sursagar Lake (East), Vadodara, Gujarat 390001, India</p>
+                      <p> Chanakya The bag Studio, vadivadi, near race course circle, race course road, Vadodara, Gujarat, India</p>
+                      <p> chanakyathebagstudio@gmail.com</p>
+                      <p> 919974017725 | 919974017727</p>
+                  
+                      
                     </div>
                   </div>
                   <div className="col-md-5">
@@ -179,8 +173,8 @@ const PrintStatment = () => {
                             <th>Item No </th>
                             <th>Description</th>
                             <th>Qty</th>
-                            <th>Rate</th>
-                            <th className="text-center">Total Price </th>
+                            {/* <th>Rate</th>
+                            <th className="text-center">Total Price </th> */}
                           </tr>
                         </thead>
                         <tbody>
@@ -197,23 +191,23 @@ const PrintStatment = () => {
                                   </div>
                                 </td>
                                 <td>{item.quantity}</td>
-                                <td>
+                                {/* <td>
                                   {item.productName.newPrice}
                                 </td>
                                 <td className="text-right">
                                   {calculateSubtotal(item)}
-                                </td>
+                                </td> */}
                               </tr>
                             ))
                           }
 
 
                           <tr>
-                            <td colSpan={2} className="text-left">We appreciate your business and looking forward to help you again!</td>
-                            <td colSpan={2} className="text-right fw-700">total : </td>
+                            <td colSpan={2} className="text-left">Tax (Gst) will be applicable on product</td>
+                            {/* <td colSpan={2} className="text-right fw-700">total : </td>
                             <td className="text-right">
                               {calculateTotal()}
-                            </td>
+                            </td> */}
                           </tr>
                           {/* <tr id>
                   <td colSpan={2} className="text-left" />
