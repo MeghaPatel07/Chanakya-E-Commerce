@@ -162,7 +162,7 @@ const Home = () => {
             <Row>
             <div className="all-category-product">
             <div className="row category-wrapper cols-lg-3 cols-sm-2  mt-5">
-                {combinedDatas.map((category, index) => (
+                {combinedDatas.slice(0, 6).map((category, index) => (
                     <div className="category-wrap mb-4" key={index}>
                         <div className="category category-group-image br-sm">
                             <div className="category-content">
@@ -179,7 +179,7 @@ const Home = () => {
                             </div>
                             <a href="#">
                                 <figure className="category-media">
-                                    <img src={`${process.env.REACT_APP_API_URL}/${category?.categoryDetails?.logo}`} alt={category?.categoryDetails?.categoryName} width="190" height="215" />
+                                    <img src={`${process.env.REACT_APP_API_URL}/${category?.categoryDetails?.logoBackground}`} alt={category?.categoryDetails?.categoryName} width="190" height="215" />
                                 </figure>
                             </a>
                         </div>

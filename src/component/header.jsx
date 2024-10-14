@@ -252,7 +252,7 @@ const Header = (data) => {
               >
                 <i className="w-icon-cart">
                   <span className="cart-count text-white">
-                    {userData && userData.cart ? userData.cart.length : null}
+                    {userData && userData.cart ? userData.cart.length : "0"}
                   </span>
                 </i>
                 <span className="cart-label">Cart</span>

@@ -39,7 +39,8 @@ const ProductInquiry = ({ data }) => {
         if(res.data.isOk)
         {
           console.log(res)
-          // toast.success(res.data.message)
+          // alert("mm")
+          toast.success("Product added to cart successfully")
           setModalShow(false)
           setCount(1)
           EmailVerify();
@@ -48,7 +49,7 @@ const ProductInquiry = ({ data }) => {
         else{
           setModalShow(false)
           setCount(1)
-          toast.error(res.data.message)
+          toast.error("Something went wrong")
         }
 
 
@@ -64,7 +65,8 @@ const ProductInquiry = ({ data }) => {
 
   return (
     <React.Fragment>
-      <ToastContainer/>
+    
+
       <div className="item-card-hov" onClick={() => setModalShow(true)}>
         <i className="w-icon-cart"></i>
         <p>Add To Inquiry</p>
@@ -141,6 +143,7 @@ const ProductInquiry = ({ data }) => {
 
         </Modal.Body>
       </Modal>
+      {/* <ToastContainer position="top-right" autoClose={2000} /> */}
     </React.Fragment>
   );
 };
