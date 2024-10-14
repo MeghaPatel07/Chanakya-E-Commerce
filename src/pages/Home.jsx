@@ -93,11 +93,13 @@ const Home = () => {
                     <div className="vertical-marquee" >
                         <Marquee gradient={false}  direction="up"  speed={10}>
                             {brandData.map((img, index) => (
+                                  <Link to={`/brand/${img._id}`}>
                                 <div key={index} className="brand-item">
-                                    <Link to={`/brand/${img._id}`}>
+                                  
                                         <img src={`${process.env.REACT_APP_API_URL}/${img.logo}`} className="mb-2" alt="Brand" style={{width:'150px'}}/>
-                                    </Link>
+                                  
                                 </div>
+                                </Link>
                             ))}
                         </Marquee>
                     </div>

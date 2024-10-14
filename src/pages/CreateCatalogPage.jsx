@@ -192,14 +192,14 @@ const CreateCatalogPage = () => {
 
 
   const handleCreateCatalogue = () => {
-    setLoading(true)
-    console.log(checkedProducts)
-    if (checkedProducts.length === 0) {
-      toast.error("Please Select Products to download the Brochure")
-      setLoading(false)
-      
+    if(estimatedDate === "")
+    {
+      toast.error("Please enter the estimated date you want order on")
       return
     }
+    setLoading(true)
+    console.log(checkedProducts)
+    
     try {
       axios.post(`${process.env.REACT_APP_API_URL}/api/auth/downloadCatalogueFromFrontend`, checkedProducts).then((res) => {
         console.log(res)
@@ -344,25 +344,33 @@ const CreateCatalogPage = () => {
           </Col>
         </Row>
         <Row className="pt-4 pb-4">
-       <div className="mainDivAllCategory">
-          {allproduct.length > 0 &&
-            <div className="allCategoryDiv">
-              <input type="checkbox"
-                checked={selectAll}
-                onChange={handleSelectAllChange}
-              /> <span>Select All Category</span>
-            </div>
-          }
-           {allproduct.length > 0 && <div className="categoryDiv pt-4">
-          <button
-            className="viewBtn"
-            type="button"
-            onClick={() => { setViewModel(true) }}>
-            {isLoading ? "Loading...." : "Create Catalog"}<IoCreateOutline />
+          <div className="mainDivAllCategory">
+            {allproduct.length > 0 &&
+              <div className="allCategoryDiv">
+                <input type="checkbox"
+                  checked={selectAll}
+                  onChange={handleSelectAllChange}
+                /> <span>Select All Category</span>
+              </div>
+            }
+            {allproduct.length > 0 && <div className="categoryDiv pt-4">
+              <button
+                className="viewBtn"
+                type="button"
+                onClick={() => { 
+                  if (checkedProducts.length === 0) {
+                    toast.error("Please Select Products to download the Brochure")
+                    setLoading(false)
+              
+                    return
+                  }
+                 else setViewModel(true) 
+                  }}>
+                {isLoading ? "Loading...." : "Create Catalog"}<IoCreateOutline />
 
-          </button>
-        </div>}
-        </div>
+              </button>
+            </div>}
+          </div>
           {allproduct.length > 0 ? allproduct.map((data) => (
             <Col className="pt-4" lg={3} md={4} sm={6}>
               <div className="item-card">
@@ -389,13 +397,13 @@ const CreateCatalogPage = () => {
 
 
         </Row>
-      
+
       </Container>
 
       <Modal
         isOpen={viewModel}
-     
-        // centered
+
+      // centered
       >
         <ModalHeader
           className="p-3 modalHader"
@@ -403,69 +411,69 @@ const CreateCatalogPage = () => {
             setViewModel(false);
           }}
           close={
-            <button       onClick={() => setViewModel(false)}
-            className="close" >
+            <button onClick={() => setViewModel(false)}
+              className="close" >
               &times;
             </button>
           }
         >
           User Detail
-          
+
         </ModalHeader>
         <form>
           <ModalBody>
-           
+
             <div className="form-floating mb-3">
-            <Row>
-            <Col lg={12}>
-              <p ><span className="fw-bold"> User Name :</span>{userData.Name} </p>
-              </Col>
-              <Col lg={12}>
-              <p ><span className="fw-bold"> Contact Number :</span>{userData.Mobile} </p>
-              </Col>
-              
-              <Col lg={12}>
-              <p ><span className="fw-bold"> User Email :</span>{userData.Email} </p>
-              </Col>
-              <Col lg={12}>
-              <p ><span className="fw-bold"> Estimated Date you want  :</span>
-                <input
-                  value={estimatedDate}
-                  onChange={(e) => {
-                    setValues({ ...values, "estimatedDate": e.target.value });
-                    console.log(values)
-                  }}
-                  type="date">
-                </input> </p>
-              </Col>
-              <Col lg={12}>
-              <div className="hstack gap-2 justify-content-end">
-              <button
-                className="viewBtn"
-                type="button"
-                onClick={() => { handleCreateCatalogue() }}>
-                {isLoading ? "Loading...." : "Create Catalog"}<IoCreateOutline />
+              <Row>
+                <Col lg={12}>
+                  <p ><span className="fw-bold"> User Name :</span>{userData.Name} </p>
+                </Col>
+                <Col lg={12}>
+                  <p ><span className="fw-bold"> Contact Number :</span>{userData.Mobile} </p>
+                </Col>
 
-              </button>
-           
+                <Col lg={12}>
+                  <p ><span className="fw-bold"> User Email :</span>{userData.Email} </p>
+                </Col>
+                <Col lg={12}>
+                  <p ><span className="fw-bold"> Estimated Date you want  :</span>
+                    <input
+                      value={estimatedDate}
+                      onChange={(e) => {
+                        setValues({ ...values, "estimatedDate": e.target.value });
+                        console.log(values)
+                      }}
+                      type="date">
+                    </input> </p>
+                </Col>
+                <Col lg={12}>
+                  <div className="hstack gap-2 justify-content-end">
+                    <button
+                      className="viewBtn"
+                      type="button"
+                      onClick={() => { handleCreateCatalogue() }}>
+                      {isLoading ? "Loading...." : "Create Catalog"}<IoCreateOutline />
 
-           
-          </div>
-              </Col>
-            </Row>
-             
-            
-             
+                    </button>
+
+
+
+                  </div>
+                </Col>
+              </Row>
+
+
+
               {/* <p ><span className="fw-bold"> Password :</span>{values.Password} </p> */}
-              
+
 
 
 
             </div>
           </ModalBody>
 
-      </form>
-    </Modal>
+        </form>
+      </Modal>
     </React.Fragment >
   );
 };

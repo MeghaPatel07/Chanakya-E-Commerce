@@ -139,7 +139,7 @@ const BrandPage = () => {
                   </h2>
                   <div className="row mt-4">
                     <div className="col-md-12">
-                      {brandDetails.brandBrochure.length > 0 && (
+                    {brandDetails.brandBrochure && brandDetails.brandBrochure.length > 0 && (
                         <>
                           <table className="table table-bordered table-tacb">
                             <thead>

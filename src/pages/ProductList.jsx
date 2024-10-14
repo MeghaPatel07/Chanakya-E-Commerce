@@ -15,6 +15,9 @@ import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import ProductInquiry from "../component/ProductInquiry";
 
+import { toast , ToastContainer } from "react-toastify";
+
+
 function valuetext(value) {
   return `${value}°C`;
 }
@@ -150,6 +153,7 @@ const ProductList = () => {
 
   return (
     <>
+    <ToastContainer />
       <nav class="breadcrumb-nav mb-10">
         <div class="container">
           <ul class="breadcrumb">
