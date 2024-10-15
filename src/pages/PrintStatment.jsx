@@ -203,7 +203,7 @@ const PrintStatment = () => {
 
 
                           <tr>
-                            <td colSpan={2} className="text-left">Tax (Gst) will be applicable on product</td>
+                            <td colSpan={2} className="text-left" style={{color:"red"}}>All the Prices are exclusive of Taxes . Taxes may differ product to product</td>
                             {/* <td colSpan={2} className="text-right fw-700">total : </td>
                             <td className="text-right">
                               {calculateTotal()}
