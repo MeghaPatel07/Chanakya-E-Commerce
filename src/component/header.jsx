@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "reactstrap";
 import logo from "../assets/images/home/logo.png";
 import product from "../assets/images/cart/product-2.jpg";
@@ -11,10 +11,15 @@ import { Email } from "@mui/icons-material";
 import { useEmail } from "./VerifyEmail";
 import { RxCross2 } from "react-icons/rx";
 import MobileHeader from "./MobileHeader";
+import { useFilter } from "./VerifyEmail";
 
 
 const Header = (data) => {
-  const { EmailVerify, userData  , setUserData} = useEmail();
+  const { EmailVerify, userData, setUserData } = useEmail();
+  const { FilterLogic ,searchText,handleKeyDown ,setSearchText , handleSearchClick, handleInputChange} = useFilter()
+  const navigate = useNavigate();
+
+
   const [show, setShow] = useState(false);
   // const [userData, setUserData] = useState({});
   const [CategoryData, setCategoryData] = useState([]);
@@ -65,7 +70,7 @@ const Header = (data) => {
         userId,
         productId
       });
-  
+
       // Update the local state after successful removal
       if (response.data.success) {
         // Filter out the removed product from the local cart state
@@ -76,7 +81,7 @@ const Header = (data) => {
       console.error('Error removing item from cart:', error);
     }
   };
-  
+
   const cartTotalQuantity = cartItems.reduce(
     (acc, item) => acc + item.quantity,
     0
@@ -127,7 +132,19 @@ const Header = (data) => {
     EmailVerify();
 
   };
+  const prices = [
+    { label: "All Price", value: "" },
+    { label: "Under 100", value: 100 },
+    { label: "Under 200", value: 200 },
+    { label: "Under 500", value: 500 },
+    { label: "Under 700", value: 700 },
+    { label: "Under 1000", value: 1000 },
+    { label: "Under 2000", value: 2000 },
+    { label: "Under 5000", value: 5000 },
+    { label: "Above 5000", value: ">5000" }
+  ];
 
+ 
 
   return (
     <header className="header">
@@ -142,7 +159,7 @@ const Header = (data) => {
 
                 <Dropdown>
                   <Dropdown.Toggle className="dropdownHader welcome-msg" id="dropdown-basic">
-                  <span>Welcome, {userData.Name}</span>
+                    <span>Welcome, {userData.Name}</span>
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu className="dropdownHaderMenu">
@@ -176,7 +193,7 @@ const Header = (data) => {
       <div className="header-middle sticky-content fix-top sticky-header border-no">
         <div className="container">
           <div className="header-left mr-md-4">
-           
+
             <MobileHeader />
             <Link to="/" className="logo">
               <img src={logo} alt="logo" />
@@ -187,16 +204,17 @@ const Header = (data) => {
               className="input-wrapper header-search hs-expanded hs-round d-none d-md-flex"
             >
               <div className="select-box bg-white">
-                <select id="category" name="category">
-                  <option value="">All Price</option>
-                  <option value="travel-bags">Under 100</option>
-                  <option value="student-bags">Under 200</option>
-                  <option value="kids-bags">Under 500</option>
-                  <option value="camera-bags">Under 700</option>
-                  <option value="men-essentials">Under 1000</option>
-                  <option value="women-essentials">Under 2000</option>
-                  <option value="winter-wear">Under 5000</option>
-                  <option value="monsoon-wear">Above 5000</option>
+                <select id="category"
+                  name="category"
+                  onChange={(e) => {
+                    FilterLogic(e.target.value)
+                    navigate('/product-list')
+                  }}>
+                  {prices.map((category) => (
+                    <option key={category.value} value={category.value}>
+                      {category.label}
+                    </option>
+                  ))}
                 </select>
               </div>
               <input
@@ -204,10 +222,14 @@ const Header = (data) => {
                 className="form-control bg-white pt-0 pb-0"
                 name="search"
                 id="search"
+                value={searchText && searchText}
+                onChange={(e)=>{
+                  handleInputChange(e.target.value)}} // Updating searchText on change
+                onKeyDown={handleKeyDown} // Listening for Enter key press
                 placeholder="What are you looking for..."
                 required
               />
-              <button className="btn btn-search" type="button">
+              <button className="btn btn-search" type="button" onClick={handleSearchClick}>
                 <i className="w-icon-search"></i>
               </button>
             </form>

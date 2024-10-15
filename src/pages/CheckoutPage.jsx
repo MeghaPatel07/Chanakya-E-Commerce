@@ -9,20 +9,20 @@ import OrderCompletion from "./Order-Complete";
 
 // Validation schema using Yup
 const CheckoutSchema = Yup.object().shape({
-  companyName: Yup.string().required("Company name is required"),
+  // companyName: Yup.string().required("Company name is required"),
   designation: Yup.string().required("Designation is required"),
   firstname: Yup.string().required("First name is required"),
   lastname: Yup.string().required("Last name is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
-  companyEmail: Yup.string()
-    .email("Invalid company email")
-    .required("Company email is required"),
+  // companyEmail: Yup.string()
+  //   .email("Invalid company email")
+  //   .required("Company email is required"),
   contactNo: Yup.string()
     .matches(/^[0-9]{10}$/, "Contact No. must be 10 digits")
     .required("Contact No. is required"),
-  companyContactNo: Yup.string()
-    .matches(/^[0-9]{10}$/, "Company Contact No. must be 10 digits")
-    .required("Company Contact No. is required"),
+  // companyContactNo: Yup.string()
+  //   .matches(/^[0-9]{10}$/, "Company Contact No. must be 10 digits")
+  //   .required("Company Contact No. is required"),
   companyAddress: Yup.string().required("Company Address is required"),
   remark: Yup.string().required("Remark is required"),
   date: Yup.date().required("Date is required"),

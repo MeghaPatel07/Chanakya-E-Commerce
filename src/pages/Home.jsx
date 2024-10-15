@@ -8,7 +8,7 @@ import { Client } from "../component/Client";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import CreateCatalogBtn from "../component/CreateCatalogBtn";
-
+import { useFilter } from "../component/VerifyEmail";
 // Define the brand images
 
 const Home = () => {
@@ -46,7 +46,7 @@ const Home = () => {
       title: "Buy 200 Get 10 free",
     },
   ];
-
+  const { handleFilterCategory, handleFilterSubCategory } = useFilter()
   const [brandData, setBrandData] = useState([]);
   const [clientData, setClientData] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
@@ -104,7 +104,7 @@ const Home = () => {
                         </Marquee>
                     </div>
                 </Col> */}
-        <Col  xl={2}  lg="3"  sm="12" xs="12"
+        <Col xl={2} lg="3" sm="12" xs="12"
           className=" widget widget-products"
           style={{ borderRight: "1px solid #eee" }}
         >
@@ -124,7 +124,7 @@ const Home = () => {
           >
             <Row>
               {brandData.map((img, index) => (
-                <Col  lg={12} md={3}  className="bnradLogoCol" >
+                <Col lg={12} md={3} className="bnradLogoCol" >
                   <div key={index} className="brand-item">
                     <Link to={`/brand/${img._id}`}>
                       <img
@@ -217,14 +217,14 @@ const Home = () => {
                 <Col
                   key={index}
                   xs="6"
-                //   sm="6"
+                  //   sm="6"
                   md="6"
                   lg="4"
                   xl="3"
                   className="category category-ellipse mb-5 col-sm large-sm-col"
                 >
                   <div className="category-media">
-                    <Link to="/product-list">
+                    <Link to="/product-list" onClick={(e) => { handleFilterCategory(category._id) }}>
                       <img
                         src={`${process.env.REACT_APP_API_URL}/${category.logo}`}
                         alt={category.categoryName}
@@ -253,13 +253,13 @@ const Home = () => {
                 <div className="category category-group-image br-sm">
                   <div className="category-content">
                     <h4 className="category-name">
-                      <a href="#">{category?.categoryDetails?.categoryName}</a>
+                      <Link to='product-list'  onClick={(e) => { handleFilterCategory(category._id) }}>{category?.categoryDetails?.categoryName}</Link>
                     </h4>
                     <ul className="category-list">
                       {category.subCategoryDetails.map(
                         (subProduct, subIndex) => (
                           <li key={subIndex}>
-                            <a href="#">{subProduct.subCategoryName}</a>
+                            <Link to="product-list" onClick={(e) => { handleFilterSubCategory(subProduct._id) }}>{subProduct.subCategoryName}</Link>
                           </li>
                         )
                       )}
