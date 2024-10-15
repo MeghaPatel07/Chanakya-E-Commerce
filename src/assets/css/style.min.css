@@ -3265,7 +3265,7 @@ blockquote {
 }
 
 .text-primary {
-    color: #007bff !important;
+    color: #a01e20 !important;
 }
 
 .text-success {
@@ -6987,9 +6987,19 @@ blockquote {
     color: #a01e20;
 }
 .increntBtn{
-    cursor: pointer;
-    font-size: 20px;
-    color: #ccc;
+    /* position: absolute;
+    top: 50%; */
+    -webkit-transform: translateY(0%);
+    transform: translateY(0%);
+    right: 1.5rem;
+    padding: 0;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    background-color: #eee;
+    color: #666;
+    font-size: 1.4rem;
+    border: none;
 }
 .modalRow{
     padding: 20px;
@@ -11230,9 +11240,30 @@ body .product-popup {
     text-overflow: ellipsis;
     color: #000;
 }
-
+.inquiryModalBoday{
+    border: 1px solid #eee;
+    margin: 10px;
+    border-radius: 10px;
+}
+.crossBtn{
+    position: absolute;
+    background: #000;
+    color: #fff;
+    padding: 9px;
+    right: 0;
+    z-index: 1;
+    font-size: 10px;
+    cursor: pointer;
+}
 .product-image-gap .product-details .product-name {
     font-size: 15px;
+}
+.product-title {
+    margin-bottom: 0.9rem;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 1.6;
 }
 
 .product-image-gap .product-details .rating-reviews {
