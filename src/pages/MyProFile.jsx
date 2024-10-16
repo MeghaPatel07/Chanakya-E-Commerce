@@ -8,6 +8,8 @@ import { useEmail } from "../component/VerifyEmail";
 import { Password } from "@mui/icons-material";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
+import { FaRegEye } from "react-icons/fa";
+import { FaRegEyeSlash } from "react-icons/fa";
 
 const MyProFile = () => {
   // Validation Schema
@@ -114,6 +116,8 @@ const MyProFile = () => {
 
   };
 
+  const [showNewPassword, setShowNewPassword] = useState(false)
+  const [showCnfPassword, setShowCnfPassword] = useState(false)
 
   return (
     <React.Fragment>
@@ -245,9 +249,18 @@ const MyProFile = () => {
 
                     <Col md={6}>
                       <div className="form-group">
-                        <label htmlFor="new-password">New Password </label>
+                        <label htmlFor="new-password">New Password 
+                          <button 
+                          className="ms-3 button-none"
+                          type="button"
+                           onClick={()=>setShowNewPassword(!showNewPassword)}
+                            > 
+                            {showNewPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+                            </button>
+
+                        </label>
                         <Field
-                          type="password"
+                          type={showNewPassword? "text" :'password'}
                           id="new-password"
                           name="new_password"
                           className="form-control form-control-md"
@@ -262,9 +275,17 @@ const MyProFile = () => {
 
                     <Col md={6}>
                       <div className="form-group">
-                        <label htmlFor="conf-password">Confirm New Password </label>
+                        <label htmlFor="conf-password">Confirm New Password 
+                        <button 
+                          className="ms-3 button-none"
+                          type="button"
+                           onClick={()=>setShowCnfPassword(!showCnfPassword)}
+                            > 
+                            {showCnfPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+                            </button>
+                        </label>
                         <Field
-                          type="password"
+                         type={showCnfPassword? "text" :'password'}
                           id="conf-password"
                           name="conf_password"
                           className="form-control form-control-md"

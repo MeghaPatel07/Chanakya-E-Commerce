@@ -13,9 +13,14 @@ import {
   Row,
 } from "reactstrap";
 import axios from "axios";
+import { FaRegEye } from "react-icons/fa";
+import { FaRegEyeSlash } from "react-icons/fa";
 
 const SignupPage = () => {
   const navigate = useNavigate();
+  const [showNewPassword, setShowNewPassword] = useState(false)
+  const [showCnfPassword, setShowCnfPassword] = useState(false)
+
   const [formData, setFormData] = useState({
     Name: "",
     Email: "",
@@ -71,6 +76,15 @@ const SignupPage = () => {
     if (!formData.Password) {
       newErrors.Password = "Password is required.";
     }
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = "Confirm Password is required.";
+    }
+    if (formData.confirmPassword != formData.Password) {
+      newErrors.confirmPassword = "Confirm Password Doesnot Match.";
+    }
+    if (!formData.agree) {
+      newErrors.agree = "You must accept the privacy policy to sign up.";
+    }
 
     setErrors(newErrors);
 
@@ -107,27 +121,39 @@ const SignupPage = () => {
   const [isLoading2, setIsLoading2] = useState(false)
   const [otp, setOtp] = useState('')
   const sendOTP = async () => {
-    setIsLoading(true)
-    const val = { Email: formData.Email }
-    try {
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/user/otp-signin-request`, val)
-      console.log(res)
-      if(res.data.isOk)
+    if (validateForm() ) {
+      console.log(formData);
+      if(!formData.agree)
       {
-      
-      setShowOtp(true)
-      setOtp(res.data.otp)
-      setIsLoading(false)
-      }
-      else{
-        setIsLoading(false)
-        toast.error(res.data.message)
+        toast.error("You must accept the privacy policy to sign up.")
+        return
       }
 
+      setIsLoading(true)
+      const val = { Email: formData.Email }
+      try {
+        const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/user/otp-signin-request`, val)
+        console.log(res)
+        if(res.data.isOk)
+        {
+        
+        setShowOtp(true)
+        setOtp(res.data.otp)
+        setIsLoading(false)
+        }
+        else{
+          setIsLoading(false)
+          toast.error(res.data.message)
+        }
+  
+      }
+      catch (error) {
+        console.error(error)
+      }
+    } else {
+      toast.error("Please fix the form errors.");
     }
-    catch (error) {
-      console.error(error)
-    }
+    
   }
 
   const [verifyOTP, setVerifyOtp] = useState("")
@@ -194,7 +220,7 @@ const SignupPage = () => {
                             required
                           />
                           {errors.Name && (
-                            <span className="text-danger">{errors.Name}</span>
+                            <small className="text-danger">{errors.Name}</small>
                           )}
                         </div>
                         <div className="form-group col-md-6 col-lg-4">
@@ -208,7 +234,7 @@ const SignupPage = () => {
                             required
                           />
                           {errors.Email && (
-                            <span className="text-danger">{errors.Email}</span>
+                            <small className="text-danger">{errors.Email}</small>
                           )}
                         </div>
                         <div className="form-group col-md-6 col-lg-4">
@@ -222,13 +248,21 @@ const SignupPage = () => {
                             required
                           />
                           {errors.Mobile && (
-                            <span className="text-danger">{errors.Mobile}</span>
+                            <small className="text-danger">{errors.Mobile}</small>
                           )}
                         </div>
                         <div className="form-group mb-0 col-md-6 col-lg-4">
-                          <label>Password *</label>
+                          <label>Password *
+                          <button 
+                          className="ms-3 button-none"
+                          type="button"
+                           onClick={()=>setShowNewPassword(!showNewPassword)}
+                            > 
+                            {showNewPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+                            </button>
+                          </label>
                           <input
-                            type="password"
+                            type={showNewPassword? "text" :'password'}
                             className="form-control"
                             name="Password"
                             value={formData.Password}
@@ -236,15 +270,23 @@ const SignupPage = () => {
                             required
                           />
                           {errors.Password && (
-                            <span className="text-danger">
+                            <small className="text-danger text-sm">
                               {errors.Password}
-                            </span>
+                            </small>
                           )}
                         </div>
                         <div className="form-group mb-0 col-md-6 col-lg-4">
-                          <label>Confirm Password *</label>
+                          <label>Confirm Password * 
+                          <button 
+                          className="ms-3 button-none"
+                          type="button"
+                           onClick={()=>setShowCnfPassword(!showCnfPassword)}
+                            > 
+                            {showCnfPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+                            </button>
+                        </label>
                           <input
-                            type="password"
+                            type={showCnfPassword? "text" :'password'}
                             className="form-control"
                             name="confirmPassword"
                             value={formData.confirmPassword}
@@ -252,14 +294,14 @@ const SignupPage = () => {
                             required
                           />
                           {errors.confirmPassword && (
-                            <span className="text-danger">
+                            <small className="text-danger">
                               {errors.confirmPassword}
-                            </span>
+                            </small>
                           )}
                         </div>
                       </div>
 
-                      <div className="form-checkbox d-flex align-items-center justify-content-between mb-5">
+                      <div className="form-checkbox d-flex align-items-center justify-content-between mb-0">
                         <input
                           type="checkbox"
                           className="custom-checkbox"
@@ -275,19 +317,21 @@ const SignupPage = () => {
                             privacy policy
                           </Link>
                         </label>
-                        {errors.agree && (
-                          <span className="text-danger">{errors.agree}</span>
-                        )}
+                        
                       </div>
-
+                          <div className="text-start mb-5">
+                          {errors.agree && (
+                          <small className="text-danger">{errors.agree}</small>
+                        )}
+                          </div>
                       <Button
                         className=" btn-danger"
-                        disabled={!formData.agree || isLoading}
+                        // disabled={ !formData.agree || isLoading}
                         onClick={sendOTP}
                         // disabled={isLoading}
-                        style={{
-                          pointerEvents: !formData.agree ? "none" : "auto",
-                        }}
+                        // style={{
+                        //   pointerEvents: !formData.agree ? "none" : "auto",
+                        // }}
                       >
                         {isLoading ? "Processing" : "Sign Up"}
                       </Button>
