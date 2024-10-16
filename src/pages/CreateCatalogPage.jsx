@@ -443,6 +443,7 @@ const CreateCatalogPage = () => {
                         setValues({ ...values, "estimatedDate": e.target.value });
                         console.log(values)
                       }}
+                      className="inputDate"
                       type="date">
                     </input> </p>
                 </Col>
