@@ -14,15 +14,22 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import ProductInquiry from "../component/ProductInquiry";
+
 import { FiPlus, FiMinus } from "react-icons/fi";
 import { toast, ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
+
+import { useFilter } from "../component/VerifyEmail";
+import { toast, ToastContainer } from "react-toastify";
+
+
 
 function valuetext(value) {
   return `${value}°C`;
 }
 
 const ProductList = () => {
+  const { FilterLogic, textToFind, filterRange, filterCategory, filterSubCategory } = useFilter()
   const [products, setProducts] = useState([]);
   const [selectList, setSelectList] = useState([]);
   const [value, setValue] = useState([]);
@@ -33,6 +40,7 @@ const ProductList = () => {
   const [brands, setBrands] = useState([]);
   const [minVal, setMinVal] = useState(0);
   const [maxVal, setMaxVal] = useState(0);
+
   const [expanded, setExpanded] = useState(false); // Track which accordion is expanded
 
   // Function to handle accordion change
@@ -40,13 +48,119 @@ const ProductList = () => {
     setExpanded(isExpanded ? panel : false);
   };
 
-  useEffect(() => {
-    fetchFilters();
-  }, []);
+  const [isFirstEffectComplete, setIsFirstEffectComplete] = useState(false);
+
 
   useEffect(() => {
-    fetchData();
-  }, []);
+
+    const runSequentially = async () => {
+      try {
+        // First, call fetchFilters
+
+        // Finally, call handleFilterRange after fetchData is done
+        if (filterRange != 0 || filterRange != '0') {
+          await handleFilterRange()
+        }
+
+        else if (textToFind != '') {
+          await fetchBySearch()
+        }
+        else {
+          await fetchFilters();
+
+          // Then, call fetchData after fetchFilters is done
+          await fetchData();
+
+        }
+
+        setIsFirstEffectComplete(true);
+      } catch (error) {
+        console.error("Error in the sequence:", error);
+      }
+    };
+
+    runSequentially();
+  }, [filterRange || textToFind]); // If you want this to rerun on filterRange changes
+
+
+  useEffect(() => {
+    // This effect runs only if the first effect has completed
+    HandleFilterCategory()
+  }, [isFirstEffectComplete, maxVal, filterCategory]); // Depend on isFirstEffectComplete, maxVal, and filterCategory
+
+  useEffect(() => {
+    // This effect runs only if the first effect has completed
+    handleFilterSubCategory()
+  }, [isFirstEffectComplete, maxVal, filterSubCategory]); // Depend on isFirstEffectComplete, maxVal, and filterCategory
+
+  const HandleFilterCategory=async()=>{
+    if (isFirstEffectComplete && filterCategory) {
+      console.log(maxVal)
+      return handleSubmit({
+        activeBrandIndices,
+        activeCategoriesIndices: [filterCategory],
+        activeSubCategoriesIndices,
+        value: [minVal, maxVal], // Ensure value is correctly passed as numbers
+      });
+    }
+  }
+
+  const handleFilterSubCategory=async()=>{
+    if (isFirstEffectComplete && filterSubCategory) {
+      console.log(maxVal)
+      return handleSubmit({
+        activeBrandIndices,
+        activeCategoriesIndices,
+        activeSubCategoriesIndices:[filterSubCategory],
+        value: [minVal, maxVal], // Ensure value is correctly passed as numbers
+      });
+    }
+  }
+
+
+  const fetchBySearch = async () => {
+    try {
+      const res = await axios
+        .post(
+          `${process.env.REACT_APP_API_URL}/api/auth/list-by-params/product-details-from-frontend`,
+          { match: textToFind }
+        )
+      console.log(res)
+      if (res.status === 200) {
+        setProducts(res.data);
+        res.data.map((item) => {
+          handleClick("brands", item.brandName)
+          handleClick("subcategories", item.subCategoryName)
+          handleClick("categories", item.categoryName)
+        })
+
+      }
+    }
+    catch (error) {
+      console.log(error)
+    }
+
+  }
+
+
+  const handleFilterRange = async () => {
+    if (filterRange === ">5000") {
+      console.log("maxVal", maxVal)
+      toast.warning("No Product In This Price range")
+      return
+    }
+    const numericFilterRange = Number(filterRange);
+    console.log("filterRange", [minVal, numericFilterRange]);
+
+    setValue([minVal, numericFilterRange]);
+    handleSubmit({
+      activeBrandIndices,
+      activeCategoriesIndices,
+      activeSubCategoriesIndices,
+      value: [minVal, numericFilterRange], // Ensure value is correctly passed as numbers
+    });
+  };
+
 
   const fetchData = async () => {
     const res = await axios.get(
@@ -64,9 +178,28 @@ const ProductList = () => {
       values
     );
     if (res.data.products.length > 0) {
-      console.log(res.data.products[0]);
+      // console.log(res.data.products[0]);
       setProducts(res.data.products[0].products);
-      setBrands(res.data.products[0].uniqueBrandDetails);
+      console.log(res.data.products[0].products)
+      // setBrands(res.data.products[0].uniqueBrandDetails);
+      res.data.products[0].products.forEach((item) => {
+        // Check if the item brand, subcategory, and category are active
+        const brandMatch = activeBrandIndices.includes(item.brandName._id);
+        const subCategoryMatch = activeSubCategoriesIndices.includes(item.subCategoryName._id);
+        const categoryMatch = activeCategoriesIndices.includes(item.categoryName._id);
+
+        // If they do not match, handle the click to deselect
+        if (!brandMatch) {
+          handleClick("brands", item.brandName._id); // Pass true to indicate deselect
+        }
+        if (!subCategoryMatch) {
+          handleClick("subcategories", item.subCategoryName._id); // Pass true to indicate deselect
+        }
+        if (!categoryMatch) {
+          handleClick("categories", item.categoryName._id); // Pass true to indicate deselect
+        }
+      });
+
     } else {
       setProducts([]);
     }
@@ -89,10 +222,13 @@ const ProductList = () => {
 
     console.log(`Min price: ${minPrice}`); // Min price: 111
     console.log(`Max price: ${maxPrice}`); // Max price: 1999
+    console.log(filterRange)
+
   };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    console.log(newValue)
   };
 
   const [activeCategoriesIndices, setActiveCategoriesIndices] = useState([]);
@@ -101,7 +237,7 @@ const ProductList = () => {
   );
   const [activeBrandIndices, setActiveBrandIndices] = useState([]);
   const handleClick = (e, index) => {
-    console.log(e);
+    // console.log(index);
     if (e === "categories") {
       setActiveCategoriesIndices((prevIndices) => {
         if (prevIndices.includes(index)) {
@@ -440,6 +576,7 @@ const ProductList = () => {
                 </div>
                 {products.length > 0
                   ? products.map((items, index) => {
+
                       return (
                         <Col lg={3} md={4} sm={6} key={index}>
                           <div className="item-card product-image-gap">
@@ -462,6 +599,7 @@ const ProductList = () => {
                         </Col>
                       );
                     })
+
                   : "No Products in this filter"}
               </Row>
             </Col>

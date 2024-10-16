@@ -2,6 +2,8 @@ import React from "react";
 import { Col, Row } from "reactstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
 
 const ContactUs = () => {
   // Define the form validation schema using Yup
@@ -32,10 +34,24 @@ const ContactUs = () => {
     onSubmit: (values) => {
       // Handle form submission (you can replace this with an actual API call)
       console.log("Form Data:", values);
+      try{
+        axios.post(`${process.env.REACT_APP_API_URL}/api/auth/create/ContactUsInquiry`, values).then((res)=>{
+          console.log(res)
+          if(res.data.isOk)
+          { 
+            toast.success(res.data.message)
+          }
+        })
+      }
+      catch(error)
+      {
+        console.log(error)
+      }
     },
   });
   return (
     <React.Fragment>
+      <ToastContainer />
       <nav className="breadcrumb-nav">
         <div className="container">
           <ul className="breadcrumb">
