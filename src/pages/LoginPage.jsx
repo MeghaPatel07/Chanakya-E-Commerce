@@ -3,6 +3,9 @@ import { Link, useAsyncError, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
+import { Password } from "@mui/icons-material";
+import { FaRegEye } from "react-icons/fa";
+import { FaRegEyeSlash } from "react-icons/fa";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -88,19 +91,24 @@ const LoginPage = () => {
   const [forgetemail, setForgetEmail] = useState('')
   const [showOtp, setShowOtp] = useState(false)
   const [otp, setOtp] = useState('')
-  const [sending , setSending] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [resetPassword, setResetPassword] = useState(false)
+  const [newPassword, setNewPassword] = useState('')
+  const [cnfPassword, setCnfPassword] = useState('')
+  const [_id, setId] = useState('')
+  const [updating, setUpdating] = useState(false)
   console.log(errorsEmail)
   const handleSendOtp = async () => {
-    const newErrors={}
+    const newErrors = {}
     if (!forgetemail) {
       newErrors.forgetemail = "Email is required.";
-      
+
       return setErrorsEmail(newErrors);
     } else if (!validateEmail(forgetemail)) {
       newErrors.forgetemail = "Invalid email format.";
       return setErrorsEmail(newErrors);
     }
-     
+
     try {
       setSending(true)
       const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/user/otp-forgetpassword-request`, { Email: forgetemail })
@@ -121,6 +129,76 @@ const LoginPage = () => {
 
     }
   }
+
+  const handleCheckOtp = async () => {
+    console.log(otp)
+    const newErrors = {}
+    if (!otp) {
+      newErrors.otp = "OTP is required.";
+      setErrors(newErrors)
+    }
+    const data = {
+      otp: parseInt(otp, 10), // Ensures it's parsed as a base-10 integer
+      email: forgetemail
+    };
+
+    try {
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/user/auth/check-otp`, data)
+      console.log(res)
+      if (res.data.isOk) {
+        setResetPassword(true)
+        setShowOtp(false)
+        setShowNewPassword(false)
+        setShowCnfPassword(false)
+        setId(res.data.data._id)
+      }
+      else {
+        toast.error(res.data.message)
+      }
+    }
+    catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleResetPassword = async () => {
+    const newErrors = {}
+    if (!newPassword) {
+      newErrors.newPassword = "Enter New Password";
+      return setErrors(newErrors)
+    }
+    if (!cnfPassword) {
+      newErrors.cnfPassword = "Enter Confirm Password";
+      return setErrors(newErrors)
+    }
+    if (cnfPassword && cnfPassword != newPassword) {
+      newErrors.cnfPassword = "New Password and confirm password doesnot match ";
+      return setErrors(newErrors)
+    }
+
+    try {
+      setUpdating(true)
+      const res = await axios.put(`${process.env.REACT_APP_API_URL}/api/auth/update/UserMasterDetails/${_id}`, { Password: cnfPassword })
+      console.log(res)
+      if (res.data.isOk) {
+        toast.success("Pasword Reset successfull")
+        setUpdating(false)
+        setTimeout(() => {
+          setForgetEmail(false)
+          setForgetPass(false)
+        }, 3000)
+      }
+    }
+    catch (error) {
+      setUpdating(false)
+      console.log(error)
+      toast.error(error)
+    }
+
+  }
+
+  const [showNewPassword, setShowNewPassword] = useState(false)
+  const [showCnfPassword, setShowCnfPassword] = useState(false)
 
   return (
     <main className="main login-page">
@@ -169,9 +247,17 @@ const LoginPage = () => {
                         </div>
 
                         <div className="form-group mb-0">
-                          <label htmlFor="password">Password *</label>
+                          <label htmlFor="password">Password *
+                            <button
+                              className="ms-3 button-none"
+                              type="button"
+                              onClick={() => setShowNewPassword(!showNewPassword)}
+                            >
+                              {showNewPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+                            </button>
+                          </label>
                           <input
-                            type="password"
+                            type={showNewPassword ? "text" : 'password'}
                             className={`form-control ${errors.password ? "is-invalid" : ""
                               }`}
                             name="password"
@@ -197,9 +283,9 @@ const LoginPage = () => {
                         <label htmlFor="remember1">Remember me</label>
                      
                       </div> */}
-                        <div>
+                        <div className="form-checkbox d-flex align-items-center justify-content-between">
                           <button
-                            className="button-none"
+                            className="loginTitle button-none "
                             onClick={() => setForgetPass(true)} >Forgot Password?</button>
                         </div>
 
@@ -242,37 +328,106 @@ const LoginPage = () => {
                           )}
                         </div>
                         {
-                          showOtp ? 
-                          <div className="form-group">
-                          <label htmlFor="otp">Enter OTP *</label>
-                          <input
-                            type="text"
-                            className={`form-control ${errors.otp ? "is-invalid" : ""
-                              }`}
-                            name="otp"
-                            id="otp"
-                            value={otp}
-                            onChange={(e) => setOtp(e.target.value)}
-                          />
-                          {errors.otp && (
-                            <small className="text-danger">{errors.otp}</small>
-                          )}
-                        </div> :null
+                          showOtp ?
+                            <div className="form-group">
+                              <label htmlFor="otp">Enter OTP *</label>
+                              <input
+                                type="number"
+                                className={`form-control ${errors.otp ? "is-invalid" : ""
+                                  }`}
+                                name="otp"
+                                id="otp"
+                                value={otp}
+                                onChange={(e) => setOtp(e.target.value)}
+                              />
+                              {errors.otp && (
+                                <small className="text-danger">{errors.otp}</small>
+                              )}
+                            </div> : null
                         }
-                        
+                        {
+                          resetPassword ?
+                            <div>
+                              <div className="form-group">
+                                <label htmlFor="newPassword">Enter New Password*
+                                  <button
+                                    className="ms-3 button-none"
+                                    type="button"
+                                    onClick={() => setShowNewPassword(!showNewPassword)}
+                                  >
+                                    {showNewPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+                                  </button>
+                                </label>
+                                <input
+                                  type={showNewPassword ? "text" : 'password'}
+                                  className={`form-control ${errors.newPassword ? "is-invalid" : ""
+                                    }`}
+                                  name="newPassword"
+                                  id="newPassword"
+                                  value={newPassword}
+                                  onChange={(e) => setNewPassword(e.target.value)}
+                                />
+                                {errors.newPassword && (
+                                  <small className="text-danger">{errors.newPassword}</small>
+                                )}
+                              </div>
+                              <div className="form-group">
+                                <label htmlFor="cnfPassword">Confirm Password*
+                                  <button
+                                    className="ms-3 button-none"
+                                    type="button"
+                                    onClick={() => setShowCnfPassword(!showCnfPassword)}
+                                  >
+                                    {showCnfPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+                                  </button>
+                                </label>
+                                <input
+                                  type={showCnfPassword? "text" :'password'}
+                                  className={`form-control ${errors.cnfPassword ? "is-invalid" : ""
+                                    }`}
+                                  name="cnfPassword"
+                                  id="cnfPassword"
+                                  value={cnfPassword}
+                                  onChange={(e) => setCnfPassword(e.target.value)}
+                                />
+                                {errors.cnfPassword && (
+                                  <small className="text-danger">{errors.cnfPassword}</small>
+                                )}
+                              </div>
+                            </div> : null
+                        }
 
-                        <div>
+
+                        <div className="form-checkbox d-flex align-items-center justify-content-between">
 
 
                           <button
-                          type="button"
-                            className="button-none"
-                            onClick={() => setForgetPass(false)} >Back TO Login</button>
+                            type="button"
+                            style={{ fontSize: '12px' }}
+                            className="button-none "
+                            onClick={() => {
+                              setForgetPass(false)
+                              setForgetEmail("")
+                              setOtp("")
+                              setShowOtp(false)
+                              setResetPassword(false)
+                              setErrors({})
+                              setShowNewPassword(false)
+                              setShowCnfPassword(false)
+                            }} >Back To Login</button>
                         </div>
 
-                        <button type="button" onClick={handleSendOtp} className="btn loginBtn btn-primary">
+                        {forgetPass && !showOtp && !resetPassword ? <button type="button" onClick={handleSendOtp} className="btn loginBtn btn-primary">
                           {sending ? "Sending ..." : "Send Otp"}
-                        </button>
+                        </button> : null}
+
+                        {showOtp ? <button type="button" onClick={handleCheckOtp} className="btn loginBtn btn-primary">
+                          {sending ? "Checking ..." : "Submit"}
+                        </button> : null}
+
+                        {resetPassword ? <button type="button" onClick={handleResetPassword} className="btn loginBtn btn-primary">
+                          {sending ? "Submitting ..." : "Submit"}
+                        </button> : null}
                       </form>
                     </div>
                   </div>
