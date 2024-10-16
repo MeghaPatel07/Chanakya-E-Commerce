@@ -16,7 +16,6 @@ import Slider from "@mui/material/Slider";
 import ProductInquiry from "../component/ProductInquiry";
 
 import { FiPlus, FiMinus } from "react-icons/fi";
-import { toast, ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
 
 import { useFilter } from "../component/VerifyEmail";
