@@ -73,17 +73,17 @@ export const Profile = () => {
                                 <h5 className="nav-link active account-dashboard">Account Dashboard</h5>
                             </li>
                             <li className="link-item">
-                                <Button name="My Account" onClick={(e) => { setSelectedCase(e.target.name) }} className="button-none">My Account</Button>
+                                <Button name="My Account" onClick={(e) => { setSelectedCase(e.target.name) }} className="button-none siderBtn">My Account</Button>
                             </li>
                             <li className="link-item">
-                                <Button name="My Order" onClick={(e) => { setSelectedCase(e.target.name) }} className="button-none">My Order</Button>
+                                <Button name="My Order" onClick={(e) => { setSelectedCase(e.target.name) }} className="button-none siderBtn">My Order</Button>
                             </li>
 
                             <li className="link-item">
-                                <Button name="My Profile" onClick={(e) => { setSelectedCase(e.target.name) }} className="button-none">My Profile</Button>
+                                <Button name="My Profile" onClick={(e) => { setSelectedCase(e.target.name) }} className="button-none siderBtn">My Profile</Button>
                             </li>
                             <li className="link-item">
-                                 <Button onClick={(e) => { handleLogout() }} className="button-none">Log Out</Button>
+                                 <Button onClick={(e) => { handleLogout() }} className="button-none siderBtn">Log Out</Button>
                             </li>
                         </ul>
                         {renderComponent()}

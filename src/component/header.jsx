@@ -96,7 +96,7 @@ const Header = (data) => {
     console.log(Email);
     EmailVerify()
   }, [Email]);
-  const [totalQuantity, setTotalQuantity] = useState(0);
+  const [totalQuantity, setTotalQuantity] = useState("");
 
   useEffect(() => {
     if (userData && userData.cart) {
@@ -190,7 +190,7 @@ const Header = (data) => {
         </div>
       </div>
       {/* End of Header Top */}
-      <div className="header-middle sticky-content fix-top sticky-header border-no">
+      <div className="header-middle border-no">
         <div className="container">
           <div className="header-left mr-md-4">
 

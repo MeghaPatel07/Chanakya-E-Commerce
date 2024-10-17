@@ -6701,7 +6701,29 @@ blockquote {
         .calendar .calendar-header a {
             color: inherit;
         }
-
+.noProductMainDiv{
+    display:flex;
+    justify-content: center;
+}
+.noProductTitle{
+    font-size: 18px;
+    color: red;
+    border: 1px solid #eee;
+    width: 250px;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 3px 3px 3px #eee;
+}
+.btn:hover{
+    background-color: #000;
+    color: #fff;
+    border:none
+}
+.maxMinDiv{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
     .calendar thead {
         font-size: 1.3rem;
         font-weight: 600;
@@ -6954,7 +6976,7 @@ blockquote {
         -ms-flex-align: start;
         align-items: flex-start;
         text-align: start;
-        padding: 1.1rem 0 0.8rem 3rem;
+        padding: 1.1rem 0 0.8rem 1rem;
     }
 
         .category-group-image .category-content ul {
@@ -7016,22 +7038,32 @@ blockquote {
 }
 .addInquiry{
     width: 100%;
-    padding: 14px;
-    border-radius: 7px;
+    padding: 10px;
+    border-radius: 5px;
     border: none;
     color: #fff;
     font-size: 16px;
     font-weight: 600;
     background-color: #a01e20;
 }
+.inputDate{
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 5px;
+}
+.form-floating p{
+    margin: 0 0 1rem;
+}
 .icon-box-wrapper {
     margin-top: 2.9rem;
     padding: 2.4rem 0 2.2rem;
     border: 1px solid #eee;
 }
-
+.item-card{
+    padding: 10px;
+}
 .hrTag{
-    border: 1px solid #000;
+    border: 1px solid #ccc;
 }
 .catagoryTitle{
     font-size: 16px;
@@ -14912,6 +14944,7 @@ width:100%;
         margin-bottom: 0.7rem;
         margin-left: auto;
         text-transform: capitalize;
+        color: #000;
     }
 
         .title-link-wrapper a:hover {
@@ -21650,8 +21683,16 @@ width:100%;
     color: #333;
     line-height: 1;
     text-align: start;
+    width: 100%;
 }
-
+.siderBtn{
+    font-size: 16px !important;
+    font-weight: 600 !important;
+}
+.btn:first-child:active{
+    background-color: #fff;
+    color: #000;
+}
     .my-account .link-item a {
         color: inherit;
     }
@@ -22825,11 +22866,7 @@ width:100%;
     font-size: 1.6rem;
 }
 
-@media (min-width: 768px) {
-    #product-tab-vendor .pl-md-6 {
-        padding-left: 3rem !important;
-    }
-}
+
 
 #product-tab-reviews {
     border-bottom-width: 0;
@@ -23209,6 +23246,9 @@ aside .sp-sidebar-banner span {
 @media (max-width: 767px) {
     .hotspot-banner {
         font-size: 0.8rem;
+    }
+    #product-tab-vendor .pl-md-6 {
+        padding-left: 3rem !important;
     }
 }
 
@@ -24399,6 +24439,9 @@ aside .sp-sidebar-banner span {
     .default-section {
         margin-bottom: 5rem;
     }
+    .icon-box-wrapper{
+        padding: 10px;
+    }
 }
 
 @media (max-width: 767px) {
@@ -24417,6 +24460,7 @@ aside .sp-sidebar-banner span {
     .user-info {
         padding-right: 0;
     }
+   
 }
 
 @media (max-width: 575px) {
@@ -24905,6 +24949,9 @@ width: 100px !important
     .large-sm-col{
         width: 12.5%;
         max-width: 12.5%;
+    }
+    .icon-box-wrapper{
+        padding: 10px;
     }
 }
 @media (max-width:426px) and (min-width:0px){

@@ -19,7 +19,7 @@ import { FiPlus, FiMinus } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
 import { useFilter } from "../component/VerifyEmail";
-import { toast, ToastContainer } from "react-toastify";
+// import { toast, ToastContainer } from "react-toastify";
 
 
 
@@ -335,18 +335,21 @@ const ProductList = () => {
                     <AccordionDetails>
                       <Box>
                         <div className="d-flex align-item-center justify-content-between">
+                          <div className="maxMinDiv">
                           <p className="mb-0-p " style={{ textAlign: "start" }}>
                             Min
                           </p>
                           <div className="d-flex justify-content-center range-box">
                             <p className="mb-0-p">{value[0]}</p>
                           </div>
-
+                          </div>
+                          <div className="maxMinDiv">
                           <p className="mb-0-p" style={{ textAlign: "start" }}>
                             Max
                           </p>
                           <div className="d-flex justify-content-center range-box">
                             <p className="mb-0-p">{value[1]}</p>
+                          </div>
                           </div>
                         </div>
 
@@ -425,58 +428,8 @@ const ProductList = () => {
                       </ul>
                     </AccordionDetails>
                   </Accordion>
-                  <Accordion
-                    expanded={expanded === "categories"} // Open only if expanded is set to "categories"
-                    onChange={handleAccordionChange("categories")}
-                    className="widget new border-0"
-                  >
-                    <AccordionSummary
-                      expandIcon={
-                        <p
-                          style={{
-                            marginBottom: "0px",
-                            fontSize: "24px",
-                            fontWeight: "bolder",
-                            color: "rgb(58, 58, 58)",
-                          }}
-                        >
-                          {expanded === "categories" ? <FiMinus /> : <FiPlus />}{" "}
-                          {/* Toggle plus and minus */}
-                        </p>
-                      }
-                      aria-controls="panel1-content"
-                      id="panel1-header"
-                    >
-                      <Typography>
-                        <h3 className="widget-title collapsed">
-                          <span> Categories</span>
-                        </h3>
-                      </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <ul className="widget-body filter-items item-check brandCard">
-                        {categories.map((item, index) => (
-                          <li
-                            key={index}
-                            id="categories"
-                            className={
-                              activeCategoriesIndices.includes(item._id)
-                                ? "active"
-                                : "inactive"
-                            }
-                            onClick={(e) => handleClick("categories", item._id)}
-                          >
-                            <p className="p-0 text-left mb-1">
-                              {item.categoryName}
-                            </p>
-                          </li>
-                        ))}
-                      </ul>
-                    </AccordionDetails>
-                  </Accordion>
-
-                  {/* Sub Categories Accordion */}
-                  <Accordion
+                   {/* Sub Categories Accordion */}
+                   <Accordion
                     expanded={expanded === "subCategories"} // Open only if expanded is set to "subCategories"
                     onChange={handleAccordionChange("subCategories")}
                     className="widget new border-0"
@@ -531,6 +484,57 @@ const ProductList = () => {
                       </ul>
                     </AccordionDetails>
                   </Accordion>
+                  <Accordion
+                    expanded={expanded === "categories"} // Open only if expanded is set to "categories"
+                    onChange={handleAccordionChange("categories")}
+                    className="widget new border-0"
+                  >
+                    <AccordionSummary
+                      expandIcon={
+                        <p
+                          style={{
+                            marginBottom: "0px",
+                            fontSize: "24px",
+                            fontWeight: "bolder",
+                            color: "rgb(58, 58, 58)",
+                          }}
+                        >
+                          {expanded === "categories" ? <FiMinus /> : <FiPlus />}{" "}
+                          {/* Toggle plus and minus */}
+                        </p>
+                      }
+                      aria-controls="panel1-content"
+                      id="panel1-header"
+                    >
+                      <Typography>
+                        <h3 className="widget-title collapsed">
+                          <span> Categories</span>
+                        </h3>
+                      </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <ul className="widget-body filter-items item-check brandCard">
+                        {categories.map((item, index) => (
+                          <li
+                            key={index}
+                            id="categories"
+                            className={
+                              activeCategoriesIndices.includes(item._id)
+                                ? "active"
+                                : "inactive"
+                            }
+                            onClick={(e) => handleClick("categories", item._id)}
+                          >
+                            <p className="p-0 text-left mb-1">
+                              {item.categoryName}
+                            </p>
+                          </li>
+                        ))}
+                      </ul>
+                    </AccordionDetails>
+                  </Accordion>
+
+                 
 
        
 
@@ -599,7 +603,12 @@ const ProductList = () => {
                       );
                     })
 
-                  : "No Products in this filter"}
+                  : <div className="noProductMainDiv">
+                    <div className="noProductTitle">
+                    "No Products in this filter"
+                    </div>
+                    
+                    </div>}
               </Row>
             </Col>
           </Row>
