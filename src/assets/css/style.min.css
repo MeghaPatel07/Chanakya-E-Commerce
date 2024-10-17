@@ -448,8 +448,16 @@ table {
     .createCatelogDiv{
         left: 97% !important;
       }
+      .qtyInput{
+        margin-bottom: 15px;
+      }
+      .selector{
+        margin-bottom: 15px;
+      }
 }
-
+.eyeIcon{
+    margin-left: 10px;
+}
 .loading:not(.load-more-overlay),
 .load-more-overlay.loading::after {
     -webkit-animation: spin 650ms infinite linear;
@@ -522,6 +530,7 @@ table {
         -webkit-transform: translateY(0);
         transform: translateY(0);
     }
+    
 }
 /*----------------------------------------
     Layout
@@ -3168,12 +3177,14 @@ blockquote {
     .d-lg-show {
         display: none !important;
     }
+    
 }
 
 @media (max-width: 767px) {
     .d-md-show {
         display: none !important;
     }
+  
 }
 
 @media (max-width: 575px) {
@@ -5820,7 +5831,7 @@ blockquote {
     }
     .header-middle .header-search {
         padding-bottom: 0.2rem;
-        border-bottom: 1px solid #eee;
+        /* border-bottom: 1px solid #eee; */
     }
     .btn i {
         display: inline-block;
@@ -6713,6 +6724,24 @@ blockquote {
     padding: 10px;
     border-radius: 5px;
     box-shadow: 3px 3px 3px #eee;
+}
+.product-categories{
+    color: #666;
+    font-size: 1.3rem;
+    font-weight: normal;
+    line-height: 2;
+    letter-spacing: 0;
+}
+.categoryName{
+    color:#999;
+}
+.product-price small{
+    font-weight: 400;
+    font-size: 12px;
+    margin-left: 10px;
+}
+.product-price{
+    color: #000;
 }
 .btn:hover{
     background-color: #000;
@@ -8194,16 +8223,20 @@ blockquote {
     content: "";
 }
 .searchBtn{
-    position: absolute;
+    /* position: absolute; */
     right: 172px;
     top: 12px;
     border-top: 0;
     border-bottom: 0;
-    border-left: 1px solid #ccc;
+    /* border-left: 1px solid #ccc; */
     padding: 15px;
-    border-right: 1px solid #ccc;
+    /* border-right: 1px solid #ccc; */
     background: #000;
     color: #fff;
+    border: none;
+}
+.mobileSearchDiv{
+    display: flex
 }
 .offcanvas-header{
     background: #a01e20;
@@ -11266,7 +11299,7 @@ body .product-popup {
 .product-name {
     margin-bottom: 0.7rem;
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -16958,8 +16991,8 @@ width:100%;
         flex: 1;
         min-width: 40px;
         padding: 0.9rem;
-        /* border: 2px solid #a01e20; */
-        border: none;
+        border: 2px solid #a01e20;
+        /* border: none; */
         border-right: 0;
         font-size: 1.2rem;
         letter-spacing: 0;
@@ -16992,13 +17025,14 @@ width:100%;
         min-width: 5.1rem;
         color: #333;
         border-left: 0;
-        /* border-color: #a01e20; */
-        border: none;
+        border-color: #a01e20;
+        /* border: none; */
         font-size: 1.5rem;
         font-weight: normal;
         letter-spacing: -0.025em;
         text-transform: none;
     }
+    
 
         .header-search .btn-search i {
             font-size: 1.7rem;
@@ -17101,7 +17135,7 @@ width:100%;
 
         .header-search.hs-expanded .select-box {
             width: 14.6rem;
-            /* border: 2px solid #a01e20; */
+            border: 2px solid #a01e20;
             border-right: none;
             color: #666666;
         }
@@ -24953,10 +24987,23 @@ width: 100px !important
     .icon-box-wrapper{
         padding: 10px;
     }
+    .maxMainDiv{
+        gap: 10px;
+     }
 }
 @media (max-width:426px) and (min-width:0px){
     .bnradLogoCol{
         width: 43%;
+    }
+    .login-popup.signup-popup{
+        max-width: 100%;
+    }
+    .categoryDiv{
+        width: 45% !important;
+    }
+    .viewBtn {
+
+        font-size: 13px;
     }
 }
 /* @media (min-width:1024px) and (max-width:1439px){

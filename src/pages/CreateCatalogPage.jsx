@@ -269,13 +269,13 @@ const CreateCatalogPage = () => {
       <ToastContainer />
       <Container>
         <Row className="pt-4 pb-4">
-          <Col lg={4}>
+          <Col lg={4} md={6}>
             <Label>Product Category</Label>
             <Form.Select
               onChange={handleCategoryChange}
               value={category}
 
-              className="selector"
+              className="selector "
               aria-label="Default select example"
             >
               <option value="All">All Category</option>
@@ -292,7 +292,7 @@ const CreateCatalogPage = () => {
               })}
             </Form.Select>
           </Col>
-          <Col lg={4}>
+          <Col lg={4} md={6}>
             <Label>Sub Product Category</Label>
             <Form.Select
               value={subCategory}
@@ -314,7 +314,7 @@ const CreateCatalogPage = () => {
               })}
             </Form.Select>
           </Col>
-          <Col lg={4}>
+          <Col lg={4} md={6}>
             <Label>Quantity</Label>
             <input
               className="qtyInput"
@@ -324,22 +324,24 @@ const CreateCatalogPage = () => {
               onChange={(e) => { setValues({ ...values, "quantity": e.target.value }) }} />
           </Col>
         </Row>
-        <Row className="pt-4 pb-4">
-          <Col lg={4}>
+        <Row className="">
+          <Col lg={4} md={6}>
             <Label>Start Price</Label>
             <input className="qtyInput" type="number" placeholder="Start"
               value={startPrice}
               onChange={(e) => { setValues({ ...values, "startPrice": e.target.value }) }} />
           </Col>
-          <Col lg={4}>
+          <Col lg={4} md={6}>
             <Label>End Price</Label>
             <input className="qtyInput" type="number" placeholder="End"
               value={endPrice}
               onChange={(e) => { setValues({ ...values, "endPrice": e.target.value }) }} />
           </Col>
-          <Col lg={4}>
+          <Col lg={4} md={6}>
+          <Label></Label>
+
             <button className="viewBtn " type="button" onClick={handleView}>
-              View <FaEye />
+              View <FaEye className="eyeIcon" />
             </button>
           </Col>
         </Row>
@@ -366,7 +368,7 @@ const CreateCatalogPage = () => {
                   }
                  else setViewModel(true) 
                   }}>
-                {isLoading ? "Loading...." : "Create Catalog"}<IoCreateOutline />
+                {isLoading ? "Loading...." : "Create Catalog"}<IoCreateOutline className="eyeIcon"  />
 
               </button>
             </div>}

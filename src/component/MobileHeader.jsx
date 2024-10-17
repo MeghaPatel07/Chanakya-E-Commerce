@@ -23,7 +23,7 @@ const MobileHeader = () => {
       <Offcanvas className="mobileHaderBody" show={show} onHide={handleClose} placement="start">
         <Offcanvas.Header closeButton>
         <form action="#" className="input-wrapper">
-        <div>
+        <div className="mobileSearchDiv">
         <input type="text" className="form-control" name="search" autoComplete="off" placeholder="Search" required />
   <button className="btn btn-search searchBtn" type="button">
     <i className="w-icon-search" />
