@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "reactstrap";
 import logo from "../assets/images/home/logo.png";
 import product from "../assets/images/cart/product-2.jpg";
@@ -8,10 +8,20 @@ import Dropdown from 'react-bootstrap/Dropdown';
 
 import axios from "axios";
 import { Email } from "@mui/icons-material";
+import { useEmail } from "./VerifyEmail";
+import { RxCross2 } from "react-icons/rx";
+import MobileHeader from "./MobileHeader";
+import { useFilter } from "./VerifyEmail";
+
 
 const Header = (data) => {
+  const { EmailVerify, userData, setUserData } = useEmail();
+  const { FilterLogic ,searchText,handleKeyDown ,setSearchText , handleSearchClick, handleInputChange  ,setFilterRange} = useFilter()
+  const navigate = useNavigate();
+
+
   const [show, setShow] = useState(false);
-  const [userData, setUserData] = useState({});
+  // const [userData, setUserData] = useState({});
   const [CategoryData, setCategoryData] = useState([]);
   const fetchData = async () => {
     const res = await axios.get(
@@ -21,6 +31,8 @@ const Header = (data) => {
     console.log(res);
   };
   useEffect(() => {
+    setFilterRange(0)
+    setSearchText("")
     fetchData();
   }, []);
   const [token, setToken] = useState("");
@@ -50,8 +62,26 @@ const Header = (data) => {
     setSelectedOption(event.target.value);
   };
 
-  const handleRemoveItem = (id) => {
-    setCartItems(cartItems.filter((item) => item.id !== id));
+  const handleRemoveItem = async (productId) => {
+    try {
+      // Assuming user ID is stored in local storage or passed down as a prop
+      const userId = localStorage.getItem('user');
+      console.log(productId)
+      // Call the API to remove the item from the user's cart
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/remove/user-cart-item`, {
+        userId,
+        productId
+      });
+
+      // Update the local state after successful removal
+      if (response.data.success) {
+        // Filter out the removed product from the local cart state
+        const updatedCart = userData.cart.filter(item => item.productName._id !== productId);
+        setUserData(prev => ({ ...prev, cart: updatedCart }));
+      }
+    } catch (error) {
+      console.error('Error removing item from cart:', error);
+    }
   };
 
   const cartTotalQuantity = cartItems.reduce(
@@ -68,35 +98,55 @@ const Header = (data) => {
     console.log(Email);
     EmailVerify()
   }, [Email]);
-  
+  const [totalQuantity, setTotalQuantity] = useState("");
 
-  const EmailVerify =()=>{
-    if (Email) {
-      varifyUser(Email)
-        .then((response) => {
-          console.log(response);
-          const user = response.data; // Access the user data from response
-          setUserData(user); // Do something with the user data
-        })
-        .catch((error) => {
-          console.error("Error in user verification process:", error);
-        });
-    } else {
-      console.log("No token found");
+  useEffect(() => {
+    if (userData && userData.cart) {
+      // Sum the quantity in cart array
+      const total = userData.cart.reduce((acc, item) => acc + item.quantity, 0);
+      setTotalQuantity(total);
     }
-  }
-
+  }, [userData]);
+  // const EmailVerify =()=>{
+  //   if (Email) {
+  //     varifyUser(Email)
+  //       .then((response) => {
+  //         console.log(response);
+  //         const user = response.data; // Access the user data from response
+  //         setUserData(user); // Do something with the user data
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error in user verification process:", error);
+  //       });
+  //   } else {
+  //     console.log("No token found");
+  //   }
+  // }
   const handleLogout = () => {
     // Remove user data from localStorage
     localStorage.removeItem("user");
-  
+
     // Optionally, you can also clear all localStorage data if needed:
     // localStorage.clear();
-  
+
     // Redirect to the login page ("/")
-    window.location.href = "/";
+    // window.location.href = "/";
+    EmailVerify();
+
   };
-  
+  const prices = [
+    { label: "All Price", value: "All" },
+    { label: "Under 100", value: 100 },
+    { label: "Under 200", value: 200 },
+    { label: "Under 500", value: 500 },
+    { label: "Under 700", value: 700 },
+    { label: "Under 1000", value: 1000 },
+    { label: "Under 2000", value: 2000 },
+    { label: "Under 5000", value: 5000 },
+    { label: "Above 5000", value: ">5000" }
+  ];
+
+ 
 
   return (
     <header className="header">
@@ -106,20 +156,20 @@ const Header = (data) => {
             <p className="welcome-msg">Welcome to Chanakya Corporate</p>
           </div>
           <div className="header-right">
-            {userData.Email ? (
+            {userData && userData.Email ? (
               <>
-                
+
                 <Dropdown>
-                  <Dropdown.Toggle className="dropdownHader" id="dropdown-basic">
-                  <span>Welcome, {userData.Name}</span>
+                  <Dropdown.Toggle className="dropdownHader welcome-msg" id="dropdown-basic">
+                    <span>Welcome, {userData.Name}</span>
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu className="dropdownHaderMenu">
                     <Dropdown.Item href="/myAccount">My Account</Dropdown.Item>
                     <Dropdown.Item >
-                     <button onClick={handleLogout}>Logout</button>
+                      <button className="logoutBtn" onClick={handleLogout}>Logout</button>
                     </Dropdown.Item>
-                   
+
                   </Dropdown.Menu>
                 </Dropdown>
                 {/* <Link to="/" className="d-lg-show">
@@ -142,10 +192,11 @@ const Header = (data) => {
         </div>
       </div>
       {/* End of Header Top */}
-      <div className="header-middle sticky-content fix-top sticky-header border-no">
+      <div className="header-middle border-no">
         <div className="container">
           <div className="header-left mr-md-4">
-            <Link to="/" className="mobile-menu-toggle w-icon-hamburger"></Link>
+
+            <MobileHeader />
             <Link to="/" className="logo">
               <img src={logo} alt="logo" />
             </Link>
@@ -155,16 +206,17 @@ const Header = (data) => {
               className="input-wrapper header-search hs-expanded hs-round d-none d-md-flex"
             >
               <div className="select-box bg-white">
-                <select id="category" name="category">
-                  <option value="">All Price</option>
-                  <option value="travel-bags">Under 100</option>
-                  <option value="student-bags">Under 200</option>
-                  <option value="kids-bags">Under 500</option>
-                  <option value="camera-bags">Under 700</option>
-                  <option value="men-essentials">Under 1000</option>
-                  <option value="women-essentials">Under 2000</option>
-                  <option value="winter-wear">Under 5000</option>
-                  <option value="monsoon-wear">Above 5000</option>
+                <select id="category"
+                  name="category"
+                  onChange={(e) => {
+                    FilterLogic(e.target.value)
+                    navigate('/product-list')
+                  }}>
+                  {prices.map((category) => (
+                    <option key={category.value} value={category.value}>
+                      {category.label}
+                    </option>
+                  ))}
                 </select>
               </div>
               <input
@@ -172,10 +224,14 @@ const Header = (data) => {
                 className="form-control bg-white pt-0 pb-0"
                 name="search"
                 id="search"
+                value={searchText && searchText}
+                onChange={(e)=>{
+                  handleInputChange(e.target.value)}} // Updating searchText on change
+                onKeyDown={handleKeyDown} // Listening for Enter key press
                 placeholder="What are you looking for..."
                 required
               />
-              <button className="btn btn-search" type="button">
+              <button className="btn btn-search" type="button" onClick={handleSearchClick}>
                 <i className="w-icon-search"></i>
               </button>
             </form>
@@ -206,9 +262,8 @@ const Header = (data) => {
             </div>
 
             <div
-              className={`dropdown cart-dropdown cart-offcanvas mr-0 mr-lg-2 ${
-                isOpen ? "opened" : ""
-              }`}
+              className={`dropdown cart-dropdown cart-offcanvas mr-0 mr-lg-2 ${isOpen ? "opened" : ""
+                }`}
             >
               <div
                 className={`cart-overlay ${isOpen ? "active" : ""}`}
@@ -221,7 +276,7 @@ const Header = (data) => {
               >
                 <i className="w-icon-cart">
                   <span className="cart-count text-white">
-                    {userData.cart ? userData.cart.length : "0"}
+                    {userData && userData.cart ? userData.cart.length : "0"}
                   </span>
                 </i>
                 <span className="cart-label">Cart</span>
@@ -236,56 +291,65 @@ const Header = (data) => {
                     </a>
                   </div>
                   <div className="products">
-                    {cartItems.map((item) => (
-                      <div className="product product-cart" key={item.id}>
-                        <div className="product-detail">
-                          <a href="#" className="product-name mb-0">
-                            {item.name}
-                          </a>
-                          <p className="mb-0 mt-0 d-flex">
-                            <small>{item.details}</small>
-                          </p>
-                          <div className="price-box">
-                            <span className="product-quantity">
-                              {item.quantity}
-                            </span>
-                            <span className="product-price">QTY</span>
+                    {userData && userData.cart.length > 0 ?
+                      userData.cart.map((item, index) => (
+                        <div className="product product-cart" key={item._id}>
+                          <div className="product-detail">
+                            <p className="text-start product-name mb-0">
+                              {item.productName.productName}
+                            </p>
+
+                            <div className="price-box">
+                              <span className="product-quantity">{item.quantity}</span>
+                              <span className="product-price">QTY</span>
+                            </div>
                           </div>
+                          <figure className="product-media">
+                            <a href="#">
+                              <img
+                                src={`${process.env.REACT_APP_API_URL}/${item.productName.productImage}`}
+                                alt={item.productName.productName}
+                                width="84"
+                                height="94"
+                              />
+                            </a>
+                          </figure>
+                          <button
+                            className="btn btn-link btn-close"
+                            onClick={() => handleRemoveItem(item.productName._id)}
+                          >
+                            <RxCross2 className=" m-0 cross" />
+                          </button>
                         </div>
-                        <figure className="product-media">
-                          <a href="#">
-                            <img
-                              src={product}
-                              alt={item.name}
-                              width="84"
-                              height="94"
-                            />
-                          </a>
-                        </figure>
-                        <button
-                          className="btn btn-link btn-close"
-                          onClick={() => handleRemoveItem(item.id)}
-                        >
-                          <i className="fas fa-times"></i>
-                        </button>
+                      ))
+                      : <div>
+                        <Link to="/product-list" className="btn btn-primary btn-rounded">
+                          Explore our products
+                        </Link>
                       </div>
-                    ))}
+                    }
+
                   </div>
-                  <div className="cart-total">
-                    <label>Subtotal:</label>
-                    <span className="price">{cartTotalQuantity} QTY</span>
-                  </div>
-                  <div className="cart-action">
-                    <a
-                      href="#"
-                      className="btn btn-dark btn-outline btn-rounded"
-                    >
-                      View Cart
-                    </a>
-                    <a href="#" className="btn btn-primary btn-rounded">
-                      Checkout
-                    </a>
-                  </div>
+                  {userData && userData.cart.length &&
+                    <div>
+                      <div className="cart-total">
+                        <label>Subtotal:</label>
+                        <span className="price">{totalQuantity} QTY</span>
+                      </div>
+                      <div className="cart-action">
+                        <Link
+                          to="/cart"
+                          className="btn btn-dark btn-outline btn-rounded"
+                        >
+                          View Cart
+                        </Link>
+                        <Link to='checkout' className="btn btn-primary btn-rounded">
+                          Checkout
+                        </Link>
+                      </div>
+                    </div>
+                  }
+
                 </div>
               )}
               {/* End of Dropdown Box */}

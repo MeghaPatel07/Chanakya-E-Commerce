@@ -31,6 +31,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import ContactUs from "./pages/ContactUs";
 import PrintStatment from "./pages/PrintStatment";
 import EmailProvider from "./component/VerifyEmail";
+import { Profile } from "./pages/Profile";
 function App() {
   return (
     <div className="App">
@@ -49,7 +50,7 @@ function App() {
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/orderCompletion" element={<OrderCompletion />} />
           <Route path="/createCatalog" element={<CreateCatalogPage />} />
-          <Route path="/myAccount" element={<MyAccount />} />
+          <Route path="/myAccount" element={<Profile />} />
           <Route path="/myOrder" element={<MyOrder />} />
           <Route path="/myAddres" element={<MyAddress />} />
           <Route path="/myProfile" element={<MyProFile />} />
@@ -57,7 +58,7 @@ function App() {
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/contactUs" element={<ContactUs />} />
-          <Route path="/printStatment" element={<PrintStatment />} />
+          <Route path="/printStatment/:id" element={<PrintStatment />} />
         </Routes>
         <Footer />
         </EmailProvider>

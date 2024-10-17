@@ -2,8 +2,9 @@
     margin-bottom: 10px;
     cursor: pointer;
     position: relative;
-    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    /* box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; */
     border-radius: 10px;
+    border: 1px soid #eee !important;
 }
 .item-card img{
     border-radius: 10px;
@@ -29,14 +30,19 @@
     width: 130px;
     gap: 5px;
     border-radius: 5px;
-    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.08);
     opacity: 0;
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
+
 .item-card:hover .item-card-hov {
     transform: translate(-50%, -50%) translateY(20px);
     opacity: 1;
+    
+}
+.item-card:hover{
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
 }
 .dis-flex-end{
     display: flex;
@@ -63,5 +69,6 @@
     margin-top: 20px;
 }
 .filter-btn:hover{
-    background-color: #007bff;
+    background-color: #000;
+    color: #fff;
 }

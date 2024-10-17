@@ -192,14 +192,14 @@ const CreateCatalogPage = () => {
 
 
   const handleCreateCatalogue = () => {
-    setLoading(true)
-    console.log(checkedProducts)
-    if (checkedProducts.length === 0) {
-      toast.error("Please Select Products to download the Brochure")
-      setLoading(false)
-      
+    if(estimatedDate === "")
+    {
+      toast.error("Please enter the estimated date you want order on")
       return
     }
+    setLoading(true)
+    console.log(checkedProducts)
+    
     try {
       axios.post(`${process.env.REACT_APP_API_URL}/api/auth/downloadCatalogueFromFrontend`, checkedProducts).then((res) => {
         console.log(res)
@@ -338,20 +338,39 @@ const CreateCatalogPage = () => {
               onChange={(e) => { setValues({ ...values, "endPrice": e.target.value }) }} />
           </Col>
           <Col lg={4}>
-            <button className="viewBtn" type="button" onClick={handleView}>
+            <button className="viewBtn " type="button" onClick={handleView}>
               View <FaEye />
             </button>
           </Col>
         </Row>
         <Row className="pt-4 pb-4">
-          {allproduct.length > 0 &&
-            <div className="allCategoryDiv">
-              <input type="checkbox"
-                checked={selectAll}
-                onChange={handleSelectAllChange}
-              /> <span>Select All Category</span>
-            </div>
-          }
+          <div className="mainDivAllCategory">
+            {allproduct.length > 0 &&
+              <div className="allCategoryDiv">
+                <input type="checkbox"
+                  checked={selectAll}
+                  onChange={handleSelectAllChange}
+                /> <span>Select All Category</span>
+              </div>
+            }
+            {allproduct.length > 0 && <div className="categoryDiv pt-4">
+              <button
+                className="viewBtn"
+                type="button"
+                onClick={() => { 
+                  if (checkedProducts.length === 0) {
+                    toast.error("Please Select Products to download the Brochure")
+                    setLoading(false)
+              
+                    return
+                  }
+                 else setViewModel(true) 
+                  }}>
+                {isLoading ? "Loading...." : "Create Catalog"}<IoCreateOutline />
+
+              </button>
+            </div>}
+          </div>
           {allproduct.length > 0 ? allproduct.map((data) => (
             <Col className="pt-4" lg={3} md={4} sm={6}>
               <div className="item-card">
@@ -378,76 +397,84 @@ const CreateCatalogPage = () => {
 
 
         </Row>
-        {allproduct.length > 0 && <div className="categoryDiv pt-4">
-          <button
-            className="viewBtn"
-            type="button"
-            onClick={() => { setViewModel(true) }}>
-            {isLoading ? "Loading...." : "Create Catalog"}<IoCreateOutline />
 
-          </button>
-        </div>}
       </Container>
 
       <Modal
         isOpen={viewModel}
 
-        centered
+      // centered
       >
         <ModalHeader
-          className="bg-light p-3"
+          className="p-3 modalHader"
           toggle={() => {
             setViewModel(false);
           }}
+          close={
+            <button onClick={() => setViewModel(false)}
+              className="close" >
+              &times;
+            </button>
+          }
         >
           User Detail
+
         </ModalHeader>
         <form>
           <ModalBody>
+
             <div className="form-floating mb-3">
-              <p ><span className="fw-bold"> User Name :</span>{userData.Name} </p>
-              <p ><span className="fw-bold"> Contact Number :</span>{userData.Mobile} </p>
-              <p ><span className="fw-bold"> User Email :</span>{userData.Email} </p>
+              <Row>
+                <Col lg={12}>
+                  <p ><span className="fw-bold"> User Name :</span>{userData.Name} </p>
+                </Col>
+                <Col lg={12}>
+                  <p ><span className="fw-bold"> Contact Number :</span>{userData.Mobile} </p>
+                </Col>
+
+                <Col lg={12}>
+                  <p ><span className="fw-bold"> User Email :</span>{userData.Email} </p>
+                </Col>
+                <Col lg={12}>
+                  <p ><span className="fw-bold"> Estimated Date you want  :</span>
+                    <input
+                      value={estimatedDate}
+                      onChange={(e) => {
+                        setValues({ ...values, "estimatedDate": e.target.value });
+                        console.log(values)
+                      }}
+                      className="inputDate"
+                      type="date">
+                    </input> </p>
+                </Col>
+                <Col lg={12}>
+                  <div className="hstack gap-2 justify-content-end">
+                    <button
+                      className="viewBtn"
+                      type="button"
+                      onClick={() => { handleCreateCatalogue() }}>
+                      {isLoading ? "Loading...." : "Create Catalog"}<IoCreateOutline />
+
+                    </button>
+
+
+
+                  </div>
+                </Col>
+              </Row>
+
+
+
               {/* <p ><span className="fw-bold"> Password :</span>{values.Password} </p> */}
-              <p ><span className="fw-bold"> Estimated Date you want  :</span>
-                <input
-                  value={estimatedDate}
-                  onChange={(e) => {
-                    setValues({ ...values, "estimatedDate": e.target.value });
-                    console.log(values)
-                  }}
-                  type="date">
-                </input> </p>
+
 
 
 
             </div>
           </ModalBody>
 
-          <ModalFooter>
-            <div className="hstack gap-2 justify-content-end">
-              <button
-                className="viewBtn"
-                type="button"
-                onClick={() => { handleCreateCatalogue() }}>
-                {isLoading ? "Loading...." : "Create Catalog"}<IoCreateOutline />
-
-              </button>
-           
-
-            <button
-              type="button"
-              className="btn btn-outline-danger"
-              onClick={() => {
-                setViewModel(false)
-              }}
-            >
-              Cancel
-            </button>
-          </div>
-        </ModalFooter>
-      </form>
-    </Modal>
+        </form>
+      </Modal>
     </React.Fragment >
   );
 };

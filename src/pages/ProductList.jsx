@@ -15,14 +15,24 @@ import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import ProductInquiry from "../component/ProductInquiry";
 
+import { FiPlus, FiMinus } from "react-icons/fi";
+import { Link } from "react-router-dom";
+
+import { useFilter } from "../component/VerifyEmail";
+import { toast, ToastContainer } from "react-toastify";
+
+
+
 function valuetext(value) {
   return `${value}°C`;
 }
 
 const ProductList = () => {
+  const { FilterLogic, textToFind, filterRange, filterCategory, filterSubCategory } = useFilter()
   const [products, setProducts] = useState([]);
   const [selectList, setSelectList] = useState([]);
   const [value, setValue] = useState([]);
+  const [allProduct, setAllProduct] = useState([])
 
   const [filters, setFilters] = useState([]);
   const [subCategories, setSubcategories] = useState([]);
@@ -31,13 +41,141 @@ const ProductList = () => {
   const [minVal, setMinVal] = useState(0);
   const [maxVal, setMaxVal] = useState(0);
 
+  const [expanded, setExpanded] = useState(false); // Track which accordion is expanded
+
+  // Function to handle accordion change
+  const handleAccordionChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
+
+  const [isFirstEffectComplete, setIsFirstEffectComplete] = useState(false);
+
+  
   useEffect(() => {
-    fetchFilters();
-  }, []);
+
+    const runSequentially = async () => {
+      try {
+        // First, call fetchFilters
+
+        // Finally, call handleFilterRange after fetchData is done
+        await handleClean()
+        await fetchFilters();
+
+        // Then, call fetchData after fetchFilters is done
+        await fetchData();
+
+
+        if (filterRange != 0 || filterRange != '0') {
+          await handleFilterRange()
+        }
+
+        else if (textToFind != '') {
+          setActiveBrandIndices([])
+
+          await fetchBySearch()
+        }
+
+
+        setIsFirstEffectComplete(true);
+      } catch (error) {
+        console.error("Error in the sequence:", error);
+      }
+    };
+
+    runSequentially();
+  }, [filterRange || textToFind]); // If you want this to rerun on filterRange changes
+
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    // This effect runs only if the first effect has completed
+    HandleFilterCategory()
+  }, [isFirstEffectComplete, maxVal, filterCategory]); // Depend on isFirstEffectComplete, maxVal, and filterCategory
+
+  useEffect(() => {
+    // This effect runs only if the first effect has completed
+    handleFilterSubCategory()
+  }, [isFirstEffectComplete, filterSubCategory]); // Depend on isFirstEffectComplete, maxVal, and filterCategory
+
+  const HandleFilterCategory = async () => {
+    if (isFirstEffectComplete && filterCategory) {
+      console.log(maxVal)
+      return handleSubmit({
+        activeBrandIndices: [],
+        activeCategoriesIndices: [filterCategory],
+        activeSubCategoriesIndices: [],
+        value: [minVal, maxVal], // Ensure value is correctly passed as numbers
+      });
+    }
+  }
+
+  const handleFilterSubCategory = async () => {
+    if (isFirstEffectComplete && filterSubCategory) {
+      console.log(maxVal)
+      return handleSubmit({
+        activeBrandIndices: [],
+        activeCategoriesIndices: [],
+        activeSubCategoriesIndices: [filterSubCategory],
+        value: [minVal, maxVal], // Ensure value is correctly passed as numbers
+      });
+    }
+  }
+
+
+  const fetchBySearch = async () => {
+    try {
+      const res = await axios
+        .post(
+          `${process.env.REACT_APP_API_URL}/api/auth/list-by-params/product-details-from-frontend`,
+          { match: textToFind }
+        )
+      console.log(res)
+      if (res.status === 200) {
+        setProducts(res.data);
+        console.log(activeBrandIndices)
+        res.data.forEach((item) => {
+       
+            handleClick("brands", item.brandName._id); // Pass true to indicate deselect
+         handleClick("subcategories", item.subCategoryName._id); // Pass true to indicate deselect
+         handleClick("categories", item.categoryName._id); // Pass true to indicate deselect
+      
+        });
+        // res.data.map((item) => {
+        //   handleClick("brands", item.brandName)
+        //   handleClick("subcategories", item.subCategoryName)
+        //   handleClick("categories", item.categoryName)
+        // })
+
+      }
+    }
+    catch (error) {
+      console.log(error)
+    }
+
+  }
+
+
+  const handleFilterRange = async () => {
+    // await handleClean()
+    setActiveBrandIndices([])
+    if (filterRange === "All") return
+
+    if (filterRange === ">5000") {
+      console.log("maxVal", maxVal)
+      toast.warning("No Product In This Price range")
+      return
+    }
+    const numericFilterRange = Number(filterRange);
+    console.log("filterRange", [minVal, numericFilterRange]);
+
+    setValue([minVal, numericFilterRange]);
+    handleSubmit({
+      activeBrandIndices: [],
+      activeCategoriesIndices: [],
+      activeSubCategoriesIndices: [],
+      value: [minVal, numericFilterRange], // Ensure value is correctly passed as numbers
+    });
+  };
+
 
   const fetchData = async () => {
     const res = await axios.get(
@@ -46,18 +184,39 @@ const ProductList = () => {
 
     console.log(res);
     setProducts(res.data);
+    setAllProduct(res.data)
   };
 
   const handleSubmit = async (values) => {
     console.log(values);
+    console.log(activeBrandIndices)
     const res = await axios.post(
       `${process.env.REACT_APP_API_URL}/api/auth/list/get-filtered-products`,
       values
     );
     if (res.data.products.length > 0) {
-      console.log(res.data.products[0]);
+      // console.log(res.data.products[0]);
       setProducts(res.data.products[0].products);
-      setBrands(res.data.products[0].uniqueBrandDetails);
+      console.log(res.data.products[0].products)
+      // setBrands(res.data.products[0].uniqueBrandDetails);
+      res.data.products[0].products.forEach((item) => {
+        // Check if the item brand, subcategory, and category are active
+        const brandMatch = values.activeBrandIndices.length > 0 && values.activeBrandIndices.includes(item.brandName._id);
+        const subCategoryMatch = values.activeSubCategoriesIndices.includes(item.subCategoryName._id);
+        const categoryMatch = values.activeCategoriesIndices.includes(item.categoryName._id);
+        console.log(brandMatch)
+        // If they do not match, handle the click to deselect
+        if (!brandMatch) {
+          handleClick("brands", item.brandName._id); // Pass true to indicate deselect
+        }
+        if (!subCategoryMatch) {
+          handleClick("subcategories", item.subCategoryName._id); // Pass true to indicate deselect
+        }
+        if (!categoryMatch) {
+          handleClick("categories", item.categoryName._id); // Pass true to indicate deselect
+        }
+      });
+
     } else {
       setProducts([]);
     }
@@ -80,19 +239,20 @@ const ProductList = () => {
 
     console.log(`Min price: ${minPrice}`); // Min price: 111
     console.log(`Max price: ${maxPrice}`); // Max price: 1999
+    console.log(filterRange)
+
   };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    console.log(newValue)
   };
 
   const [activeCategoriesIndices, setActiveCategoriesIndices] = useState([]);
-  const [activeSubCategoriesIndices, setActiveSubCategoriesIndices] = useState(
-    []
-  );
+  const [activeSubCategoriesIndices, setActiveSubCategoriesIndices] = useState([]);
   const [activeBrandIndices, setActiveBrandIndices] = useState([]);
   const handleClick = (e, index) => {
-    console.log(e);
+    // console.log(index);
     if (e === "categories") {
       setActiveCategoriesIndices((prevIndices) => {
         if (prevIndices.includes(index)) {
@@ -138,7 +298,7 @@ const ProductList = () => {
 
       setProducts(sortedProducts); // Assuming setProducts is the state updater function
     }
-    if (e.target.value === "newPrice") {
+    if (e.target.value === "lowHigh") {
       // Assuming products is an array of objects with a price field
       const sortedProducts = [...products].sort(
         (a, b) => a.newPrice - b.newPrice
@@ -146,10 +306,28 @@ const ProductList = () => {
 
       setProducts(sortedProducts); // Assuming setProducts is the state updater function
     }
+    if (e.target.value === "highLow") {
+      // Assuming products is an array of objects with a price field
+      const sortedProducts = [...products].sort(
+        (a, b) => b.newPrice - a.newPrice
+      ); // Sorts by price (low to high)
+
+      setProducts(sortedProducts); // Assuming setProducts is the state updater function
+    }
   };
+
+  const handleClean = async () => {
+    console.log("object")
+    setValue([minVal, maxVal]);
+    setProducts(allProduct)
+    setActiveCategoriesIndices([])
+    setActiveSubCategoriesIndices([])
+    setActiveBrandIndices([])
+  }
 
   return (
     <>
+      <ToastContainer />
       <nav class="breadcrumb-nav mb-10">
         <div class="container">
           <ul class="breadcrumb">
@@ -167,205 +345,39 @@ const ProductList = () => {
         <div className="container">
           <Row className="shop-content row gutter-lg">
             <Col
-              lg={2}
+              xl={3}
+              lg={3}
+              md={12}
               className="shop-sidebar sticky-sidebar-wrapper sidebar-fixed"
             >
               <div className="sticky-sidebar">
                 <div class="filter-actions">
                   <label>Filter :</label>
-                  <a href="#" class="btn btn-dark btn-link filter-clean">
+                  <button onClick={() => { handleClean() }} class="btn btn-dark btn-link filter-clean">
                     Clean All
-                  </a>
+                  </button>
                 </div>
 
                 <div>
-                  <Accordion className="widget new border-0">
-                    <AccordionSummary
-                      expandIcon={
-                        <p
-                          style={{
-                            marginBottom: "0px",
-                            fontSize: "24px",
-                            fontWeight: "bolder",
-                            color: "rgb(58, 58, 58)",
-                          }}
-                        >
-                          <ArrowDownwardIcon />
-                        </p>
-                      }
-                      aria-controls="panel1-content"
-                      id="panel1-header"
-                    >
-                      <Typography>
-                        <p
-                          className="widget-title"
-                          style={{
-                            marginBottom: "0px",
-                            fontSize: "18px",
-                            fontWeight: "bolder",
-                            color: "rgb(58, 58, 58)",
-                          }}
-                        >
-                          Categories
-                        </p>
-                      </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <ul class="widget-body filter-items item-check brandCard">
-                        {categories.map((item, index) => {
-                          return (
-                            <li
-                              key={index}
-                              id="categories"
-                              className={
-                                activeCategoriesIndices.includes(item._id)
-                                  ? "active"
-                                  : "inactive"
-                              }
-                              onClick={(e) =>
-                                handleClick("categories", item._id)
-                              }
-                            >
-                              <p className="p-0 text-left mb-1">
-                                {item.categoryName}
-                              </p>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </AccordionDetails>
-                  </Accordion>
-                  <Accordion className="widget new border-0">
-                    <AccordionSummary
-                      expandIcon={
-                        <p
-                          style={{
-                            marginBottom: "0px",
-                            fontSize: "24px",
-                            fontWeight: "bolder",
-                            color: "rgb(58, 58, 58)",
-                          }}
-                        >
-                          <ArrowDownwardIcon />
-                        </p>
-                      }
-                      aria-controls="panel1-content"
-                      id="panel1-header"
-                    >
-                      <Typography>
-                        <p
-                          className="widget-title"
-                          style={{
-                            marginBottom: "0px",
-                            fontSize: "18px",
-                            fontWeight: "bolder",
-                            color: "rgb(58, 58, 58)",
-                          }}
-                        >
-                          Sub Categories
-                        </p>
-                      </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <ul class="widget-body filter-items item-check brandCard">
-                        {subCategories.map((item, index) => {
-                          return (
-                            <li
-                              key={index}
-                              name="subcategories"
-                              className={
-                                activeSubCategoriesIndices.includes(item._id)
-                                  ? "active"
-                                  : "inactive"
-                              }
-                              onClick={(e) =>
-                                handleClick("subcategories", item._id)
-                              }
-                            >
-                              <p className="p-0 text-left mb-1">
-                                {item.subCategoryName}
-                              </p>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </AccordionDetails>
-                  </Accordion>
-                  <Accordion className="widget new border-0">
-                    <AccordionSummary
-                      expandIcon={
-                        <p
-                          style={{
-                            marginBottom: "0px",
-                            fontSize: "24px",
-                            fontWeight: "bolder",
-                            color: "rgb(58, 58, 58)",
-                          }}
-                        >
-                          <ArrowDownwardIcon />
-                        </p>
-                      }
-                      aria-controls="panel1-content"
-                      id="panel1-header"
-                    >
-                      <Typography>
-                        <p
-                          className="widget-title"
-                          style={{
-                            marginBottom: "0px",
-                            fontSize: "18px",
-                            fontWeight: "bolder",
-                            color: "rgb(58, 58, 58)",
-                          }}
-                        >
-                          Brands
-                        </p>
-                      </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <ul class="widget-body filter-items item-check brandCard">
-                        {brands.map((item, index) => {
-                          return (
-                            <li
-                              key={index}
-                              name="brands"
-                              className={
-                                activeBrandIndices.includes(item._id)
-                                  ? "active"
-                                  : "inactive"
-                              }
-                              onClick={(e) => handleClick("brands", item._id)}
-                            >
-                              <p className="p-0 text-left mb-1">
-                                {item.brandName}
-                              </p>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </AccordionDetails>
-                  </Accordion>
+                  <Typography>
+                  <h3 className="widget collapsed  text-start price-range-border">
+                          <span className="widget-title">Price Range</span>
+                        </h3>
+                  </Typography>
                   <Accordion>
                     <AccordionDetails>
                       <Box>
                         <div className="d-flex align-item-center justify-content-between">
-                          <div>
-                            <p
-                              className="mb-0-p "
-                              style={{ textAlign: "start" }}
-                            >
+                          <div className="maxMinDiv">
+                            <p className="mb-0-p " style={{ textAlign: "start" }}>
                               Min
                             </p>
                             <div className="d-flex justify-content-center range-box">
                               <p className="mb-0-p">{value[0]}</p>
                             </div>
                           </div>
-
-                          <div>
-                            <p
-                              className="mb-0-p"
-                              style={{ textAlign: "start" }}
-                            >
+                          <div className="maxMinDiv">
+                            <p className="mb-0-p" style={{ textAlign: "start" }}>
                               Max
                             </p>
                             <div className="d-flex justify-content-center range-box">
@@ -399,6 +411,166 @@ const ProductList = () => {
                       </Box>
                     </AccordionDetails>
                   </Accordion>
+                  {/* Brands Accordion */}
+                  <Accordion
+                    expanded={expanded === "brands"} // Open only if expanded is set to "brands"
+                    onChange={handleAccordionChange("brands")}
+                    className="widget new border-0"
+                  >
+                    <AccordionSummary
+                      expandIcon={
+                        <p
+                          style={{
+                            marginBottom: "0px",
+                            fontSize: "24px",
+                            fontWeight: "bolder",
+                            color: "rgb(58, 58, 58)",
+                          }}
+                        >
+                          {expanded === "brands" ? <FiMinus /> : <FiPlus />}{" "}
+                          {/* Toggle plus and minus */}
+                        </p>
+                      }
+                      aria-controls="panel3-content"
+                      id="panel3-header"
+                    >
+                      <Typography>
+                        <h3 className="widget-title collapsed">
+                          <span> Brands</span>
+                        </h3>
+                      </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <ul className="widget-body filter-items item-check brandCard">
+                        {brands.map((item, index) => (
+                          <li
+                            key={index}
+                            name="brands"
+                            className={
+                              activeBrandIndices.includes(item._id)
+                                ? "active"
+                                : "inactive"
+                            }
+                            onClick={(e) => handleClick("brands", item._id)}
+                          >
+                            <p className="p-0 text-left mb-1">
+                              {item.brandName}
+                            </p>
+                          </li>
+                        ))}
+                      </ul>
+                    </AccordionDetails>
+                  </Accordion>
+                  {/* Sub Categories Accordion */}
+                  <Accordion
+                    expanded={expanded === "subCategories"} // Open only if expanded is set to "subCategories"
+                    onChange={handleAccordionChange("subCategories")}
+                    className="widget new border-0"
+                  >
+                    <AccordionSummary
+                      expandIcon={
+                        <p
+                          style={{
+                            marginBottom: "0px",
+                            fontSize: "24px",
+                            fontWeight: "bolder",
+                            color: "rgb(58, 58, 58)",
+                          }}
+                        >
+                          {expanded === "subCategories" ? (
+                            <FiMinus />
+                          ) : (
+                            <FiPlus />
+                          )}{" "}
+                          {/* Toggle plus and minus */}
+                        </p>
+                      }
+                      aria-controls="panel2-content"
+                      id="panel2-header"
+                    >
+                      <Typography>
+                        <h3 className="widget-title collapsed">
+                          <span> Sub Categories</span>
+                        </h3>
+                      </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <ul className="widget-body filter-items item-check brandCard">
+                        {subCategories.map((item, index) => (
+                          <li
+                            key={index}
+                            name="subcategories"
+                            className={
+                              activeSubCategoriesIndices.includes(item._id)
+                                ? "active"
+                                : "inactive"
+                            }
+                            onClick={(e) =>
+                              handleClick("subcategories", item._id)
+                            }
+                          >
+                            <p className="p-0 text-left mb-1">
+                              {item.subCategoryName}
+                            </p>
+                          </li>
+                        ))}
+                      </ul>
+                    </AccordionDetails>
+                  </Accordion>
+                  <Accordion
+                    expanded={expanded === "categories"} // Open only if expanded is set to "categories"
+                    onChange={handleAccordionChange("categories")}
+                    className="widget new border-0"
+                  >
+                    <AccordionSummary
+                      expandIcon={
+                        <p
+                          style={{
+                            marginBottom: "0px",
+                            fontSize: "24px",
+                            fontWeight: "bolder",
+                            color: "rgb(58, 58, 58)",
+                          }}
+                        >
+                          {expanded === "categories" ? <FiMinus /> : <FiPlus />}{" "}
+                          {/* Toggle plus and minus */}
+                        </p>
+                      }
+                      aria-controls="panel1-content"
+                      id="panel1-header"
+                    >
+                      <Typography>
+                        <h3 className="widget-title collapsed">
+                          <span> Categories</span>
+                        </h3>
+                      </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <ul className="widget-body filter-items item-check brandCard">
+                        {categories.map((item, index) => (
+                          <li
+                            key={index}
+                            id="categories"
+                            className={
+                              activeCategoriesIndices.includes(item._id)
+                                ? "active"
+                                : "inactive"
+                            }
+                            onClick={(e) => handleClick("categories", item._id)}
+                          >
+                            <p className="p-0 text-left mb-1">
+                              {item.categoryName}
+                            </p>
+                          </li>
+                        ))}
+                      </ul>
+                    </AccordionDetails>
+                  </Accordion>
+
+
+
+
+
                   <button
                     className="filter-btn"
                     onClick={() =>
@@ -416,7 +588,7 @@ const ProductList = () => {
                 </div>
               </div>
             </Col>
-            <Col lg={10} md={12}>
+            <Col xl={9} lg={9} md={12}>
               <Row>
                 <div className="dis-flex-end">
                   <ProductInquiry />
@@ -430,7 +602,6 @@ const ProductList = () => {
                       class="form-control"
                       onChange={handleSortChange}
                     >
-                      <option disabled>Select</option>
                       <option value="lowHigh" >
                         Price (low to high)
                       </option>
@@ -442,27 +613,38 @@ const ProductList = () => {
                     </select>
                   </div>
                 </div>
-                {products.length > 0
+                {products && products.length > 0
                   ? products.map((items, index) => {
-                      return (
-                        <Col lg={3} md={4} sm={6} key={index}>
-                          <div className="item-card">
-                            <img
-                              src={`${process.env.REACT_APP_API_URL}/${items.productImage}`}
-                              alt=""
-                            />
-                            <p>{items.productName}</p>
-                            <p>{items.brandName.brandName}</p>
-                            {/* <div className='item-card-hov'>
+
+                    return (
+                      <Col lg={3} md={4} sm={6} key={index}>
+                        <div className="item-card product-image-gap">
+                          <img
+                            src={`${process.env.REACT_APP_API_URL}/${items.productImage}`}
+                            alt=""
+                          />
+                          <p className="product-name mb-0">
+                            <Link to="#">{items.productName}</Link>
+                          </p>
+                          <p class="product-cat text-center mt-2">
+                            <Link to="#">{items.brandName.brandName}</Link>
+                          </p>
+                          {/* <div className='item-card-hov'>
                             <i className="w-icon-cart"></i>
                             <p>Add To Inquiry</p>
                           </div> */}
-                            <ProductInquiry  data ={items}/>
-                          </div>
-                        </Col>
-                      );
-                    })
-                  : "No Products in this filter"}
+                          <ProductInquiry data={items} />
+                        </div>
+                      </Col>
+                    );
+                  })
+
+                  : <div className="noProductMainDiv">
+                    <div className="noProductTitle">
+                      "No Products in this filter"
+                    </div>
+
+                  </div>}
               </Row>
             </Col>
           </Row>

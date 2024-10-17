@@ -1,52 +1,80 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import xq from "../assets/images/home/products/p-01.jpg"
 import xq1 from "../assets/images/home/products/p-02.jpg";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
+import { useEmail } from "../component/VerifyEmail";
+import { RiDeleteBinLine } from "react-icons/ri";
 const Cart = () => {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Thorium Neo 8 Wheels 55 Cm Small Cabin Trolley Bag Hard",
-      brand: "Safari",
-      category: "Travelling Bags",
-      subCategory: "Suitcases",
-      price: 3350,
-      quantity: 1,
-      image: xq,
-    },
-    {
-      id: 2,
-      name: "Safari Medium Trolley Bag",
-      brand: "Urban Jungle",
-      category: "Travelling Bags",
-      subCategory: "Suitcases",
-      price: 4350,
-      quantity: 1,
-      image: xq1, 
-    },
-  ]);
+ 
+
+
+  const { EmailVerify, setUserData, userData } = useEmail();
+  console.log(userData)
+  useEffect(() => {
+    EmailVerify()
+  }, [])
 
   // Update quantity for a specific cart item
+  // Update quantity for a specific cart item in userData
   const handleQuantityChange = (id, quantity) => {
-    const updatedItems = cartItems.map((item) =>
-      item.id === id ? { ...item, quantity: Math.max(1, quantity) } : item
+    const updatedCart = userData.cart.map((item) =>
+      item.productName._id === id
+        ? { ...item, quantity: Math.max(1, quantity) } // Ensure quantity is at least 1
+        : item
     );
-    setCartItems(updatedItems);
+
+    setUserData({ ...userData, cart: updatedCart }); // Update the cart in userData
   };
 
-  // Remove item from cart
-  const handleRemoveItem = (id) => {
-    const updatedItems = cartItems.filter((item) => item.id !== id);
-    setCartItems(updatedItems);
+  // Remove item from userData cart
+  const handleRemoveItem = async(id) => {
+    const updatedCart = userData.cart.filter(
+      (item) => item.productName._id !== id
+    );
+   
+    setUserData({ ...userData, cart: updatedCart }); // Update the cart in userData
   };
+
 
   // Calculate the subtotal for a single item
-  const calculateSubtotal = (item) => item.price * item.quantity;
+  const calculateSubtotal = (item) => {
+    console.log(item)
+    return item.productName.newPrice * item.quantity
+  };
 
-  // Calculate the total for the entire cart
-  const calculateTotal = () =>
-    cartItems.reduce((total, item) => total + calculateSubtotal(item), 0);
+  // // Calculate the total for the entire cart
+
+ 
+  const calculateTotal = () => {
+    // Check if userData exists and has a cart array
+    return userData && userData.cart
+      ? userData.cart.reduce((total, item) => total + calculateSubtotal(item), 0)
+      : 0;  // Return 0 if there's no cart or userData
+  };
+
+  const handleCheckout = async()=>{
+    const user= localStorage.getItem('user')
+      try{
+        const res = await axios.put(`${process.env.REACT_APP_API_URL}/api/auth/update/UserMasterDetails/${user}`,userData )
+      console.log(res)
+      if(res.status===200)
+      {
+        window.location.href = '/checkout'; 
+      }
+      }
+      catch(error)
+      {
+        console.log(error)
+      }
+
+  }
+
+  const handleClear=()=>{
+ 
+    setUserData({ ...userData, cart: [] }); // Update the cart in userData
+  }
 
   return (
     <main className="main login-page">
@@ -107,14 +135,14 @@ const Cart = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {cartItems.map((item) => (
-                    <tr key={item.id}>
+                  {userData && userData.cart.length > 0 && userData.cart.map((item) => (
+                    <tr key={item.productName._id}>
                       <td className="product-thumbnail">
                         <div className="p-relative">
                           <Link to="#">
                             <figure>
                               <img
-                                src={item.image}
+                                src={`${process.env.REACT_APP_API_URL}/${item.productName.productImage}`}
                                 alt="product"
                                 width="300"
                                 height="338"
@@ -124,31 +152,25 @@ const Cart = () => {
                         </div>
                       </td>
                       <td className="product-name">
-                        <Link to="#">
-                          <span className="productname" style={{fontSize:"14px", fontWeight:"500"}}>{item.name}</span>
+                        <Link to={`/brand/${item.brandName.brandName}`}>
+                          <span className="productname" style={{ fontSize: "14px", fontWeight: "500" }}>{item.productName.productName}</span>
                           <ul className="product-desc row m-0 mb-1 pl-20">
                             <li className="col-md-12 p-0">
-                              <strong>Brand :</strong> {item.brand}
+                              <strong>Brand :</strong> {item.brandName.brandName}
                             </li>
                             <li className="col-md-12 p-0">
-                              <strong>Category :</strong> {item.category}
+                              <strong>Category :</strong> {item.categoryName.categoryName}
                             </li>
                             <li className="col-md-12 p-0">
-                              <strong>Sub Category :</strong> {item.subCategory}
+                              <strong>Sub Category :</strong> {item.subCategoryName.subCategoryName}
                             </li>
                           </ul>
                         </Link>
                       </td>
                       <td className="product-price text-center">
                         <ins className="new-price">
-                          <span
-                            style={{
-                              fontFamily: "Arial, Helvetica, sans-serif",
-                            }}
-                          >
-                            ₹
-                          </span>{" "}
-                          {item.price.toFixed(2)}
+                          <span style={{ fontFamily: "Arial, Helvetica, sans-serif" }}>₹</span>{" "}
+                          {item.productName.newPrice}
                         </ins>
                       </td>
                       <td className="product-quantity text-center">
@@ -158,37 +180,22 @@ const Cart = () => {
                             type="number"
                             min="1"
                             value={item.quantity}
-                            onChange={(e) =>
-                              handleQuantityChange(
-                                item.id,
-                                parseInt(e.target.value)
-                              )
-                            }
+                            onChange={(e) => handleQuantityChange(item.productName._id, parseInt(e.target.value))}
                           />
                           <button
                             className="quantity-plus w-icon-plus"
-                            onClick={() =>
-                              handleQuantityChange(item.id, item.quantity + 1)
-                            }
+                            onClick={() => handleQuantityChange(item.productName._id, item.quantity + 1)}
                           ></button>
                           <button
                             className="quantity-minus w-icon-minus"
-                            onClick={() =>
-                              handleQuantityChange(item.id, item.quantity - 1)
-                            }
+                            onClick={() => handleQuantityChange(item.productName._id, item.quantity - 1)}
                           ></button>
                         </div>
                       </td>
                       <td className="product-subtotal text-center">
                         <span className="amount">
-                          <span
-                            style={{
-                              fontFamily: "Arial, Helvetica, sans-serif",
-                            }}
-                          >
-                            ₹
-                          </span>{" "}
-                          {calculateSubtotal(item).toFixed(2)}
+                          <span style={{ fontFamily: "Arial, Helvetica, sans-serif" }}>₹</span>{" "}
+                          {calculateSubtotal(item)}
                         </span>
                       </td>
                       <td className="wishlist-action">
@@ -197,17 +204,9 @@ const Cart = () => {
                             <Link
                               to="#"
                               className="btn deleteBut btn-rounded btn-sm p-3 mt-2"
-                              onClick={() => handleRemoveItem(item.id)}
+                              onClick={() => handleRemoveItem(item.productName._id)}
                             >
-                              <i className="far fa-trash-alt" style={{fontSize:" 15px"}}></i>
-                            </Link>
-                          </p>
-                          <p>
-                            <Link
-                              to="#"
-                              className="btn seetBtn btn-primary btn-rounded btn-sm p-3"
-                            >
-                              <i className="far fa-eye"></i>
+                              <RiDeleteBinLine style={{ strokeWidth: '0px' }} />
                             </Link>
                           </p>
                         </div>
@@ -215,17 +214,19 @@ const Cart = () => {
                     </tr>
                   ))}
                 </tbody>
+
               </table>
 
               <div className="cart-action d-flex mt-6 mb-6">
                 <Link
-                  to="#"
+                  to="/product-list"
                   className="btn btn-dark btn-rounded btn-icon-left btn-shopping mr-auto"
                 >
                   <i className="w-icon-long-arrow-left"></i>Continue Shopping
                 </Link>
                 <button
-                  type="submit"
+                  type="button"
+                  onClick={handleClear}
                   className="btn btn-rounded btn-default btn-clear"
                 >
                   Clear Cart
@@ -263,13 +264,14 @@ const Cart = () => {
                       {calculateTotal().toFixed(2)}
                     </span>
                   </div>
-                  <Link
-                    to="/checkOut"
+                  <button
+                    disabled={userData && !userData.cart.length>0}
+                    onClick={handleCheckout}
                     className="btn btn-block btn-dark btn-icon-right btn-rounded btn-checkout mt-3 "
                   >
                     Proceed to checkout
                     <i className="w-icon-long-arrow-right"></i>
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>
