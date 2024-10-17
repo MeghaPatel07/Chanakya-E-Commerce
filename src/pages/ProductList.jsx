@@ -50,7 +50,7 @@ const ProductList = () => {
 
   const [isFirstEffectComplete, setIsFirstEffectComplete] = useState(false);
 
-
+  
   useEffect(() => {
 
     const runSequentially = async () => {
@@ -58,20 +58,23 @@ const ProductList = () => {
         // First, call fetchFilters
 
         // Finally, call handleFilterRange after fetchData is done
+        await handleClean()
+        await fetchFilters();
+
+        // Then, call fetchData after fetchFilters is done
+        await fetchData();
+
+
         if (filterRange != 0 || filterRange != '0') {
           await handleFilterRange()
         }
 
         else if (textToFind != '') {
+          setActiveBrandIndices([])
+
           await fetchBySearch()
         }
-        else {
-          await fetchFilters();
 
-          // Then, call fetchData after fetchFilters is done
-          await fetchData();
-
-        }
 
         setIsFirstEffectComplete(true);
       } catch (error) {
@@ -91,15 +94,15 @@ const ProductList = () => {
   useEffect(() => {
     // This effect runs only if the first effect has completed
     handleFilterSubCategory()
-  }, [isFirstEffectComplete, maxVal, filterSubCategory]); // Depend on isFirstEffectComplete, maxVal, and filterCategory
+  }, [isFirstEffectComplete, filterSubCategory]); // Depend on isFirstEffectComplete, maxVal, and filterCategory
 
   const HandleFilterCategory = async () => {
     if (isFirstEffectComplete && filterCategory) {
       console.log(maxVal)
       return handleSubmit({
-        activeBrandIndices,
+        activeBrandIndices: [],
         activeCategoriesIndices: [filterCategory],
-        activeSubCategoriesIndices,
+        activeSubCategoriesIndices: [],
         value: [minVal, maxVal], // Ensure value is correctly passed as numbers
       });
     }
@@ -109,8 +112,8 @@ const ProductList = () => {
     if (isFirstEffectComplete && filterSubCategory) {
       console.log(maxVal)
       return handleSubmit({
-        activeBrandIndices,
-        activeCategoriesIndices,
+        activeBrandIndices: [],
+        activeCategoriesIndices: [],
         activeSubCategoriesIndices: [filterSubCategory],
         value: [minVal, maxVal], // Ensure value is correctly passed as numbers
       });
@@ -128,12 +131,19 @@ const ProductList = () => {
       console.log(res)
       if (res.status === 200) {
         setProducts(res.data);
-
-        res.data.map((item) => {
-          handleClick("brands", item.brandName)
-          handleClick("subcategories", item.subCategoryName)
-          handleClick("categories", item.categoryName)
-        })
+        console.log(activeBrandIndices)
+        res.data.forEach((item) => {
+       
+            handleClick("brands", item.brandName._id); // Pass true to indicate deselect
+         handleClick("subcategories", item.subCategoryName._id); // Pass true to indicate deselect
+         handleClick("categories", item.categoryName._id); // Pass true to indicate deselect
+      
+        });
+        // res.data.map((item) => {
+        //   handleClick("brands", item.brandName)
+        //   handleClick("subcategories", item.subCategoryName)
+        //   handleClick("categories", item.categoryName)
+        // })
 
       }
     }
@@ -145,6 +155,10 @@ const ProductList = () => {
 
 
   const handleFilterRange = async () => {
+    // await handleClean()
+    setActiveBrandIndices([])
+    if (filterRange === "All") return
+
     if (filterRange === ">5000") {
       console.log("maxVal", maxVal)
       toast.warning("No Product In This Price range")
@@ -155,9 +169,9 @@ const ProductList = () => {
 
     setValue([minVal, numericFilterRange]);
     handleSubmit({
-      activeBrandIndices,
-      activeCategoriesIndices,
-      activeSubCategoriesIndices,
+      activeBrandIndices: [],
+      activeCategoriesIndices: [],
+      activeSubCategoriesIndices: [],
       value: [minVal, numericFilterRange], // Ensure value is correctly passed as numbers
     });
   };
@@ -175,6 +189,7 @@ const ProductList = () => {
 
   const handleSubmit = async (values) => {
     console.log(values);
+    console.log(activeBrandIndices)
     const res = await axios.post(
       `${process.env.REACT_APP_API_URL}/api/auth/list/get-filtered-products`,
       values
@@ -186,10 +201,10 @@ const ProductList = () => {
       // setBrands(res.data.products[0].uniqueBrandDetails);
       res.data.products[0].products.forEach((item) => {
         // Check if the item brand, subcategory, and category are active
-        const brandMatch = activeBrandIndices.includes(item.brandName._id);
-        const subCategoryMatch = activeSubCategoriesIndices.includes(item.subCategoryName._id);
-        const categoryMatch = activeCategoriesIndices.includes(item.categoryName._id);
-
+        const brandMatch = values.activeBrandIndices.length > 0 && values.activeBrandIndices.includes(item.brandName._id);
+        const subCategoryMatch = values.activeSubCategoriesIndices.includes(item.subCategoryName._id);
+        const categoryMatch = values.activeCategoriesIndices.includes(item.categoryName._id);
+        console.log(brandMatch)
         // If they do not match, handle the click to deselect
         if (!brandMatch) {
           handleClick("brands", item.brandName._id); // Pass true to indicate deselect
@@ -283,7 +298,7 @@ const ProductList = () => {
 
       setProducts(sortedProducts); // Assuming setProducts is the state updater function
     }
-    if (e.target.value === "newPrice") {
+    if (e.target.value === "lowHigh") {
       // Assuming products is an array of objects with a price field
       const sortedProducts = [...products].sort(
         (a, b) => a.newPrice - b.newPrice
@@ -291,9 +306,18 @@ const ProductList = () => {
 
       setProducts(sortedProducts); // Assuming setProducts is the state updater function
     }
+    if (e.target.value === "highLow") {
+      // Assuming products is an array of objects with a price field
+      const sortedProducts = [...products].sort(
+        (a, b) => b.newPrice - a.newPrice
+      ); // Sorts by price (low to high)
+
+      setProducts(sortedProducts); // Assuming setProducts is the state updater function
+    }
   };
 
-  const handleClean = () => {
+  const handleClean = async () => {
+    console.log("object")
     setValue([minVal, maxVal]);
     setProducts(allProduct)
     setActiveCategoriesIndices([])
@@ -336,9 +360,9 @@ const ProductList = () => {
 
                 <div>
                   <Typography>
-                    <h3 className="widget-title collapsed">
-                      <span> Price Range</span>
-                    </h3>
+                  <h3 className="widget collapsed  text-start price-range-border">
+                          <span className="widget-title">Price Range</span>
+                        </h3>
                   </Typography>
                   <Accordion>
                     <AccordionDetails>
@@ -578,15 +602,18 @@ const ProductList = () => {
                       class="form-control"
                       onChange={handleSortChange}
                     >
-                      <option value="newPrice" selected="selected">
-                        price
+                      <option value="lowHigh" >
+                        Price (low to high)
+                      </option>
+                      <option value="highLow" >
+                        Price (high to low)
                       </option>
                       <option value="AZ">Sort by A to Z</option>
                       <option value="ZA">Sort by Z to A</option>
                     </select>
                   </div>
                 </div>
-                {products.length > 0
+                {products && products.length > 0
                   ? products.map((items, index) => {
 
                     return (

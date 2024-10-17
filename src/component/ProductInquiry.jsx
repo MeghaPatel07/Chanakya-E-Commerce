@@ -2,17 +2,15 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { Col, Row } from "reactstrap";
-import { FaRupeeSign, FaShoppingBag } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { AiFillPlusCircle } from "react-icons/ai";
-import { AiFillMinusCircle } from "react-icons/ai";
 import { ImCross } from "react-icons/im";
 import ProductImg from "../assets/images/products/default/1-1.jpg";
 import Logo from "../assets/images/products/brand/brand-1.jpg";
 import Counter from "./Counter";
 import { toast, ToastContainer } from "react-toastify";
 import { useEmail } from "./VerifyEmail";
+import { BsBagCheck } from "react-icons/bs";
 
 const ProductInquiry = ({ data }) => {
   const { EmailVerify } = useEmail();
@@ -86,49 +84,53 @@ const ProductInquiry = ({ data }) => {
               </Col>
               <Col lg={8}>
                 <h2 className="product-title">{data.productName}</h2>
-                <div className="catagoryDiv">
-                  <div>
+                <div>
+                  <div className="catagoryDiv">
                     <img
                       className="brandLogo"
                       src={`${process.env.REACT_APP_API_URL}/${data.brandName.logo}`}
                       alt="logo"
                     />
                   </div>
-                  <div>
-                    <div className=" product-categories">
-                      <span>Category :</span>
+                </div>
+                <div className="catagoryDiv">
+
+                  <div className="product-single ">
+                    <div className="product-categories">
+                      <span >Category :</span>
                       {data.categoryName.categoryName}
                     </div>
                     <div className=" product-categories">
                       <span>SKU:</span>
                       {data.SKU}
                     </div>
+                    <div className="product-price">
+                      <span style={{ fontFamily: "Arial, Helvetica, sans-serif" }} className="me-2">
+                        ₹
+                      </span>
+                      {data.newPrice}
+                      <small className="text-primary">
+                        (For Retail Price)
+                      </small>{" "}
+                      <br />
+                      <small
+                        className="text-primary d-block mt-3"
+                        style={{
+                          whiteSpace: "break-spaces",
+                          fontWeight: 500,
+                          lineHeight: "initial",
+                        }}
+                      >
+                        *Remark: For corporate pricing, please select the quantity
+                        and submit an inquiry to receive the best price.
+                      </small>
+                    </div>
                   </div>
                 </div>
                 {/* <h4>
                   <FaRupeeSign /> 
                 </h4> */}
-                <div className="product-price">
-                  <span style={{ fontFamily: "Arial, Helvetica, sans-serif" }}>
-                    ₹
-                  </span>
-                  {data.newPrice}
-                  <small className="text-primary">
-                    (For Retail Price)
-                  </small>{" "}
-                  <br />
-                  <small
-                    className="text-primary d-block mt-3"
-                    style={{
-                      whiteSpace: "break-spaces",
-                      fontWeight: 500,
-                      lineHeight: "initial",
-                    }}
-                  >
-                    *Remark: For corporate pricing, please select the quantity
-                    and submit an inquiry to receive the best price.
-                  </small>
-                </div>
+
 
                 {/* <h5 className="remarkDescription">
                   *Remark: please select the quantity and submit an inquiry to
@@ -140,11 +142,12 @@ const ProductInquiry = ({ data }) => {
                     <div className="mainDivCounter">
                       {/* Button to increment the counter */}
                       <div> {count}</div>
+                      <div className="d-flex gap-3">
                       <div
                         // className="increntBtn"
                         onClick={() => setCount(count > 1 ? count - 1 : 1)}
                       >
-                     <button className="quantity-minus increntBtn w-icon-minus" />
+                        <button className="quantity-minus increntBtn w-icon-minus" />
 
                       </div>
                       <div
@@ -152,8 +155,9 @@ const ProductInquiry = ({ data }) => {
                         onClick={() => setCount(count + 1)}
                       >
                         {/* <AiFillPlusCircle /> */}
-                     <button className=" increntBtn quantity-plus w-icon-plus" />
+                        <button className=" increntBtn quantity-plus w-icon-plus" />
 
+                      </div>
                       </div>
 
                       {/* Button to decrement the counter */}
@@ -165,7 +169,7 @@ const ProductInquiry = ({ data }) => {
                       type="button"
                       onClick={checkLogin}
                     >
-                      <FaShoppingBag /> Add To Inquiry
+                      <BsBagCheck /> Add To Inquiry
                     </button>
                   </Col>
                 </Row>

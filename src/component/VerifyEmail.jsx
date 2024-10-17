@@ -80,10 +80,13 @@ const EmailProvider = ({ children }) => {
 
 
   return (
-    <EmailContext.Provider value={{ EmailVerify, userData, setUserData }}>
+    <EmailContext.Provider value={{ 
+      EmailVerify, userData, setUserData }}>
+
+
     <FilterContext.Provider value={{ FilterLogic ,filterRange ,searchText  ,
       handleKeyDown ,setSearchText , handleSearchClick,handleInputChange,textToFind , handleFilterCategory , filterCategory ,
-      handleFilterSubCategory , filterSubCategory}}>
+      handleFilterSubCategory , filterSubCategory ,setFilterRange}}>
       {children}
     </FilterContext.Provider>
   </EmailContext.Provider>
