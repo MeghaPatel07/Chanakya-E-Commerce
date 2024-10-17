@@ -430,8 +430,12 @@ const ProductList = () => {
                       class="form-control"
                       onChange={handleSortChange}
                     >
-                      <option value="newPrice" selected="selected">
-                        price
+                      <option disabled>Select</option>
+                      <option value="lowHigh" >
+                        Price (low to high)
+                      </option>
+                      <option value="highLow" >
+                        Price (high to low)
                       </option>
                       <option value="AZ">Sort by A to Z</option>
                       <option value="ZA">Sort by Z to A</option>
