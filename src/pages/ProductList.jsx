@@ -16,11 +16,10 @@ import Slider from "@mui/material/Slider";
 import ProductInquiry from "../component/ProductInquiry";
 
 import { FiPlus, FiMinus } from "react-icons/fi";
-import { toast, ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
 
 import { useFilter } from "../component/VerifyEmail";
-// import { toast, ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 
 
@@ -33,6 +32,7 @@ const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [selectList, setSelectList] = useState([]);
   const [value, setValue] = useState([]);
+  const [allProduct, setAllProduct] = useState([])
 
   const [filters, setFilters] = useState([]);
   const [subCategories, setSubcategories] = useState([]);
@@ -93,7 +93,7 @@ const ProductList = () => {
     handleFilterSubCategory()
   }, [isFirstEffectComplete, maxVal, filterSubCategory]); // Depend on isFirstEffectComplete, maxVal, and filterCategory
 
-  const HandleFilterCategory=async()=>{
+  const HandleFilterCategory = async () => {
     if (isFirstEffectComplete && filterCategory) {
       console.log(maxVal)
       return handleSubmit({
@@ -105,13 +105,13 @@ const ProductList = () => {
     }
   }
 
-  const handleFilterSubCategory=async()=>{
+  const handleFilterSubCategory = async () => {
     if (isFirstEffectComplete && filterSubCategory) {
       console.log(maxVal)
       return handleSubmit({
         activeBrandIndices,
         activeCategoriesIndices,
-        activeSubCategoriesIndices:[filterSubCategory],
+        activeSubCategoriesIndices: [filterSubCategory],
         value: [minVal, maxVal], // Ensure value is correctly passed as numbers
       });
     }
@@ -128,6 +128,7 @@ const ProductList = () => {
       console.log(res)
       if (res.status === 200) {
         setProducts(res.data);
+
         res.data.map((item) => {
           handleClick("brands", item.brandName)
           handleClick("subcategories", item.subCategoryName)
@@ -169,6 +170,7 @@ const ProductList = () => {
 
     console.log(res);
     setProducts(res.data);
+    setAllProduct(res.data)
   };
 
   const handleSubmit = async (values) => {
@@ -232,9 +234,7 @@ const ProductList = () => {
   };
 
   const [activeCategoriesIndices, setActiveCategoriesIndices] = useState([]);
-  const [activeSubCategoriesIndices, setActiveSubCategoriesIndices] = useState(
-    []
-  );
+  const [activeSubCategoriesIndices, setActiveSubCategoriesIndices] = useState([]);
   const [activeBrandIndices, setActiveBrandIndices] = useState([]);
   const handleClick = (e, index) => {
     // console.log(index);
@@ -293,6 +293,14 @@ const ProductList = () => {
     }
   };
 
+  const handleClean = () => {
+    setValue([minVal, maxVal]);
+    setProducts(allProduct)
+    setActiveCategoriesIndices([])
+    setActiveSubCategoriesIndices([])
+    setActiveBrandIndices([])
+  }
+
   return (
     <>
       <ToastContainer />
@@ -321,9 +329,9 @@ const ProductList = () => {
               <div className="sticky-sidebar">
                 <div class="filter-actions">
                   <label>Filter :</label>
-                  <a href="#" class="btn btn-dark btn-link filter-clean">
+                  <button onClick={() => { handleClean() }} class="btn btn-dark btn-link filter-clean">
                     Clean All
-                  </a>
+                  </button>
                 </div>
 
                 <div>
@@ -337,20 +345,20 @@ const ProductList = () => {
                       <Box>
                         <div className="d-flex align-item-center justify-content-between">
                           <div className="maxMinDiv">
-                          <p className="mb-0-p " style={{ textAlign: "start" }}>
-                            Min
-                          </p>
-                          <div className="d-flex justify-content-center range-box">
-                            <p className="mb-0-p">{value[0]}</p>
-                          </div>
+                            <p className="mb-0-p " style={{ textAlign: "start" }}>
+                              Min
+                            </p>
+                            <div className="d-flex justify-content-center range-box">
+                              <p className="mb-0-p">{value[0]}</p>
+                            </div>
                           </div>
                           <div className="maxMinDiv">
-                          <p className="mb-0-p" style={{ textAlign: "start" }}>
-                            Max
-                          </p>
-                          <div className="d-flex justify-content-center range-box">
-                            <p className="mb-0-p">{value[1]}</p>
-                          </div>
+                            <p className="mb-0-p" style={{ textAlign: "start" }}>
+                              Max
+                            </p>
+                            <div className="d-flex justify-content-center range-box">
+                              <p className="mb-0-p">{value[1]}</p>
+                            </div>
                           </div>
                         </div>
 
@@ -379,8 +387,8 @@ const ProductList = () => {
                       </Box>
                     </AccordionDetails>
                   </Accordion>
-                             {/* Brands Accordion */}
-                             <Accordion
+                  {/* Brands Accordion */}
+                  <Accordion
                     expanded={expanded === "brands"} // Open only if expanded is set to "brands"
                     onChange={handleAccordionChange("brands")}
                     className="widget new border-0"
@@ -429,8 +437,8 @@ const ProductList = () => {
                       </ul>
                     </AccordionDetails>
                   </Accordion>
-                   {/* Sub Categories Accordion */}
-                   <Accordion
+                  {/* Sub Categories Accordion */}
+                  <Accordion
                     expanded={expanded === "subCategories"} // Open only if expanded is set to "subCategories"
                     onChange={handleAccordionChange("subCategories")}
                     className="widget new border-0"
@@ -535,9 +543,9 @@ const ProductList = () => {
                     </AccordionDetails>
                   </Accordion>
 
-                 
 
-       
+
+
 
                   <button
                     className="filter-btn"
@@ -581,35 +589,35 @@ const ProductList = () => {
                 {products.length > 0
                   ? products.map((items, index) => {
 
-                      return (
-                        <Col lg={3} md={4} sm={6} key={index}>
-                          <div className="item-card product-image-gap">
-                            <img
-                              src={`${process.env.REACT_APP_API_URL}/${items.productImage}`}
-                              alt=""
-                            />
-                            <p className="product-name mb-0">
-                              <Link to="#">{items.productName}</Link>
-                            </p>
-                            <p class="product-cat text-center mt-2">
-                              <Link to="#">{items.brandName.brandName}</Link>
-                            </p>
-                            {/* <div className='item-card-hov'>
+                    return (
+                      <Col lg={3} md={4} sm={6} key={index}>
+                        <div className="item-card product-image-gap">
+                          <img
+                            src={`${process.env.REACT_APP_API_URL}/${items.productImage}`}
+                            alt=""
+                          />
+                          <p className="product-name mb-0">
+                            <Link to="#">{items.productName}</Link>
+                          </p>
+                          <p class="product-cat text-center mt-2">
+                            <Link to="#">{items.brandName.brandName}</Link>
+                          </p>
+                          {/* <div className='item-card-hov'>
                             <i className="w-icon-cart"></i>
                             <p>Add To Inquiry</p>
                           </div> */}
-                            <ProductInquiry data={items} />
-                          </div>
-                        </Col>
-                      );
-                    })
+                          <ProductInquiry data={items} />
+                        </div>
+                      </Col>
+                    );
+                  })
 
                   : <div className="noProductMainDiv">
                     <div className="noProductTitle">
-                    "No Products in this filter"
+                      "No Products in this filter"
                     </div>
-                    
-                    </div>}
+
+                  </div>}
               </Row>
             </Col>
           </Row>
