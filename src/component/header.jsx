@@ -16,7 +16,7 @@ import { useFilter } from "./VerifyEmail";
 
 const Header = (data) => {
   const { EmailVerify, userData, setUserData } = useEmail();
-  const { FilterLogic ,searchText,handleKeyDown ,setSearchText , handleSearchClick, handleInputChange} = useFilter()
+  const { FilterLogic ,searchText,handleKeyDown ,setSearchText , handleSearchClick, handleInputChange  ,setFilterRange} = useFilter()
   const navigate = useNavigate();
 
 
@@ -31,6 +31,8 @@ const Header = (data) => {
     console.log(res);
   };
   useEffect(() => {
+    setFilterRange(0)
+    setSearchText("")
     fetchData();
   }, []);
   const [token, setToken] = useState("");
@@ -133,7 +135,7 @@ const Header = (data) => {
 
   };
   const prices = [
-    { label: "All Price", value: "" },
+    { label: "All Price", value: "All" },
     { label: "Under 100", value: 100 },
     { label: "Under 200", value: 200 },
     { label: "Under 500", value: 500 },

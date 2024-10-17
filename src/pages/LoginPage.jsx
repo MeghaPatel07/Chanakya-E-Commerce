@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Link, useAsyncError, useNavigate } from "react-router-dom";
+import { Link, useAsyncError, useNavigate , useLocation} from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { Password } from "@mui/icons-material";
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -13,6 +14,7 @@ const LoginPage = () => {
   const [errors, setErrors] = useState({});
   const [errorsEmail, setErrorsEmail] = useState({});
   const navigate = useNavigate();
+  const location = useLocation();
 
   const validateEmail = (email) => {
     console.log(email)
@@ -69,8 +71,19 @@ const LoginPage = () => {
           toast.success(res.data.message);
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("user", res.data.user._id);
-
-          window.location.href = '/';
+          if (
+            location.state &&
+            location.state.from &&
+            (location.state.from.pathname === "/signUp")
+          ) {
+            navigate("/");
+          } else {
+            setTimeout(() => {
+              navigate(-1);
+            }, 2000);
+            // navigate(-1);
+          }
+          // window.location.href = '/';
 
           // navigate("/"); // Redirect to the home page after successful login
 
@@ -283,13 +296,14 @@ const LoginPage = () => {
                         <label htmlFor="remember1">Remember me</label>
                      
                       </div> */}
-                        <div className="form-checkbox d-flex align-items-center justify-content-between">
+                        <div className="form-checkbox d-flex align-items-center justify-content-end">
                           <button
+                          style={{color:'#a01c20'}}
                             className="loginTitle button-none "
                             onClick={() => setForgetPass(true)} >Forgot Password?</button>
                         </div>
 
-                        <button type="submit" className="btn loginBtn btn-primary">
+                        <button type="submit" className="w-100 btn loginBtn btn-primary">
                           Sign In
                         </button>
                       </form>
@@ -297,9 +311,7 @@ const LoginPage = () => {
                   </div>
 
 
-                  <p>
-                    Don't have an account? <Link to="/signUp">Sign up</Link>
-                  </p>
+                 
                 </div>
                 : <div className="tab tab-nav-boxed tab-nav-center tab-nav-underline">
                   <div className="text-center">
@@ -374,7 +386,7 @@ const LoginPage = () => {
                               <div className="form-group">
                                 <label htmlFor="cnfPassword">Confirm Password*
                                   <button
-                                    className="ms-3 button-none"
+                                    className="ms-3  button-none"
                                     type="button"
                                     onClick={() => setShowCnfPassword(!showCnfPassword)}
                                   >
@@ -414,18 +426,18 @@ const LoginPage = () => {
                               setErrors({})
                               setShowNewPassword(false)
                               setShowCnfPassword(false)
-                            }} >Back To Login</button>
+                            }} ><FaArrowLeftLong className="me-3"/>Back To Login</button>
                         </div>
 
-                        {forgetPass && !showOtp && !resetPassword ? <button type="button" onClick={handleSendOtp} className="btn loginBtn btn-primary">
+                        {forgetPass && !showOtp && !resetPassword ? <button type="button" onClick={handleSendOtp} className="w-100 btn loginBtn btn-primary">
                           {sending ? "Sending ..." : "Send Otp"}
                         </button> : null}
 
-                        {showOtp ? <button type="button" onClick={handleCheckOtp} className="btn loginBtn btn-primary">
+                        {showOtp ? <button type="button" onClick={handleCheckOtp} className="w-100 btn loginBtn btn-primary">
                           {sending ? "Checking ..." : "Submit"}
                         </button> : null}
 
-                        {resetPassword ? <button type="button" onClick={handleResetPassword} className="btn loginBtn btn-primary">
+                        {resetPassword ? <button type="button" onClick={handleResetPassword} className="w-100 btn loginBtn btn-primary">
                           {sending ? "Submitting ..." : "Submit"}
                         </button> : null}
                       </form>
@@ -436,6 +448,9 @@ const LoginPage = () => {
 
 
                 </div>}
+                <p>
+                    Don't have an account? <Link to="/signUp">Sign up</Link>
+                  </p>
 
             </div>
           </div>
