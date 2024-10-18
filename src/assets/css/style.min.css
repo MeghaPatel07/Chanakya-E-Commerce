@@ -24918,7 +24918,9 @@ aside .sp-sidebar-banner span {
 .vendors-section {
     background-color: #f8f8f8;
 }
-
+.navbar-toggler:focus{
+    box-shadow: 0px;
+}
 .vendors-section .vendor-widget {
     margin-bottom: 0;
 }
