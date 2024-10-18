@@ -345,6 +345,7 @@ const LoginPage = () => {
                               <label htmlFor="otp">Enter OTP *</label>
                               <input
                                 type="number"
+                                onWheel={(e) => e.target.blur()} // Disable scrolling increment
                                 className={`form-control ${errors.otp ? "is-invalid" : ""
                                   }`}
                                 name="otp"

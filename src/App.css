@@ -189,3 +189,10 @@ left: -90px;
   padding-bottom: 10px;
   border-bottom: 1px solid #eee !important;
 }
+
+.box {
+  -webkit-box-shadow: 2px 1px 26px -7px rgba(0,0,0,0.75);
+-moz-box-shadow: 2px 1px 26px -7px rgba(0,0,0,0.75);
+box-shadow: 2px 1px 26px -7px rgba(0,0,0,0.75);
+border-radius: 10px;
+}
