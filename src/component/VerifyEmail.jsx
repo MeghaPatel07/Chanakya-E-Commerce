@@ -49,6 +49,7 @@ const EmailProvider = ({ children }) => {
   };
 
   const handleKeyDown = (e) => {
+    console.log(e)
   
     if (e.key === "Enter") { // Check if the key pressed is "Enter"
       console.log("Search text on Enter:", searchText);
