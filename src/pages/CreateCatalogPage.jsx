@@ -201,11 +201,12 @@ const CreateCatalogPage = () => {
     console.log(checkedProducts)
     
     try {
-      axios.post(`${process.env.REACT_APP_API_URL}/api/auth/downloadCatalogueFromFrontend`, checkedProducts).then((res) => {
+      axios.post(`${process.env.REACT_APP_API_URL}/api/auth/downloadCatalogueFromFrontend`,{AllProduct: checkedProducts , discount:""}).then((res) => {
         console.log(res)
         if (res.status === 200) {
           toast.success(res.message)
           setLoading(false)
+          
           // setDownloadable(true)
           downloadFile(`${process.env.REACT_APP_API_URL}/uploads/Catalogue/${res.data.filename}`)
           // setAllProducts(res.data.products)
@@ -268,6 +269,8 @@ const CreateCatalogPage = () => {
     <React.Fragment>
       <ToastContainer />
       <Container>
+        <Row className="justify-content-center mt-5 ">
+          <Col lg={8} className="p-5 box">
         <Row className="pt-4 pb-4">
           <Col lg={4} md={6}>
             <Label>Product Category</Label>
@@ -319,42 +322,40 @@ const CreateCatalogPage = () => {
             <input
               className="qtyInput"
               type="number"
+              onWheel={(e) => e.target.blur()} // Disable scrolling increment
               placeholder="Qty"
               value={quantity}
               onChange={(e) => { setValues({ ...values, "quantity": e.target.value }) }} />
           </Col>
         </Row>
-        <Row className="">
+        <Row className="pb-4">
           <Col lg={4} md={6}>
             <Label>Start Price</Label>
             <input className="qtyInput" type="number" placeholder="Start"
+            onWheel={(e) => e.target.blur()} // Disable scrolling increment
               value={startPrice}
               onChange={(e) => { setValues({ ...values, "startPrice": e.target.value }) }} />
           </Col>
           <Col lg={4} md={6}>
             <Label>End Price</Label>
             <input className="qtyInput" type="number" placeholder="End"
+            onWheel={(e) => e.target.blur()} // Disable scrolling increment
               value={endPrice}
               onChange={(e) => { setValues({ ...values, "endPrice": e.target.value }) }} />
           </Col>
           <Col lg={4} md={6}>
-          <Label></Label>
+          <Label className="invisible">"mm</Label>
 
             <button className="viewBtn " type="button" onClick={handleView}>
               View <FaEye className="eyeIcon" />
             </button>
           </Col>
         </Row>
-        <Row className="pt-4 pb-4">
-          <div className="mainDivAllCategory">
-            {allproduct.length > 0 &&
-              <div className="allCategoryDiv">
-                <input type="checkbox"
-                  checked={selectAll}
-                  onChange={handleSelectAllChange}
-                /> <span>Select All Category</span>
-              </div>
-            }
+        </Col>
+        </Row>
+        <Row className="pt-4 pb-4  mt-4">
+         
+            <div className="row justify-content-center">
             {allproduct.length > 0 && <div className="categoryDiv pt-4">
               <button
                 className="viewBtn"
@@ -372,12 +373,23 @@ const CreateCatalogPage = () => {
 
               </button>
             </div>}
+            {allproduct.length > 0 &&
+              <div className="ps-4 allCategoryDiv justify-content-center mt-4">
+                <input type="checkbox"
+                 style={{accentColor:'#a01e20'}}
+                  checked={selectAll}
+                  onChange={handleSelectAllChange}
+                /> <span>Select All Category</span>
+              </div>
+            }
           </div>
+         
           {allproduct.length > 0 ? allproduct.map((data) => (
             <Col className="pt-4" lg={3} md={4} sm={6}>
               <div className="item-card">
                 <div className="allCategoryDiv checkBoxDiv ">
                   <input
+                  style={{accentColor:'#a01e20'}}
                     className=""
                     type="checkbox"
                     checked={checkedProducts.includes(data._id)} // Check if the product is in the array
@@ -395,7 +407,7 @@ const CreateCatalogPage = () => {
                           </div> */}
               </div>
             </Col>
-          )) : "No Products in this selected filters"}
+          )) : "No Products "}
 
 
         </Row>

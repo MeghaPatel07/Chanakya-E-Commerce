@@ -178,6 +178,7 @@ const Cart = () => {
                           <input
                             className="quantity form-control"
                             type="number"
+                            onWheel={(e) => e.target.blur()} // Disable scrolling increment
                             min="1"
                             value={item.quantity}
                             onChange={(e) => handleQuantityChange(item.productName._id, parseInt(e.target.value))}
