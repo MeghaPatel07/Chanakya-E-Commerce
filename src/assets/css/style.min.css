@@ -13404,7 +13404,7 @@ body .product-popup {
 }
 
 .filter-items.item-check .active>p::before {
-    content: "";
+    content: "\2713";
     background-color: #a01e20;
     width: 20px;
     height: 20px;
