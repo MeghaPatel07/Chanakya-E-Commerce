@@ -34,10 +34,10 @@ const CategoryPage = () => {
             <Container className="pb-5">
                 <Row>
                     <Col lg="12">
-                        <Row className="category-wrapper cols-md-2 col-sm-2 cols-lg-7 cols-xl-9 pt-4 align-items-center">
+                        <Row className="category-wrapper cols-12 cols-md-2 cols-xs-2  cols-lg-7 cols-xl-9 pt-4 align-items-center">
                             {CategoryData.map((category, index) => (
 
-                                <div key={index} xs="6" md="6" lg="4" xl="3" className="category category-ellipse mb-5">
+                                <div key={index} xs="6" md="6" lg="4" xl="3" className="category  category-ellipse mb-5">
                                     <div className="category-media">
                                         <Link to="#">
                                             <img
