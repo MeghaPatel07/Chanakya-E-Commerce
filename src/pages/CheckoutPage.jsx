@@ -10,7 +10,7 @@ import OrderCompletion from "./Order-Complete";
 // Validation schema using Yup
 const CheckoutSchema = Yup.object().shape({
   // companyName: Yup.string().required("Company name is required"),
-  designation: Yup.string().required("Designation is required"),
+  // designation: Yup.string().required("Designation is required"),
   firstname: Yup.string().required("First name is required"),
   lastname: Yup.string().required("Last name is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -23,7 +23,7 @@ const CheckoutSchema = Yup.object().shape({
   // companyContactNo: Yup.string()
   //   .matches(/^[0-9]{10}$/, "Company Contact No. must be 10 digits")
   //   .required("Company Contact No. is required"),
-  companyAddress: Yup.string().required("Company Address is required"),
+  companyAddress: Yup.string().required("Address is required"),
   remark: Yup.string().required("Remark is required"),
   estimatedDate: Yup.date().required("Date is required"),
 });
@@ -184,7 +184,7 @@ const CheckoutPage = () => {
                       <div className="col-xs-6">
                         <div className="form-group">
                           <label htmlFor="companyName" className="d-flex">
-                            Company name <span>*</span>
+                            Company name 
                           </label>
                           <Field
                             type="text"
@@ -202,7 +202,7 @@ const CheckoutPage = () => {
                       <div className="col-xs-6">
                         <div className="form-group">
                           <label htmlFor="designation" className="d-flex">
-                            Designation <span>*</span>
+                            Designation 
                           </label>
                           <Field
                             type="text"
@@ -274,7 +274,7 @@ const CheckoutPage = () => {
                       <div className="col-xs-6">
                         <div className="form-group">
                           <label htmlFor="companyEmail" className="d-flex">
-                            Company Email Address <span>*</span>
+                            Company Email Address 
                           </label>
                           <Field
                             type="email"
@@ -346,7 +346,7 @@ const CheckoutPage = () => {
                       <div className="col-xs-6">
                         <div className="form-group">
                           <label htmlFor="companyAddress" className="d-flex">
-                            Company Address <span></span>
+                             Address <span></span>
                           </label>
                           <Field
                             as="textarea"
@@ -355,7 +355,7 @@ const CheckoutPage = () => {
                             name="companyAddress"
                             cols="30"
                             rows="4"
-                            placeholder="Company Address"
+                            placeholder=" Address"
                           />
                           <ErrorMessage
                             name="companyAddress"

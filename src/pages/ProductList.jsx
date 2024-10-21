@@ -40,6 +40,7 @@ const ProductList = () => {
   const [brands, setBrands] = useState([]);
   const [minVal, setMinVal] = useState(0);
   const [maxVal, setMaxVal] = useState(0);
+  const [loading, setLoading] = useState(false)
 
   const [expanded, setExpanded] = useState(false); // Track which accordion is expanded
 
@@ -50,7 +51,7 @@ const ProductList = () => {
 
   const [isFirstEffectComplete, setIsFirstEffectComplete] = useState(false);
 
-  
+
   useEffect(() => {
 
     const runSequentially = async () => {
@@ -64,6 +65,8 @@ const ProductList = () => {
         // Then, call fetchData after fetchFilters is done
         await fetchData();
 
+        console.log("mmm")
+        // setLoading(true)
 
         if (filterRange != 0 || filterRange != '0') {
           await handleFilterRange()
@@ -74,7 +77,8 @@ const ProductList = () => {
 
           await fetchBySearch()
         }
-
+        console.log("lll")
+        setLoading(false)
 
         setIsFirstEffectComplete(true);
       } catch (error) {
@@ -104,7 +108,7 @@ const ProductList = () => {
         activeCategoriesIndices: [filterCategory],
         activeSubCategoriesIndices: [],
         value: [minVal, maxVal], // Ensure value is correctly passed as numbers
-      },true);
+      }, true);
     }
   }
 
@@ -123,6 +127,7 @@ const ProductList = () => {
 
   const fetchBySearch = async () => {
     try {
+      setLoading(true)
       const res = await axios
         .post(
           `${process.env.REACT_APP_API_URL}/api/auth/list-by-params/product-details-from-frontend`,
@@ -130,14 +135,15 @@ const ProductList = () => {
         )
       console.log(res)
       if (res.status === 200) {
+        setLoading(false)
         setProducts(res.data);
         console.log(activeBrandIndices)
         res.data.forEach((item) => {
-       
-            handleClick("brands", item.brandName._id); // Pass true to indicate deselect
-         handleClick("subcategories", item.subCategoryName._id); // Pass true to indicate deselect
-         handleClick("categories", item.categoryName._id); // Pass true to indicate deselect
-      
+
+          handleClick("brands", item.brandName._id); // Pass true to indicate deselect
+          handleClick("subcategories", item.subCategoryName._id); // Pass true to indicate deselect
+          handleClick("categories", item.categoryName._id); // Pass true to indicate deselect
+
         });
         // res.data.map((item) => {
         //   handleClick("brands", item.brandName)
@@ -161,6 +167,7 @@ const ProductList = () => {
 
     if (filterRange === ">5000") {
       console.log("maxVal", maxVal)
+      setProducts([])
       toast.warning("No Product In This Price range")
       return
     }
@@ -178,17 +185,28 @@ const ProductList = () => {
 
 
   const fetchData = async () => {
-    const res = await axios.get(
-      `${process.env.REACT_APP_API_URL}/api/auth/list/product-details`
-    );
+    try {
+      setLoading(true)
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/auth/list/product-details`
+      );
 
-    console.log(res);
-    setProducts(res.data);
-    setAllProduct(res.data)
+
+      console.log(res);
+      setProducts(res.data);
+      setAllProduct(res.data)
+      // setLoading(false)
+    }
+    catch (Error) {
+      console.log(Error)
+      setLoading(false)
+    }
+
   };
 
   const handleSubmit = async (values, check) => {
     console.log(values);
+    setLoading(true)
     console.log(activeBrandIndices)
     const res = await axios.post(
       `${process.env.REACT_APP_API_URL}/api/auth/list/get-filtered-products`,
@@ -196,36 +214,36 @@ const ProductList = () => {
     );
     console.log(res.data.products)
     if (res.data.products.length > 0) {
+      setLoading(false)
       // console.log(res.data.products[0]);
       setProducts(res.data.products[0].products);
       console.log(res.data.products[0].products)
       // setBrands(res.data.products[0].uniqueBrandDetails);
       res.data.products[0].products.forEach((item) => {
         // Check if the item brand, subcategory, and category are active
-        
+
         console.log(values)
-        if(check)
-        {
+        if (check) {
           handleClick("brands", item.brandName._id);
           handleClick("subcategories", item.subCategoryName._id)
-          handleClick("categories", item.categoryName._id); 
+          handleClick("categories", item.categoryName._id);
           return
         }
-        else{
-        const brandMatch = values.activeBrandIndices.length > 0 && values.activeBrandIndices.includes(item.brandName._id);
-        const subCategoryMatch = values.activeSubCategoriesIndices.includes(item.subCategoryName._id);
-        const categoryMatch = values.activeCategoriesIndices.includes(item.categoryName._id);
-        // If they do not match, handle the click to deselect
-        if (!brandMatch) {
-          handleClick("brands", item.brandName._id); // Pass true to indicate deselect
+        else {
+          const brandMatch = values.activeBrandIndices.length > 0 && values.activeBrandIndices.includes(item.brandName._id);
+          const subCategoryMatch = values.activeSubCategoriesIndices.includes(item.subCategoryName._id);
+          const categoryMatch = values.activeCategoriesIndices.includes(item.categoryName._id);
+          // If they do not match, handle the click to deselect
+          if (!brandMatch) {
+            handleClick("brands", item.brandName._id); // Pass true to indicate deselect
+          }
+          if (!subCategoryMatch) {
+            handleClick("subcategories", item.subCategoryName._id); // Pass true to indicate deselect
+          }
+          if (!categoryMatch) {
+            handleClick("categories", item.categoryName._id); // Pass true to indicate deselect
+          }
         }
-        if (!subCategoryMatch) {
-          handleClick("subcategories", item.subCategoryName._id); // Pass true to indicate deselect
-        }
-        if (!categoryMatch) {
-          handleClick("categories", item.categoryName._id); // Pass true to indicate deselect
-        }
-      }
       });
 
     } else {
@@ -251,12 +269,13 @@ const ProductList = () => {
     console.log(`Min price: ${minPrice}`); // Min price: 111
     console.log(`Max price: ${maxPrice}`); // Max price: 1999
     console.log(filterRange)
+    setLoading(true)
 
   };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    console.log(newValue)
+    // console.log(newValue)
   };
 
   const [activeCategoriesIndices, setActiveCategoriesIndices] = useState([]);
@@ -371,9 +390,9 @@ const ProductList = () => {
 
                 <div>
                   <Typography>
-                  <h3 className="widget collapsed  text-start price-range-border">
-                          <span className="widget-title">Price Range</span>
-                        </h3>
+                    <h3 className="widget collapsed  text-start price-range-border">
+                      <span className="widget-title">Price Range</span>
+                    </h3>
                   </Typography>
                   <Accordion>
                     <AccordionDetails>
@@ -552,7 +571,7 @@ const ProductList = () => {
                     >
                       <Typography>
                         <h3 className="widget-title collapsed">
-                          <span> Categories</span>
+                          <span>All Categories</span>
                         </h3>
                       </Typography>
                     </AccordionSummary>
@@ -624,38 +643,41 @@ const ProductList = () => {
                     </select>
                   </div>
                 </div>
-                {products && products.length > 0
-                  ? products.map((items, index) => {
-
-                    return (
-                      <Col lg={3} md={4} sm={6} key={index}>
-                        <div className="item-card product-image-gap">
-                          <img
-                            src={`${process.env.REACT_APP_API_URL}/${items.productImage}`}
-                            alt=""
-                          />
-                          <p className="product-name mb-0">
-                            <Link to="#">{items.productName}</Link>
-                          </p>
-                          <p class="product-cat text-center mt-2">
-                            <Link to="#">{items.brandName.brandName}</Link>
-                          </p>
-                          {/* <div className='item-card-hov'>
-                            <i className="w-icon-cart"></i>
-                            <p>Add To Inquiry</p>
-                          </div> */}
-                          <ProductInquiry data={items} />
-                        </div>
-                      </Col>
-                    );
-                  })
-
-                  : <div className="noProductMainDiv">
+                {loading ? (
+                  // Show loader when loading is true
+                  <div className="loader">Loading...</div>
+                ) : products && products.length > 0  ? (
+                  // If loading is false and products exist, display the product list
+                  products.map((items, index) => (
+                    <Col lg={3} md={4} sm={6} key={index}>
+                      <div className="item-card product-image-gap">
+                        <img
+                          src={`${process.env.REACT_APP_API_URL}/${items.productImage}`}
+                          alt=""
+                        />
+                        <p className="product-name mb-0">
+                          <Link to="#">{items.productName}</Link>
+                        </p>
+                        <p className="product-cat text-center mt-2">
+                          <Link to="#">{items.brandName.brandName}</Link>
+                        </p>
+                        {/* <div className='item-card-hov'>
+          <i className="w-icon-cart"></i>
+          <p>Add To Inquiry</p>
+        </div> */}
+                        <ProductInquiry data={items} />
+                      </div>
+                    </Col>
+                  ))
+                ) : !loading &&
+                  // If no products exist, show "No Products in this filter"
+                  <div className="noProductMainDiv">
                     <div className="noProductTitle">
                       "No Products in this filter"
                     </div>
+                  </div>
+                }
 
-                  </div>}
               </Row>
             </Col>
           </Row>

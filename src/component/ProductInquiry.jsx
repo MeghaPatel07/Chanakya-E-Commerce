@@ -24,6 +24,7 @@ const ProductInquiry = ({ data }) => {
       setNotLogin(false);
 
       try {
+        console.log(data)
         // Send the request to update the cart
         const res = await axios.post(
           `${process.env.REACT_APP_API_URL}/api/auth/update/user-cart`,

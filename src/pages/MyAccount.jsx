@@ -26,7 +26,7 @@ const MyAccount = ({ setSelectedCase ,userData}) => {
               <h6 className="contact-information">Contact Information</h6>
               <p>{userData && userData.Name} {userData && userData.lastName}</p>
               <p>{userData && userData.Email} | {userData && userData.Mobile}</p>
-              <p>Address: {userData && userData.companyAddress}</p>
+              <p>Address: {userData && userData.companyAddress ? userData.companyAddress : "-" }</p>
               <p className="contact-info-link">
                 <span>
                   <Button onClick={() => setSelectedCase("My Profile")} className='button-none'>
