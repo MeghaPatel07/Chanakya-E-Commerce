@@ -147,9 +147,9 @@ const PrintStatment = () => {
                       </thead>
                       <tbody>
                         <tr>
-                          <td> {printData.date && printData.orderNo} </td>
+                          <td> {printData.orderNo && printData.orderNo} </td>
                           <td>{printData.createdAt && printData.createdAt.split('T')[0]}</td>
-                          <td> {printData.date && printData.date.split('T')[0]} </td>
+                          <td> {printData.estimatedDate && printData.estimatedDate.split('T')[0]} </td>
 
                         </tr>
                       </tbody>

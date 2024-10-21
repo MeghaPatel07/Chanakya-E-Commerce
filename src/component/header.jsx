@@ -16,7 +16,7 @@ import { useFilter } from "./VerifyEmail";
 
 const Header = (data) => {
   const { EmailVerify, userData, setUserData } = useEmail();
-  const { FilterLogic ,searchText,handleKeyDown ,setSearchText , handleSearchClick, handleInputChange  ,setFilterRange} = useFilter()
+  const { FilterLogic, searchText, handleKeyDown, setSearchText, handleSearchClick, handleInputChange, setFilterRange } = useFilter()
   const navigate = useNavigate();
 
 
@@ -146,7 +146,7 @@ const Header = (data) => {
     { label: "Above 5000", value: ">5000" }
   ];
 
- 
+
 
   return (
     <header className="header">
@@ -225,8 +225,9 @@ const Header = (data) => {
                 name="search"
                 id="search"
                 value={searchText && searchText}
-                onChange={(e)=>{
-                  handleInputChange(e.target.value)}} // Updating searchText on change
+                onChange={(e) => {
+                  handleInputChange(e.target.value)
+                }} // Updating searchText on change
                 onKeyDown={handleKeyDown} // Listening for Enter key press
                 placeholder="What are you looking for..."
                 required
@@ -270,7 +271,7 @@ const Header = (data) => {
                 onClick={toggleDropdown}
               ></div>
               <a
-                href="#"
+                // href="#"
                 className="cart-toggle label-down link"
                 onClick={toggleDropdown}
               >
@@ -291,45 +292,48 @@ const Header = (data) => {
                     </a>
                   </div>
                   <div className="products">
-                    {userData && userData.cart.length > 0 ?
+                    {userData && userData.cart.length > 0 ? (
                       userData.cart.map((item, index) => (
-                        <div className="product product-cart" key={item._id}>
-                          <div className="product-detail">
-                            <p className="text-start product-name mb-0">
-                              {item.productName.productName}
-                            </p>
+                        item.productName && (
+                          <div className="product product-cart" key={item._id}>
+                            <div className="product-detail">
+                              <p className="text-start product-name mb-0">
+                                {item.productName.productName}
+                              </p>
 
-                            <div className="price-box">
-                              <span className="product-quantity">{item.quantity}</span>
-                              <span className="product-price">QTY</span>
+                              <div className="price-box">
+                                <span className="product-quantity">{item.quantity}</span>
+                                <span className="product-price">QTY</span>
+                              </div>
                             </div>
+                            <figure className="product-media">
+                              <a href="#">
+                                <img
+                                  src={`${process.env.REACT_APP_API_URL}/${item.productName.productImage}`}
+                                  alt={item.productName.productName}
+                                  width="84"
+                                  height="94"
+                                />
+                              </a>
+                            </figure>
+                            <button
+                              className="btn btn-link btn-close"
+                              onClick={() => handleRemoveItem(item.productName._id)}
+                            >
+                              <RxCross2 className=" m-0 cross" />
+                            </button>
                           </div>
-                          <figure className="product-media">
-                            <a href="#">
-                              <img
-                                src={`${process.env.REACT_APP_API_URL}/${item.productName.productImage}`}
-                                alt={item.productName.productName}
-                                width="84"
-                                height="94"
-                              />
-                            </a>
-                          </figure>
-                          <button
-                            className="btn btn-link btn-close"
-                            onClick={() => handleRemoveItem(item.productName._id)}
-                          >
-                            <RxCross2 className=" m-0 cross" />
-                          </button>
-                        </div>
+                        )
                       ))
-                      : <div>
+                    ) : (
+                      <div>
                         <Link to="/product-list" className="btn btn-primary btn-rounded">
                           Explore our products
                         </Link>
                       </div>
-                    }
-
+                    )}
                   </div>
+
                   {userData && userData.cart.length &&
                     <div>
                       <div className="cart-total">

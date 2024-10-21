@@ -25,7 +25,7 @@ const CheckoutSchema = Yup.object().shape({
   //   .required("Company Contact No. is required"),
   companyAddress: Yup.string().required("Company Address is required"),
   remark: Yup.string().required("Remark is required"),
-  date: Yup.date().required("Date is required"),
+  estimatedDate: Yup.date().required("Date is required"),
 });
 
 
@@ -54,7 +54,7 @@ const CheckoutPage = () => {
     companyContactNo: "",
     companyAddress: "",
     remark: "",
-    date: "",
+    estimatedDate: "",
   });
   useEffect(() => {
     EmailVerify(); // Triggers the email verification
@@ -84,7 +84,7 @@ const CheckoutPage = () => {
       companyContactNo: userData.companyContactNo || "", // Add actual values if available
       companyAddress: userData.companyAddress || "", // Add actual values if available
       remark: "", // Add actual values if available
-      date: "", // Add actual values if available
+      estimatedDate: "", // Add actual values if available
     });
 
     setCart(userData.cart)
@@ -105,7 +105,7 @@ const CheckoutPage = () => {
       companyContactNo: values.companyContactNo, // Add actual values if available
       companyAddress: values.companyAddress, // Add actual values if available
       remark: values.remark, // Add actual values if available
-      date: values.date, // Add actual values if available
+      estimatedDate: values.estimatedDate, // Add actual values if available
       cartNew: userData.cart,
       cart: []
     }
@@ -117,6 +117,7 @@ const CheckoutPage = () => {
         setOrderData(res.data)
         setOrderStatus(true);  // Set orderStatus to success
         setOrderResult("success");
+        EmailVerify();
       } else {
         setOrderStatus(false); // Set orderStatus to failed
         setOrderResult("failed");
@@ -309,7 +310,7 @@ const CheckoutPage = () => {
                       <div className="col-xs-6">
                         <div className="form-group">
                           <label htmlFor="companyContactNo" className="d-flex">
-                            Company Contact No. <span>*</span>
+                            Company Contact No. <span></span>
                           </label>
                           <Field
                             type="text"
@@ -326,16 +327,16 @@ const CheckoutPage = () => {
 
                       <div className="col-xs-6">
                         <div className="form-group">
-                          <label htmlFor="date" className="d-flex">
+                          <label htmlFor="estimatedDate" className="d-flex">
                             Estimated Date <span>*</span>
                           </label>
                           <Field
                             type="date"
                             className="form-control form-control-md"
-                            name="date"
+                            name="estimatedDate"
                           />
                           <ErrorMessage
-                            name="date"
+                            name="estimatedDate"
                             component="div"
                             className="error-message"
                           />
@@ -345,7 +346,7 @@ const CheckoutPage = () => {
                       <div className="col-xs-6">
                         <div className="form-group">
                           <label htmlFor="companyAddress" className="d-flex">
-                            Company Address <span>*</span>
+                            Company Address <span></span>
                           </label>
                           <Field
                             as="textarea"

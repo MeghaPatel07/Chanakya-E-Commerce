@@ -121,10 +121,9 @@ const SignupPage = () => {
   const [isLoading2, setIsLoading2] = useState(false)
   const [otp, setOtp] = useState('')
   const sendOTP = async () => {
-    if (validateForm() ) {
+    if (validateForm()) {
       console.log(formData);
-      if(!formData.agree)
-      {
+      if (!formData.agree) {
         toast.error("You must accept the privacy policy to sign up.")
         return
       }
@@ -134,18 +133,17 @@ const SignupPage = () => {
       try {
         const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/user/otp-signin-request`, val)
         console.log(res)
-        if(res.data.isOk)
-        {
-        
-        setShowOtp(true)
-        setOtp(res.data.otp)
-        setIsLoading(false)
+        if (res.data.isOk) {
+
+          setShowOtp(true)
+          setOtp(res.data.otp)
+          setIsLoading(false)
         }
-        else{
+        else {
           setIsLoading(false)
           toast.error(res.data.message)
         }
-  
+
       }
       catch (error) {
         console.error(error)
@@ -153,7 +151,7 @@ const SignupPage = () => {
     } else {
       toast.error("Please fix the form errors.");
     }
-    
+
   }
 
   const [verifyOTP, setVerifyOtp] = useState("")
@@ -176,6 +174,10 @@ const SignupPage = () => {
       setIsLoading2(false)
       toast.error("Otp doesnot match")
     }
+  }
+  const handleShow = () => {
+    console.log(showNewPassword)
+    setShowNewPassword(prevState => !prevState)
   }
 
   return (
@@ -252,51 +254,50 @@ const SignupPage = () => {
                           )}
                         </div>
                         <div className="form-group mb-0 col-md-6 col-lg-4">
-                          <label>Password *
-                          <button 
-                          className="ms-3 button-none"
-                          type="button"
-                           onClick={()=>setShowNewPassword(!showNewPassword)}
-                            > 
-                            {showNewPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+                          <label htmlFor="newPassword">Enter New Password*
+                            <button
+                              className="ms-3 button-none"
+                              type="button"
+                              onClick={() => setShowNewPassword(!showNewPassword)}
+                            >
+                              {showNewPassword ? <FaRegEyeSlash /> : <FaRegEye />}
                             </button>
                           </label>
                           <input
-                            type={showNewPassword? "text" :'password'}
-                            className="form-control"
+                            type={showNewPassword ? "text" : 'password'}
+                            className={`form-control ${errors.newPassword ? "is-invalid" : ""
+                              }`}
                             name="Password"
                             value={formData.Password}
                             onChange={handleChange}
                             required
                           />
-                          {errors.Password && (
-                            <small className="text-danger text-sm">
-                              {errors.Password}
-                            </small>
+                          {errors.newPassword && (
+                            <small className="text-danger">{errors.newPassword}</small>
                           )}
                         </div>
+
                         <div className="form-group mb-0 col-md-6 col-lg-4">
-                          <label>Confirm Password * 
-                          <button 
-                          className="ms-3 button-none"
-                          type="button"
-                           onClick={()=>setShowCnfPassword(!showCnfPassword)}
-                            > 
-                            {showCnfPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+                          <label htmlFor="newPassword">Enter Confirm Password*
+                            <button
+                              className="ms-3 button-none"
+                              type="button"
+                              onClick={() => setShowCnfPassword(!showCnfPassword)}
+                            >
+                              {showCnfPassword ? <FaRegEyeSlash /> : <FaRegEye />}
                             </button>
-                        </label>
+                          </label>
                           <input
-                            type={showCnfPassword? "text" :'password'}
-                            className="form-control"
+                            type={showCnfPassword ? "text" : 'password'}
+                            className={`form-control ${errors.confirmPassword ? "is-invalid" : ""
+                              }`}
                             name="confirmPassword"
                             value={formData.confirmPassword}
                             onChange={handleChange}
                             required
                           />
                           {errors.confirmPassword && (
-                            <small className="text-danger">
-                              {errors.confirmPassword}
-                            </small>
+                            <small className="text-danger">{errors.confirmPassword}</small>
                           )}
                         </div>
                       </div>
@@ -317,21 +318,21 @@ const SignupPage = () => {
                             privacy policy
                           </Link>
                         </label>
-                        
+
                       </div>
-                          <div className="text-start mb-5">
-                          {errors.agree && (
+                      <div className="text-start mb-5">
+                        {errors.agree && (
                           <small className="text-danger">{errors.agree}</small>
                         )}
-                          </div>
+                      </div>
                       <Button
-                        className=" btn-danger"
+                        className="w-100 btn-danger"
                         // disabled={ !formData.agree || isLoading}
                         onClick={sendOTP}
-                        // disabled={isLoading}
-                        // style={{
-                        //   pointerEvents: !formData.agree ? "none" : "auto",
-                        // }}
+                      // disabled={isLoading}
+                      // style={{
+                      //   pointerEvents: !formData.agree ? "none" : "auto",
+                      // }}
                       >
                         {isLoading ? "Processing" : "Sign Up"}
                       </Button>
@@ -353,15 +354,15 @@ const SignupPage = () => {
         size="sm"
       >
         <ModalHeader
-        
-          
+
+
           className="p-3 modalHader"
           toggle={() => {
             setShowOtp(false);
           }}
           close={
-            <button       onClick={() => setShowOtp(false)}
-            className="close" >
+            <button onClick={() => setShowOtp(false)}
+              className="close" >
               &times;
             </button>
           }
@@ -372,34 +373,34 @@ const SignupPage = () => {
           <ModalBody>
             <Row>
               <Col lg={12}>
-              <Label>Enter Otp sent to you Email</Label>
-            <input
-              value={verifyOTP}
-              onChange={(e) => { setVerifyOtp(e.target.value) }}
-              className="otpInput"
-            >
-            </input>
+                <Label>Enter Otp sent to you Email</Label>
+                <input
+                  value={verifyOTP}
+                  onChange={(e) => { setVerifyOtp(e.target.value) }}
+                  className="otpInput"
+                >
+                </input>
               </Col>
               <Col lg={12}>
-              <div className="hstack otpDiv gap-2 justify-content-end">
-              <button
-                className="viewBtn"
-                type="button"
-                onClick={() => { verify() }}>
-                {isLoading2 ? "Loading" : "Submit"}
+                <div className="hstack otpDiv gap-2 justify-content-end">
+                  <button
+                    className="viewBtn"
+                    type="button"
+                    onClick={() => { verify() }}>
+                    {isLoading2 ? "Loading" : "Submit"}
 
-              </button>
+                  </button>
 
 
-             
-            </div>
+
+                </div>
               </Col>
             </Row>
-            
-           
+
+
           </ModalBody>
 
-          
+
         </form>
       </Modal>
     </main>

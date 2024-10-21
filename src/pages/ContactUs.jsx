@@ -31,7 +31,7 @@ const ContactUs = () => {
       message: "",
     },
     validationSchema,
-    onSubmit: (values) => {
+    onSubmit: (values, {resetForm}) => {
       // Handle form submission (you can replace this with an actual API call)
       console.log("Form Data:", values);
       try{
@@ -40,6 +40,7 @@ const ContactUs = () => {
           if(res.data.isOk)
           { 
             toast.success(res.data.message)
+            resetForm();
           }
         })
       }

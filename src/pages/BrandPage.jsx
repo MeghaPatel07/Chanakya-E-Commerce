@@ -158,10 +158,10 @@ const BrandPage = () => {
                                   <td>{item.title || "N/A"}</td>
                                   <td>
                                     <button
-                                      className="downloadBtn"
+                                      className="btn p-3 btn-primary"
                                       onClick={() => window.open(`${process.env.REACT_APP_API_URL}/${item.linkdoc}`, "_blank")}
                                     >
-                                      Download
+                                      Download Brochure PDF
                                     </button>
                                   </td>
                                 </tr>

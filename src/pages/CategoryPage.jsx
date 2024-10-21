@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from "axios";
-
+import { useFilter } from "../component/VerifyEmail";
 import { Container, Row, Col } from 'reactstrap';
 
 const CategoryPage = () => {
     const [CategoryData, setCategoryData] = useState([])
+    const { handleFilterCategory, handleFilterSubCategory } = useFilter()
     const fetchData = async () => {
         const res = await axios.get(
             `${process.env.REACT_APP_API_URL}/api/auth/list/CategoryMaster`
@@ -23,8 +24,7 @@ const CategoryPage = () => {
             <nav className="breadcrumb-nav mb-10">
                 <Container>
                     <ul className="breadcrumb">
-                        <li><Link to="/">Home</Link></li>
-                        <li><Link to="/products">Product</Link></li>
+                        <li><Link to="/">Home</Link></li> 
                         <li>All Categories</li>
                     </ul>
                 </Container>
@@ -39,7 +39,7 @@ const CategoryPage = () => {
 
                                 <div key={index} xs="6" md="6" lg="4" xl="3" className="category  category-ellipse mb-5">
                                     <div className="category-media">
-                                        <Link to="#">
+                                        <Link to="/product-list" onClick={(e) => { handleFilterCategory(category._id) }}>
                                             <img
                                                 src={`${process.env.REACT_APP_API_URL}/${category.logo}`}
                                                 alt={category.categoryName}
@@ -50,7 +50,7 @@ const CategoryPage = () => {
                                     </div>
                                     <div className="category-content">
                                         <h4 className="category-name">
-                                            <Link to="#">{category.categoryName}</Link>
+                                            <Link to="/product-list" onClick={(e) => { handleFilterCategory(category._id) }}>{category.categoryName}</Link>
                                         </h4>
                                     </div>
                                 </div>
