@@ -1,84 +1,61 @@
 import React from 'react';
-import Slider from 'react-slick'; // Import the Slider component
-import 'slick-carousel/slick/slick.css'; // Import slick carousel styles
-import 'slick-carousel/slick/slick-theme.css'; // Import slick carousel theme styles
+import Carousel from 'react-multi-carousel'; // Import the react-multi-carousel component
+import 'react-multi-carousel/lib/styles.css'; // Import the carousel styles
 
 export const Client = ({data}) => {
-    const settings = {
-        // dots: true,
-        infinite: true,
-        speed: 1000,
-        slidesToShow: 8,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 600,
-        responsive: [
-            {
-                breakpoint: 576,
-                settings: {
-                    slidesToShow:2,
-                },
-            },
-            {
-                breakpoint: 768,
-                settings: {
-                    slidesToShow:4,
-                },
-            },
-            {
-                breakpoint: 992,
-                settings: {
-                    slidesToShow: 4,
-                },
-            },
-            {
-                breakpoint: 1200,
-                settings: {
-                    slidesToShow: 8,
-                },
-            },
-        ],
+    const responsive = {
+        superLargeDesktop: {
+            breakpoint: { max: 4000, min: 1200 },
+            items: 8
+        },
+        desktop: {
+            breakpoint: { max: 1200, min: 992 },
+            items: 6
+        },
+        tablet: {
+            breakpoint: { max: 992, min: 768 },
+            items: 4
+        },
+        mobile: {
+            breakpoint: { max: 768, min: 576 },
+            items: 2
+        }
     };
 
-    // Array of image paths
-    const clientImages = [
-        { url: require('../assets/images/client/01.jpg') },
-        { url: require('../assets/images/client/02.jpg') },
-        { url: require('../assets/images/client/03.jpg') },
-        { url: require('../assets/images/client/04.jpg') },
-        { url: require('../assets/images/client/05.jpg') },
-        { url: require('../assets/images/client/06.jpg') },
-        { url: require('../assets/images/client/07.jpg') },
-        { url: require('../assets/images/client/08.jpg') },
-        { url: require('../assets/images/client/09.jpg') },
-        { url: require('../assets/images/client/10.jpg') },
-        { url: require('../assets/images/client/11.jpg') },
-    ];
-
-    console.log(data)
     return (
         <>
-        <div className="title-link-wrapper title-underline title-post after-none mb-4 ">
-            <h2 className="title font-secondary ls-normal mb-0">Our Valuable Clients</h2>
-            <a href="#" className="font-weight-bold font-size-normal mb-0">
-                View All Clients
-                <i className="w-icon-long-arrow-right"></i>
-            </a>
+            <div className="title-link-wrapper title-underline title-post after-none mb-4">
+                <h2 className="title font-secondary ls-normal mb-0">Our Valuable Clients</h2>
+                <a href="#" className="font-weight-bold font-size-normal mb-0">
+                    View All Clients
+                    <i className="w-icon-long-arrow-right"></i>
+                </a>
             </div>
             <div>
-        
-            <div className="swiper-container swiper-theme brands-wrapper br-sm mb-10">
-                <Slider {...settings}>
-                    {data.map((imageName, index) => (
-                        <div className="swiper-slide" key={index}>
-                            <figure >
-                                <img  src={`${process.env.REACT_APP_API_URL}/${imageName.logo}`} alt="Brand" />
-                            </figure>
-                        </div>
-                    ))}
-                </Slider>
+                <div className="swiper-container swiper-theme brands-wrapper br-sm mb-10">
+                    <Carousel 
+                        responsive={responsive} 
+                        infinite={true} 
+                        autoPlay={true} 
+                        autoPlaySpeed={600} 
+                        keyBoardControl={true}
+                        transitionDuration={1000}
+                        arrows={false}
+                    >
+                        {data.map((imageName, index) => (
+                            <div className="swiper-slide" key={index}>
+                                <figure>
+                                    <img 
+                                        className="brand-image" 
+                                        src={`${process.env.REACT_APP_API_URL}/${imageName.logo}`} 
+                                        alt="Brand" 
+                                    />
+                                </figure>
+                            </div>
+                        ))}
+                    </Carousel>
+                </div>
             </div>
-        </div>
         </>
     );
 };
