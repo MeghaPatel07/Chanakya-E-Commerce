@@ -25455,7 +25455,9 @@ aside .sp-sidebar-banner span {
     margin-bottom: 7px;
     font-size: 14px;
 }
-
+.react-multi-carousel-track{
+    gap: 10px;
+}
 .email-otp .text-otp-desc {
     margin-bottom: 7px;
     font-size: 13px;
