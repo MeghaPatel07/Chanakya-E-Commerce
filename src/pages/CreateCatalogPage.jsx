@@ -407,7 +407,7 @@ const CreateCatalogPage = () => {
                           </div> */}
               </div>
             </Col>
-          )) : "No Products "}
+          )) : <div className="text-center"> No Products </div>}
 
 
         </Row>
