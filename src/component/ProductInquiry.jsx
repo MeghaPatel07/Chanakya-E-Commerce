@@ -33,7 +33,7 @@ const ProductInquiry = ({ data }) => {
             quantity: count, // Send the selected quantity
           }
         );
-
+        console.log(res)
         if (res.data.isOk) {
           console.log(res);
           // alert("mm")

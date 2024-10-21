@@ -9,7 +9,7 @@ import * as Yup from "yup";
 import MyOrder from './MyOrder';
 import MyProFile from './MyProFile';
 import { useEmail } from "../component/VerifyEmail";
-import { ToastContainer } from 'react-toastify';
+import {toast, ToastContainer } from 'react-toastify';
 
 
 
@@ -38,6 +38,7 @@ export const Profile = () => {
 
 
     const handleLogout = () => {
+        toast.success("User Logged out successfully")
         // Remove user data from localStorage
         localStorage.removeItem("user");
     
@@ -45,7 +46,7 @@ export const Profile = () => {
         // localStorage.clear();
     
         // Redirect to the login page ("/")
-        // window.location.href = "/";
+        window.location.href = "/";
         EmailVerify();
     
       };

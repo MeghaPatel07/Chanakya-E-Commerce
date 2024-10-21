@@ -104,7 +104,7 @@ const ProductList = () => {
         activeCategoriesIndices: [filterCategory],
         activeSubCategoriesIndices: [],
         value: [minVal, maxVal], // Ensure value is correctly passed as numbers
-      });
+      },true);
     }
   }
 
@@ -187,13 +187,14 @@ const ProductList = () => {
     setAllProduct(res.data)
   };
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values, check) => {
     console.log(values);
     console.log(activeBrandIndices)
     const res = await axios.post(
       `${process.env.REACT_APP_API_URL}/api/auth/list/get-filtered-products`,
       values
     );
+    console.log(res.data.products)
     if (res.data.products.length > 0) {
       // console.log(res.data.products[0]);
       setProducts(res.data.products[0].products);
@@ -201,10 +202,19 @@ const ProductList = () => {
       // setBrands(res.data.products[0].uniqueBrandDetails);
       res.data.products[0].products.forEach((item) => {
         // Check if the item brand, subcategory, and category are active
+        
+        console.log(values)
+        if(check)
+        {
+          handleClick("brands", item.brandName._id);
+          handleClick("subcategories", item.subCategoryName._id)
+          handleClick("categories", item.categoryName._id); 
+          return
+        }
+        else{
         const brandMatch = values.activeBrandIndices.length > 0 && values.activeBrandIndices.includes(item.brandName._id);
         const subCategoryMatch = values.activeSubCategoriesIndices.includes(item.subCategoryName._id);
         const categoryMatch = values.activeCategoriesIndices.includes(item.categoryName._id);
-        console.log(brandMatch)
         // If they do not match, handle the click to deselect
         if (!brandMatch) {
           handleClick("brands", item.brandName._id); // Pass true to indicate deselect
@@ -215,6 +225,7 @@ const ProductList = () => {
         if (!categoryMatch) {
           handleClick("categories", item.categoryName._id); // Pass true to indicate deselect
         }
+      }
       });
 
     } else {
