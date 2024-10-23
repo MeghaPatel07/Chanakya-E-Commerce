@@ -5,6 +5,7 @@ import logo from "../assets/images/home/logo.png";
 import product from "../assets/images/cart/product-2.jpg";
 import { varifyUser } from "../Functions/UserLogin";
 import Dropdown from 'react-bootstrap/Dropdown';
+import { ToastContainer, toast } from "react-toastify";
 
 import axios from "axios";
 import { Email } from "@mui/icons-material";
@@ -125,7 +126,7 @@ const Header = (data) => {
   const handleLogout = () => {
     // Remove user data from localStorage
     localStorage.removeItem("user");
-
+    toast.success("Account Logged out Successfully")
     // Optionally, you can also clear all localStorage data if needed:
     // localStorage.clear();
 
@@ -150,6 +151,7 @@ const Header = (data) => {
 
   return (
     <header className="header">
+      {/* <ToastContainer/> */}
       <div className="header-top">
         <div className="container">
           <div className="header-left">

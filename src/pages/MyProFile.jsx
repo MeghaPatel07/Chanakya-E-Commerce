@@ -31,6 +31,7 @@ const MyProFile = () => {
     cur_password: Yup.string().required("Current password is required"),
 
 
+
   });
 
 
@@ -42,7 +43,8 @@ const MyProFile = () => {
     contactNo: "",
     cur_password: "",
     new_password: "",
-    conf_password: ""
+    conf_password: "",
+    companyAddress:""
   });
   useEffect(() => {
     EmailVerify(); // Triggers the email verification
@@ -68,7 +70,8 @@ const MyProFile = () => {
       contactNo: userData.Mobile || "",
       cur_password: userData.Password || "",
       conf_password:"",
-      new_password:""
+      new_password:"",
+      companyAddress:userData.companyAddress || ""
     });
 
     setCart(userData.cart)
@@ -89,7 +92,8 @@ const MyProFile = () => {
       lastname: values.lastname, // Add actual values if available
       Email: values.email,
       Mobile: values.contactNo,
-      Password: values.conf_password != "" ? values.conf_password : values.cur_password
+      Password: values.conf_password != "" ? values.conf_password : values.cur_password,
+      companyAddress:values.companyAddress
     }
     console.log(data)
     try {
@@ -121,8 +125,10 @@ const MyProFile = () => {
 
   return (
     <React.Fragment>
+     
 
       <div className="tab-content mb-6">
+      <ToastContainer />
         <div className="tab-pane active in" id="account-details">
           <div className="icon-box icon-box-side mb-6">
             <span className="icon-box-icon icon-account mr-2">
@@ -219,6 +225,23 @@ const MyProFile = () => {
                         />
                       </div>
                     </Col>
+                  </Row>
+
+                  <Row>
+                    <Col md={6}>
+                      <div className="form-group">
+                        <label htmlFor="email">Address </label>
+                        <Field
+                          // disabled
+                          type="text"
+                          id="companyAddress"
+                          name="companyAddress"
+                          className="form-control form-control-md"
+                        />
+                        
+                      </div>
+                    </Col>
+                    
                   </Row>
 
                   {/* Password Fields */}
