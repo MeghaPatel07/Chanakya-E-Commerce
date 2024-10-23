@@ -265,7 +265,7 @@ const Home = () => {
                       )}
                     </ul>
                   </div>
-                  <a href="#">
+                 
                     <figure className="category-media">
                       <img
                         src={`${process.env.REACT_APP_API_URL}/${category?.categoryDetails?.logo}`}
@@ -274,7 +274,7 @@ const Home = () => {
                         height="215"
                       />
                     </figure>
-                  </a>
+                 
                 </div>
               </div>
             ))}
@@ -302,18 +302,18 @@ const Home = () => {
                 className="swiper-slide post text-center overlay-zoom"
               >
                 <figure className="post-media br-sm">
-                  <a href="#">
+                  
                     <img
                       src={brand.imgSrc}
                       style={{ backgroundColor: brand.backgroundColor }}
                       alt={brand.title}
                     />
-                  </a>
+                 
                 </figure>
                 <div className="post-details">
                   <div className="post-meta">{brand.discount}</div>
                   <h4 className="post-title" title={brand.title}>
-                    <a href="#">{brand.title}</a>
+                    <div href="#">{brand.title}</div>
                   </h4>
                 </div>
               </div>

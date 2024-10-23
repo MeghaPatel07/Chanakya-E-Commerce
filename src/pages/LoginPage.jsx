@@ -236,7 +236,7 @@ const LoginPage = () => {
                 <div className="tab tab-nav-boxed tab-nav-center tab-nav-underline">
                   <div className="text-center">
                     <h4 className="loginTitle heading-sign">
-                      Welcome to Chanakya Corporate, Sign into your Account
+                      Welcome to Chanakya Corporate, Sign in to your Account
                     </h4>
                   </div>
 
@@ -316,7 +316,7 @@ const LoginPage = () => {
                 : <div className="tab tab-nav-boxed tab-nav-center tab-nav-underline">
                   <div className="text-center">
                     <h4 className="loginTitle heading-sign">
-                      Forget Password
+                    Enter your email and we'll send you a reset your password.
                     </h4>
                   </div>
 

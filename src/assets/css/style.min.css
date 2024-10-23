@@ -104,6 +104,7 @@ body:not(.loaded) * {
 .selector {
     padding: 10px;
     border: 1px solid #a01e20;
+    font-size: 14px;
 }
 
 .qtyInput {
@@ -6196,16 +6197,16 @@ blockquote {
 
 .btn-dark {
     color: #fff;
-    border-color: #333;
-    background-color: #333;
+    border-color: #000 ;
+    background-color: #000;
 }
 
 .btn-dark:hover,
 .btn-dark:active,
 .btn-dark:focus {
     color: #fff;
-    border-color: #454545;
-    background-color: #454545;
+    border-color: #000;
+    background-color: #000;
 }
 
 .btn-dark.btn-solid {
@@ -6943,8 +6944,9 @@ blockquote {
 
 .btn:hover {
     background-color: #000;
-    color: #fff;
-    border: none
+    /* color: #fff; */
+    /* border: none */
+    border-color: #000;
 }
 
 .maxMinDiv {
@@ -8894,7 +8896,7 @@ input:-internal-autofill-selected {
     font-family: Poppins, sans-serif;
     line-height: 1.5;
     font-weight: 400;
-    color: #999;
+    color: #000;
     background-color: transparent;
     border-radius: 0;
     -webkit-box-shadow: none;
@@ -15611,7 +15613,9 @@ body .product-popup {
 .login-popup .btn:hover {
     background-color: #000;
     color: #fff;
-    border: 1px solid #000;
+    /* border: 1px solid #000; */
+    padding-top: 0.79em;
+    padding-bottom: 0.79em;
 }
 
 .widget-products .widget-title {
@@ -17397,6 +17401,8 @@ body .product-popup {
 .header-search .btn-search:focus {
     color: #a01e20;
     background-color: transparent;
+    border: 2px solid #a01e20;
+    border-left: none;
 }
 
 .header-search .select-box::before {
@@ -17907,6 +17913,7 @@ body .product-popup {
 
 .cart-dropdown .cart-toggle {
     padding: 0;
+    cursor: pointer;
 }
 
 .cart-dropdown .cart-toggle::after {
@@ -19390,7 +19397,7 @@ body .product-popup {
 }
 
 .footer-newsletter .btn {
-    padding: 0.93em 1.85em;
+    /* padding: 0.93em 1.85em; */
 }
 
 .footer-newsletter .btn i {
