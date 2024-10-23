@@ -35,8 +35,29 @@ const Cart = () => {
     );
 
     setUserData({ ...userData, cart: updatedCart }); // Update the cart in userData
+    handleRemoveItemfunc(id)
   };
+  const handleRemoveItemfunc = async (productId) => {
+    try {
+      // Assuming user ID is stored in local storage or passed down as a prop
+      const userId = localStorage.getItem('user');
+      console.log(productId)
+      // Call the API to remove the item from the user's cart
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/remove/user-cart-item`, {
+        userId,
+        productId
+      });
 
+      // Update the local state after successful removal
+      if (response.data.success) {
+        // Filter out the removed product from the local cart state
+        const updatedCart = userData.cart.filter(item => item.productName._id !== productId);
+        setUserData(prev => ({ ...prev, cart: updatedCart }));
+      }
+    } catch (error) {
+      console.error('Error removing item from cart:', error);
+    }
+  };
 
   // Calculate the subtotal for a single item
   const calculateSubtotal = (item) => {
@@ -69,9 +90,12 @@ const Cart = () => {
 
   }
 
-  const handleClear = () => {
+  const handleClear = async() => {
 
     setUserData({ ...userData, cart: [] }); // Update the cart in userData
+    const data = {cart:[]}
+    const res = await axios.put(`${process.env.REACT_APP_API_URL}/api/auth/update/UserMasterDetails/${userData._id}`, data)
+    console.log(res)
   }
 
   return (
@@ -178,6 +202,7 @@ const Cart = () => {
                             <input
                               className="quantity form-control"
                               type="number"
+                              readOnly
                               onWheel={(e) => e.target.blur()} // Disable scrolling increment
                               min="1"
                               value={item.quantity}

@@ -8,17 +8,17 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
-const OrderCompletion = ({orderStatus ,orderData}) => {
+const OrderCompletion = ({ orderStatus, orderData }) => {
   const [show, setShow] = useState(false)
   // Assuming the order status can be "success" or "failed"
-  
- 
+
+
 
 
   return (
     <main className="main login-page">
       {/* Start of Breadcrumb */}
-      
+
       {/* End of Breadcrumb */}
 
       {/* Start of PageContent */}
@@ -37,9 +37,16 @@ const OrderCompletion = ({orderStatus ,orderData}) => {
             </li>
             <li>
               <label>Date</label>
-              <strong>{orderData.orderHistory.createdAt.split('T')[0]}</strong>
+              <strong>
+                {new Date(orderData.orderHistory.createdAt).toLocaleDateString('en-GB', {
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: 'numeric'
+                })}
+              </strong>
+
             </li>
-             
+
           </ul>
 
           <div className="row justify-content-center" id="thankyou-note">
@@ -117,7 +124,7 @@ const OrderCompletion = ({orderStatus ,orderData}) => {
 
           <div className="text-center">
             <button
-              onClick={()=>{window.location.href = "/"}}
+              onClick={() => { window.location.href = "/" }}
               className="btn btn-primary btn-rounded btn-icon-left btn-back mt-6"
             >
               {/* <FontAwesomeIcon icon="long-arrow-left" /> */}

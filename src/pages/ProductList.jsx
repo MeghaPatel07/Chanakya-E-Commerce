@@ -120,7 +120,7 @@ const ProductList = () => {
         activeCategoriesIndices: [],
         activeSubCategoriesIndices: [filterSubCategory],
         value: [minVal, maxVal], // Ensure value is correctly passed as numbers
-      });
+      }, true);
     }
   }
 
