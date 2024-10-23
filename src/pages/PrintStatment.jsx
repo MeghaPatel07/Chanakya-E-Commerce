@@ -126,12 +126,12 @@ const PrintStatment = () => {
                     <img src={Logo} className="img-fluid center-block text-center" style={{ width: 200 }} />
                   </div>
                 </div>
-                <div className="row mt-4">
+                <div className="row mt-4" style={{borderBottom:'1px dashed #d4d4d4'}}>
                   <div className="col-md-6">
-                    <h5 className="order-ttl">BILL TO</h5>
-                    <p>
-                      {printData.user && printData.user.companyAddress}
-                    </p>
+                  <p className='mb-0'><span className="fw-bold">Name : </span>{printData.user && printData.user.Name}</p>
+                  <p className='mb-0'><span className="fw-bold">Email : </span>{printData.user && printData.user.Email}</p>
+                    <p className='mb-0'><span className="fw-bold">BILL TO : </span>{printData.user && printData.user.companyAddress}</p>
+                   
                   </div>
 
                 </div>

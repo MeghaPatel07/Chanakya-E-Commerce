@@ -138,42 +138,56 @@ const ProductInquiry = ({ data }) => {
                   receive the best price.
                 </h5> */}
                 <hr className="hrTag" />
+                {data.isAvailable === false ?
+                 <Row>
+                 <Col lg={4}>
+                   <div className="mainDivCounter">
+                     {/* Button to increment the counter */}
+                     <div> {count}</div>
+                     <div className="d-flex gap-3">
+                     <div
+                       // className="increntBtn"
+                       onClick={() => setCount(count > 1 ? count - 1 : 1)}
+                     >
+                       <button className="quantity-minus increntBtn w-icon-minus" />
+
+                     </div>
+                     <div
+                       className="increntBtn quantity-plus"
+                       onClick={() => setCount(count + 1)}
+                     >
+                       {/* <AiFillPlusCircle /> */}
+                       <button className=" increntBtn quantity-plus w-icon-plus" />
+
+                     </div>
+                     </div>
+
+                     {/* Button to decrement the counter */}
+                   </div>
+                 </Col>
+                 <Col lg={8}>
+                   <button
+                     className="addInquiry"
+                     type="button"
+                     onClick={checkLogin}
+                   >
+                     <BsBagCheck /> Add To Inquiry
+                   </button>
+                 </Col>
+               </Row> : 
                 <Row>
-                  <Col lg={4}>
-                    <div className="mainDivCounter">
-                      {/* Button to increment the counter */}
-                      <div> {count}</div>
-                      <div className="d-flex gap-3">
-                      <div
-                        // className="increntBtn"
-                        onClick={() => setCount(count > 1 ? count - 1 : 1)}
-                      >
-                        <button className="quantity-minus increntBtn w-icon-minus" />
-
-                      </div>
-                      <div
-                        className="increntBtn quantity-plus"
-                        onClick={() => setCount(count + 1)}
-                      >
-                        {/* <AiFillPlusCircle /> */}
-                        <button className=" increntBtn quantity-plus w-icon-plus" />
-
-                      </div>
-                      </div>
-
-                      {/* Button to decrement the counter */}
-                    </div>
-                  </Col>
-                  <Col lg={8}>
-                    <button
-                      className="addInquiry"
-                      type="button"
-                      onClick={checkLogin}
-                    >
-                      <BsBagCheck /> Add To Inquiry
-                    </button>
-                  </Col>
-                </Row>
+               
+                <Col lg={12}>
+                  <button
+                    className="addInquiry"
+                    type="button"
+                  >
+                    Out of Order
+                  </button>
+                </Col>
+              </Row>
+                }
+               
                 <Row className="mt-4">
                   {notLogin && (
                     <h5 className="remarkDescription">

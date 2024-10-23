@@ -31,7 +31,7 @@ const CheckoutSchema = Yup.object().shape({
 
 
 const CheckoutPage = () => {
-
+  const [orderSuccess, setOrderSuccess] = useState(false)
   const { EmailVerify, userData } = useEmail();
   const [cart, setCart] = useState([])
   const [orderStatus, setOrderStatus] = useState(false);  // To control modal visibility
@@ -117,6 +117,7 @@ const CheckoutPage = () => {
         setOrderData(res.data)
         setOrderStatus(true);  // Set orderStatus to success
         setOrderResult("success");
+        setOrderSuccess(true)
         EmailVerify();
       } else {
         setOrderStatus(false); // Set orderStatus to failed
@@ -441,7 +442,7 @@ const CheckoutPage = () => {
                           <button
                             type="submit"
                             className="btn btn-dark btn-block btn-rounded"
-                            disabled={isSubmitting}
+                            disabled={isSubmitting || orderSuccess}
                           >
                             {isSubmitting ? "Placing Order..." : "Place Order"}
                           </button>
