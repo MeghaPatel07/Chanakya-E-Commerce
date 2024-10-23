@@ -147,9 +147,22 @@ const PrintStatment = () => {
                       </thead>
                       <tbody>
                         <tr>
-                          <td> {printData.orderNo && printData.orderNo} </td>
-                          <td>{printData.createdAt && printData.createdAt.split('T')[0]}</td>
-                          <td> {printData.estimatedDate && printData.estimatedDate.split('T')[0]} </td>
+                          <td> {}{printData.orderNo && printData.orderNo} </td>
+                          <td>{new Date(printData.createdAt && printData.createdAt).toLocaleDateString('en-GB', {
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: 'numeric'
+                })}
+                {/* {printData.createdAt && printData.createdAt.split('T')[0]} */}
+
+                </td>
+                          <td>{new Date(printData.estimatedDate && printData.estimatedDate).toLocaleDateString('en-GB', {
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: 'numeric'
+                })}
+                 {/* {printData.estimatedDate && printData.estimatedDate.split('T')[0]}  */}
+                 </td>
 
                         </tr>
                       </tbody>
