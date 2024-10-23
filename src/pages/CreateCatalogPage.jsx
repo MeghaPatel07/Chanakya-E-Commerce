@@ -369,7 +369,7 @@ const CreateCatalogPage = () => {
                   }
                  else setViewModel(true) 
                   }}>
-                {isLoading ? "Loading...." : "Create Catalog"}<IoCreateOutline className="eyeIcon"  />
+                {isLoading ? "Loading...." : "Create Catalogue"}<IoCreateOutline className="eyeIcon"  />
 
               </button>
             </div>}
@@ -431,7 +431,7 @@ const CreateCatalogPage = () => {
             </button>
           }
         >
-          User Detail
+          User Deatils
 
         </ModalHeader>
         <form>
@@ -490,7 +490,7 @@ const CreateCatalogPage = () => {
         </form>
       </Modal>
     </React.Fragment >
-  );
+  )
 };
 
 export default CreateCatalogPage;

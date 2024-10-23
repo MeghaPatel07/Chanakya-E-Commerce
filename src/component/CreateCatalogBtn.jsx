@@ -29,7 +29,7 @@ const CreateCatalogBtn = () => {
     <React.Fragment>
     <ToastContainer />
         <div className='createCatelogDiv'>
-        <button onClick={chechLogin} className='catalogue-vertical'>   Create Catalog  </button>
+        <button onClick={chechLogin} className='catalogue-vertical'>   Create catalogue  </button>
         </div>
        
     </React.Fragment>

@@ -37,9 +37,9 @@ export const Client = ({data}) => {
                         responsive={responsive} 
                         infinite={true} 
                         autoPlay={true} 
-                        autoPlaySpeed={600} 
+                        autoPlaySpeed={1000} 
                         keyBoardControl={true}
-                        transitionDuration={1000}
+                        transitionDuration={2000}
                         arrows={false}
                     >
                         {data.map((imageName, index) => (

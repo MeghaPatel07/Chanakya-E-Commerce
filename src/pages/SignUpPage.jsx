@@ -18,8 +18,8 @@ import { FaRegEyeSlash } from "react-icons/fa";
 
 const SignupPage = () => {
   const navigate = useNavigate();
-  const [showNewPassword, setShowNewPassword] = useState(false)
-  const [showCnfPassword, setShowCnfPassword] = useState(false)
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showCnfPassword, setShowCnfPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     Name: "",
@@ -116,69 +116,64 @@ const SignupPage = () => {
     }
   };
 
-  const [showOTP, setShowOtp] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [isLoading2, setIsLoading2] = useState(false)
-  const [otp, setOtp] = useState('')
+  const [showOTP, setShowOtp] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading2, setIsLoading2] = useState(false);
+  const [otp, setOtp] = useState("");
   const sendOTP = async () => {
     if (validateForm()) {
       console.log(formData);
       if (!formData.agree) {
-        toast.error("You must accept the privacy policy to sign up.")
-        return
+        toast.error("You must accept the privacy policy to sign up.");
+        return;
       }
 
-      setIsLoading(true)
-      const val = { Email: formData.Email }
+      setIsLoading(true);
+      const val = { Email: formData.Email };
       try {
-        const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/user/otp-signin-request`, val)
-        console.log(res)
+        const res = await axios.post(
+          `${process.env.REACT_APP_API_URL}/api/auth/user/otp-signin-request`,
+          val
+        );
+        console.log(res);
         if (res.data.isOk) {
-
-          setShowOtp(true)
-          setOtp(res.data.otp)
-          setIsLoading(false)
+          setShowOtp(true);
+          setOtp(res.data.otp);
+          setIsLoading(false);
+        } else {
+          setIsLoading(false);
+          toast.error(res.data.message);
         }
-        else {
-          setIsLoading(false)
-          toast.error(res.data.message)
-        }
-
-      }
-      catch (error) {
-        console.error(error)
+      } catch (error) {
+        console.error(error);
       }
     } else {
       toast.error("Please fix the form errors.");
     }
+  };
 
-  }
-
-  const [verifyOTP, setVerifyOtp] = useState("")
+  const [verifyOTP, setVerifyOtp] = useState("");
   const verify = () => {
-    const check = verifyOTP === otp
-    console.log(otp)
-    console.log(check)
-    setIsLoading2(true)
+    const check = verifyOTP === otp;
+    console.log(otp);
+    console.log(check);
+    setIsLoading2(true);
     if (check) {
-      toast.success("Thank you for registering")
-      setIsLoading2(false)
+      toast.success("Thank you for registering");
+      setIsLoading2(false);
 
       setTimeout(() => {
         handleSubmit();
       }, 2000);
-
-
+    } else {
+      setIsLoading2(false);
+      toast.error("Otp doesnot match");
     }
-    else {
-      setIsLoading2(false)
-      toast.error("Otp doesnot match")
-    }
-  }
+  };
   const handleShow = () => {
-    console.log(showNewPassword)
-    setShowNewPassword(prevState => !prevState)
-  }
+    console.log(showNewPassword);
+    setShowNewPassword((prevState) => !prevState);
+  };
 
   return (
     <main className="main login-page">
@@ -236,7 +231,9 @@ const SignupPage = () => {
                             required
                           />
                           {errors.Email && (
-                            <small className="text-danger">{errors.Email}</small>
+                            <small className="text-danger">
+                              {errors.Email}
+                            </small>
                           )}
                         </div>
                         <div className="form-group col-md-6 col-lg-4">
@@ -250,57 +247,88 @@ const SignupPage = () => {
                             required
                           />
                           {errors.Mobile && (
-                            <small className="text-danger">{errors.Mobile}</small>
+                            <small className="text-danger">
+                              {errors.Mobile}
+                            </small>
                           )}
                         </div>
                         <div className="form-group mb-0 col-md-6 col-lg-4">
-                          <label htmlFor="newPassword">Enter New Password*
+                          <label htmlFor="newPassword">
+                            Enter New Password*
                             <button
                               className="ms-3 button-none"
                               type="button"
-                              onClick={() => setShowNewPassword(!showNewPassword)}
+                              onClick={() =>
+                                setShowNewPassword(!showNewPassword)
+                              }
                             >
-                              {showNewPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+                              {showNewPassword ? (
+                                <FaRegEyeSlash />
+                              ) : (
+                                <FaRegEye />
+                              )}
                             </button>
                           </label>
                           <input
-                            type={showNewPassword ? "text" : 'password'}
-                            className={`form-control ${errors.newPassword ? "is-invalid" : ""
-                              }`}
+                            type={showNewPassword ? "text" : "password"}
+                            className={`form-control ${
+                              errors.newPassword ? "is-invalid" : ""
+                            }`}
                             name="Password"
                             value={formData.Password}
                             onChange={handleChange}
                             required
                           />
                           {errors.newPassword && (
-                            <small className="text-danger">{errors.newPassword}</small>
+                            <small className="text-danger">
+                              {errors.newPassword}
+                            </small>
                           )}
                         </div>
 
                         <div className="form-group mb-0 col-md-6 col-lg-4">
-                          <label htmlFor="newPassword">Enter Confirm Password*
+                          <label htmlFor="newPassword">
+                            Enter Confirm Password*
                             <button
                               className="ms-3 button-none"
                               type="button"
-                              onClick={() => setShowCnfPassword(!showCnfPassword)}
+                              onClick={() =>
+                                setShowCnfPassword(!showCnfPassword)
+                              }
                             >
-                              {showCnfPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+                              {showCnfPassword ? (
+                                <FaRegEyeSlash />
+                              ) : (
+                                <FaRegEye />
+                              )}
                             </button>
                           </label>
                           <input
-                            type={showCnfPassword ? "text" : 'password'}
-                            className={`form-control ${errors.confirmPassword ? "is-invalid" : ""
-                              }`}
+                            type={showCnfPassword ? "text" : "password"}
+                            className={`form-control ${
+                              errors.confirmPassword ? "is-invalid" : ""
+                            }`}
                             name="confirmPassword"
                             value={formData.confirmPassword}
                             onChange={handleChange}
                             required
                           />
                           {errors.confirmPassword && (
-                            <small className="text-danger">{errors.confirmPassword}</small>
+                            <small className="text-danger">
+                              {errors.confirmPassword}
+                            </small>
                           )}
                         </div>
                       </div>
+                      <p className="mt-3" style={{textAlign:'start'}}>
+                        Your personal data will be used to support your
+                        experience throughout this website, to manage access to
+                        your account, and for other purposes described in our{" "}
+                        <a href="/privacy-policy" className="text-primary">
+                          privacy policy
+                        </a>
+                        .
+                      </p>
 
                       <div className="form-checkbox d-flex align-items-center justify-content-between mb-0">
                         <input
@@ -314,11 +342,13 @@ const SignupPage = () => {
                         />
                         <label htmlFor="agree" className="font-size-md">
                           I agree to the{" "}
-                          <Link to="/privacy-policy" className="text-primary font-size-md">
+                          <Link
+                            to="/privacy-policy"
+                            className="text-primary font-size-md"
+                          >
                             privacy policy
                           </Link>
                         </label>
-
                       </div>
                       <div className="text-start mb-5">
                         {errors.agree && (
@@ -329,10 +359,10 @@ const SignupPage = () => {
                         className="w-100 btn-danger"
                         // disabled={ !formData.agree || isLoading}
                         onClick={sendOTP}
-                      // disabled={isLoading}
-                      // style={{
-                      //   pointerEvents: !formData.agree ? "none" : "auto",
-                      // }}
+                        // disabled={isLoading}
+                        // style={{
+                        //   pointerEvents: !formData.agree ? "none" : "auto",
+                        // }}
                       >
                         {isLoading ? "Processing" : "Sign Up"}
                       </Button>
@@ -348,21 +378,14 @@ const SignupPage = () => {
           </div>
         </div>
       </div>
-      <Modal
-        isOpen={showOTP}
-
-        size="sm"
-      >
+      <Modal isOpen={showOTP} size="sm">
         <ModalHeader
-
-
           className="p-3 modalHader"
           toggle={() => {
             setShowOtp(false);
           }}
           close={
-            <button onClick={() => setShowOtp(false)}
-              className="close" >
+            <button onClick={() => setShowOtp(false)} className="close">
               &times;
             </button>
           }
@@ -376,31 +399,27 @@ const SignupPage = () => {
                 <Label>Enter Otp sent to you Email</Label>
                 <input
                   value={verifyOTP}
-                  onChange={(e) => { setVerifyOtp(e.target.value) }}
+                  onChange={(e) => {
+                    setVerifyOtp(e.target.value);
+                  }}
                   className="otpInput"
-                >
-                </input>
+                ></input>
               </Col>
               <Col lg={12}>
                 <div className="hstack otpDiv gap-2 justify-content-end">
                   <button
                     className="viewBtn"
                     type="button"
-                    onClick={() => { verify() }}>
+                    onClick={() => {
+                      verify();
+                    }}
+                  >
                     {isLoading2 ? "Loading" : "Submit"}
-
                   </button>
-
-
-
                 </div>
               </Col>
             </Row>
-
-
           </ModalBody>
-
-
         </form>
       </Modal>
     </main>

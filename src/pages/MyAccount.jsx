@@ -16,7 +16,7 @@ const MyAccount = ({ setSelectedCase ,userData}) => {
               <i className="w-icon-user" />
             </span>
             <div className="icon-box-content">
-              <h4 className="icon-box-title mb-0 ls-normal" style={{ fontSize: '2rem' }}>Account Detail</h4>
+              <h4 className="icon-box-title mb-0 ls-normal" style={{ fontSize: '2rem' }}>Account Details</h4>
             </div>
           </div>
           <div className="account-info" style={{}}>
